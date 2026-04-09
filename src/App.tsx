@@ -50,7 +50,12 @@ function App() {
           <p className="text-amber-400">Cargando...</p>
         </div>
       ) : (
-        <NoteList notes={notes} onNoteClick={setSelectedNoteId} />
+        <NoteList
+          notes={notes}
+          onNoteClick={setSelectedNoteId}
+          onArchive={archiveNote}
+          onDelete={removeNote}
+        />
       )}
     </div>
   );
