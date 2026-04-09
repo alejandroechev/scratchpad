@@ -6,7 +6,14 @@ A personal scratchpad for quickly jotting down notes, pasting links, and capturi
 
 ## Features
 
-- (to be filled as features are implemented)
+- ✏️ **Quick-add bar** — always visible at top, enter to submit
+- 📝 **Plain text notes** — with automatic URL detection and tappable link chips
+- 🔍 **Search** — filter notes by content text in real-time
+- 📋 **Note detail** — tap to expand, edit, save/discard changes
+- 📦 **Archive** — archive notes to hide from main list
+- 🗑️ **Delete** — permanently remove notes
+- 🔄 **Offline-first sync** — Automerge CRDTs sync across devices via SyncEngine
+- 📱 **Mobile-first UI** — designed for Android (Pixel 5 viewport)
 
 ## Tech Stack
 
