@@ -4,11 +4,11 @@ import { IndexedDBStorageAdapter } from "@automerge/automerge-repo-storage-index
 import type { AutomergeUrl, DocHandle } from "@automerge/automerge-repo";
 import type { ScratchPadDoc } from "./schema.js";
 import { CURRENT_SCHEMA_VERSION } from "./schema.js";
+import { getAuthenticatedWsUrl } from "./auth.js";
 
 const DOC_URL_KEY = "scratchpad-automerge-doc-url";
 const IDB_NAME = "scratchpad-automerge";
 
-const SYNC_SERVER_URL = import.meta.env.VITE_SYNC_SERVER_URL || "ws://localhost:3030";
 const DEFAULT_DOC_URL = import.meta.env.VITE_AUTOMERGE_DOC_URL || "";
 
 let repoInstance: Repo | null = null;
@@ -23,8 +23,9 @@ function createInitialDoc(): ScratchPadDoc {
 
 export function getRepo(): Repo {
   if (!repoInstance) {
+    const wsUrl = getAuthenticatedWsUrl();
     repoInstance = new Repo({
-      network: [new BrowserWebSocketClientAdapter(SYNC_SERVER_URL)],
+      network: [new BrowserWebSocketClientAdapter(wsUrl)],
       storage: new IndexedDBStorageAdapter(IDB_NAME),
     });
   }

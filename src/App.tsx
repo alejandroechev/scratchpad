@@ -4,10 +4,13 @@ import { QuickAddBar } from "./ui/components/QuickAddBar";
 import { NoteList } from "./ui/components/NoteList";
 import { NoteDetailPage } from "./ui/pages/NoteDetailPage";
 import { SearchBar } from "./ui/components/SearchBar";
+import { SyncInfo } from "./ui/components/SyncInfo";
+import { SyncAuthGate } from "./ui/components/SyncAuthGate";
 
-function App() {
+function AppContent() {
   const [search, setSearch] = useState("");
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
+  const [showInfo, setShowInfo] = useState(false);
   const filters = useMemo(() => ({ search: search || undefined }), [search]);
   const { notes, loading, addNote, editNote, archiveNote, removeNote } = useNotes(filters);
 
@@ -38,9 +41,18 @@ function App() {
 
   return (
     <div className="min-h-screen bg-amber-50 flex flex-col">
-      <header className="bg-amber-600 text-white px-4 py-3 shadow-md">
+      <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center justify-between">
         <h1 className="text-lg font-bold">ScratchPad</h1>
+        <button
+          onClick={() => setShowInfo(!showInfo)}
+          className="text-amber-200 text-sm hover:text-white"
+          data-testid="info-button"
+        >
+          ⓘ
+        </button>
       </header>
+
+      {showInfo && <SyncInfo />}
 
       <QuickAddBar onAdd={addNote} />
       <SearchBar value={search} onChange={setSearch} />
@@ -58,6 +70,14 @@ function App() {
         />
       )}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <SyncAuthGate>
+      <AppContent />
+    </SyncAuthGate>
   );
 }
 
