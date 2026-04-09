@@ -6,8 +6,14 @@ export function SyncInfo() {
   const backend = getStorageBackend();
 
   useEffect(() => {
-    const saved = localStorage.getItem("scratchpad-automerge-doc-url") || "";
-    setDocUrl(saved);
+    // Poll for doc URL — it may be set after initial doc creation
+    const check = () => {
+      const saved = localStorage.getItem("scratchpad-automerge-doc-url") || "";
+      setDocUrl(saved);
+    };
+    check();
+    const interval = setInterval(check, 2000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -16,7 +22,7 @@ export function SyncInfo() {
       <p><span className="font-semibold">Backend:</span> {backend}</p>
       <p><span className="font-semibold">Sync:</span> {import.meta.env.VITE_SYNC_SERVER_URL || "no configurado"}</p>
       <p className="break-all">
-        <span className="font-semibold">Doc URL:</span> {docUrl || "no asignado"}
+        <span className="font-semibold">Doc URL:</span> {docUrl || "creando..."}
       </p>
     </div>
   );
