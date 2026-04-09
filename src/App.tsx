@@ -59,7 +59,7 @@ function AppContent() {
 
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <p className="text-amber-400">Cargando...</p>
+          <p className="text-amber-600">Cargando...</p>
         </div>
       ) : (
         <NoteList

@@ -46,7 +46,7 @@ export function NoteDetailPage({
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="flex-1 min-h-[200px] rounded-lg border border-amber-200 bg-white p-3 text-sm
+          className="flex-1 min-h-[200px] rounded-lg border border-amber-200 bg-white p-3 text-sm text-gray-900
                      resize-none focus:outline-none focus:ring-2 focus:ring-amber-400"
           data-testid="note-editor"
         />
@@ -68,7 +68,7 @@ export function NoteDetailPage({
           </div>
         )}
 
-        <div className="text-xs text-amber-500 space-y-0.5">
+        <div className="text-xs text-amber-700 space-y-0.5">
           <p>Creado: {new Date(initialCreatedAt).toLocaleString("es")}</p>
           <p>Actualizado: {new Date(initialUpdatedAt).toLocaleString("es")}</p>
         </div>

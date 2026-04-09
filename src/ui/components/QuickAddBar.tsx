@@ -30,7 +30,7 @@ export function QuickAddBar({ onAdd }: QuickAddBarProps) {
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Escribe una nota..."
-          className="flex-1 rounded-lg border border-amber-300 bg-white px-3 py-2 text-sm
+          className="flex-1 rounded-lg border border-amber-300 bg-white px-3 py-2 text-sm text-gray-900
                      placeholder:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
           data-testid="quick-add-input"
         />

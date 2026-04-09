@@ -29,7 +29,7 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
                  hover:border-amber-300 transition-colors"
       data-testid={`note-card-${note.id}`}
     >
-      <p className="text-sm text-gray-800 whitespace-pre-wrap break-words">{preview}</p>
+      <p className="text-sm text-gray-900 whitespace-pre-wrap break-words">{preview}</p>
 
       {urls.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
@@ -49,7 +49,7 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
         </div>
       )}
 
-      <p className="mt-2 text-xs text-amber-500">{formatRelativeTime(note.createdAt)}</p>
+      <p className="mt-2 text-xs text-amber-700">{formatRelativeTime(note.createdAt)}</p>
     </div>
   );
 }
