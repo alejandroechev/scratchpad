@@ -2,9 +2,10 @@
 
 ```mermaid
 graph TD
-    subgraph "Android Device (Tauri)"
+    subgraph "Android / Desktop (Tauri)"
+        AUTH[SyncAuthGate<br/>Device Registration]
         QAB[QuickAddBar]
-        NL[NoteList + NoteCards]
+        NL[NoteList + SwipeableCards]
         NDP[NoteDetailPage]
         SB[SearchBar]
         Hook[useNotes Hook]
@@ -12,6 +13,7 @@ graph TD
         AM[Automerge Doc<br/>ScratchPadDoc]
         IDB[(IndexedDB)]
 
+        AUTH -->|authenticated| QAB
         QAB --> Hook
         NL --> Hook
         NDP --> Hook
@@ -22,10 +24,13 @@ graph TD
     end
 
     subgraph "SyncEngine Server"
-        WS[WebSocket Server]
+        REG[/auth/register/]
+        WS[WebSocket Server<br/>JWT Verified]
         Storage[(Server Storage)]
+        REG -->|JWT token| WS
         WS --> Storage
     end
 
-    AM <-->|"WebSocket<br/>CRDT Sync"| WS
+    AUTH -->|"register<br/>(device name + key)"| REG
+    AM <-->|"WebSocket + JWT<br/>CRDT Sync"| WS
 ```
