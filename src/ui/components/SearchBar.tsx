@@ -16,7 +16,7 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
         onChange={(e) => onChange(e.target.value)}
         placeholder="Buscar notas..."
         className="w-full rounded-lg border border-amber-200 bg-white px-3 py-1.5 text-sm text-gray-900
-                   placeholder:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                   placeholder:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400"
         data-testid="search-input"
       />
     </div>
