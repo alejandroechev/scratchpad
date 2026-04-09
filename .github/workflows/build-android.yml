@@ -68,8 +68,8 @@ jobs:
         run: npx tauri android build
         env:
           VITE_STORAGE_BACKEND: automerge
-          VITE_SYNC_SERVER_URL: ${{ vars.SYNC_SERVER_URL || 'wss://sync.stormlab.app' }}
-          VITE_AUTOMERGE_DOC_URL: ${{ vars.AUTOMERGE_DOC_URL || '' }}
+          VITE_SYNC_SERVER_URL: wss://sync.stormlab.app
+          VITE_AUTOMERGE_DOC_URL: automerge:25avBccAaFeLJJ8qVEBq8gBf4Ht3
 
       - name: Sign APK
         run: |
