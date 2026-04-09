@@ -23,5 +23,8 @@ export default defineConfig({
     url: 'http://localhost:5173',
     reuseExistingServer: false,
     timeout: 30000,
+    env: {
+      VITE_STORAGE_BACKEND: 'memory',
+    },
   },
 });
