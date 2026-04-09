@@ -25,6 +25,11 @@ A personal scratchpad for quickly jotting down notes, pasting links, and capturi
 - **Tag milestones**: `git tag v0.1.0-mvp` when deploying or reaching a checkpoint
 - **Branch only for risky experiments** you might discard — delete after merge or abandon
 
+### Release & Versioning
+- **Bump version on every change** — after committing a meaningful change, bump the patch (or minor/major as appropriate) in both `package.json` and `src-tauri/tauri.conf.json`. Keep them in sync.
+- **CI auto-releases** — the `build-android.yml` workflow creates a GitHub Release with a signed APK for every push to master that touches `src/`, `src-tauri/`, `vite.config.ts`, or `package.json`. The release tag is `v<version>` from `package.json`.
+- **Never reuse a version tag** — always bump before pushing so CI creates a fresh release.
+
 ### Coding — TDD Workflow (strict, per-function)
 
 1. **RED** — Write a failing test FIRST. Run it. Confirm it fails. Show the failure output.
