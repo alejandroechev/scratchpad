@@ -9,6 +9,7 @@ on:
       - 'src-tauri/**'
       - 'tests/**'
       - 'package.json'
+      - 'vite.config.ts'
       - '.github/workflows/build-android.yml'
 
 permissions:
