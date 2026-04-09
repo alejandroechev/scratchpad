@@ -55,6 +55,11 @@ jobs:
       - name: Initialize Tauri Android
         run: npx tauri android init
 
+      - name: Copy app icons to Android project
+        run: |
+          cp -r src-tauri/icons/android/mipmap-* src-tauri/gen/android/app/src/main/res/
+          cp -r src-tauri/icons/android/values src-tauri/gen/android/app/src/main/res/
+
       - name: Decode signing keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > src-tauri/gen/android/app/scratchpad.keystore
