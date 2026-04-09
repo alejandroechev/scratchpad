@@ -3,7 +3,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import wasm from 'vite-plugin-wasm'
-import topLevelAwait from 'vite-plugin-top-level-await'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -11,8 +10,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
     wasm(),
-    topLevelAwait(),
   ],
+  build: {
+    target: 'esnext',
+  },
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version || '0.0.0'),
   },
