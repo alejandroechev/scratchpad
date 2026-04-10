@@ -15,3 +15,7 @@ if (getStorageBackend() === 'automerge') {
     startBlobSyncListener();
   });
 }
+
+import('./infra/share-receiver').then(({ initShareReceiver }) => {
+  initShareReceiver();
+});
