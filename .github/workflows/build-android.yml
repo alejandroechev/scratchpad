@@ -60,7 +60,7 @@ jobs:
           cp -r src-tauri/icons/android/mipmap-* src-tauri/gen/android/app/src/main/res/
           cp -r src-tauri/icons/android/values src-tauri/gen/android/app/src/main/res/
 
-      - name: Patch AndroidManifest for share intent
+      - name: Patch Android project (manifest + minSdk)
         run: bash src-tauri/android-patches/patch-manifest.sh
 
       - name: Decode signing keystore
