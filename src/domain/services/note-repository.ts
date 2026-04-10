@@ -1,4 +1,4 @@
-import type { Note } from "../models/note.js";
+import type { Note, NoteImage } from "../models/note.js";
 
 export interface NoteFilters {
   includeArchived?: boolean;
@@ -12,4 +12,6 @@ export interface NoteRepository {
   update(id: string, content: string): Note;
   archive(id: string): Note;
   delete(id: string): void;
+  addImage(noteId: string, image: NoteImage): Note;
+  removeImage(noteId: string, blobId: string): Note;
 }

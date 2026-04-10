@@ -1,4 +1,4 @@
-import type { Note } from "../../domain/models/note.js";
+import type { Note, NoteImage } from "../../domain/models/note.js";
 import type { NoteFilters } from "../../domain/services/note-repository.js";
 import { createNote } from "../../domain/models/note.js";
 import { getDocHandle } from "./repo.js";
@@ -73,4 +73,32 @@ export async function deleteNote(id: string): Promise<void> {
     if (!doc.notes[id]) throw new Error(`Note not found: ${id}`);
     delete doc.notes[id];
   });
+}
+
+export async function addImage(noteId: string, image: NoteImage): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (!note.images) note.images = [];
+    note.images.push(image);
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[noteId];
+}
+
+export async function removeImage(noteId: string, blobId: string): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (!note.images) note.images = [];
+    const idx = note.images.findIndex((img) => img.blobId === blobId);
+    if (idx === -1) throw new Error(`Image not found: ${blobId}`);
+    note.images.splice(idx, 1);
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[noteId];
 }

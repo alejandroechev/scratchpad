@@ -1,4 +1,4 @@
-import type { Note } from "../../domain/models/note.js";
+import type { Note, NoteImage } from "../../domain/models/note.js";
 import type { NoteRepository, NoteFilters } from "../../domain/services/note-repository.js";
 import { createNote } from "../../domain/models/note.js";
 
@@ -58,5 +58,25 @@ export class InMemoryNoteStore implements NoteRepository {
   delete(id: string): void {
     if (!this.notes.has(id)) throw new Error(`Note not found: ${id}`);
     this.notes.delete(id);
+  }
+
+  addImage(noteId: string, image: NoteImage): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (!note.images) note.images = [];
+    note.images.push(image);
+    note.updatedAt = new Date().toISOString();
+    return { ...note, images: [...note.images] };
+  }
+
+  removeImage(noteId: string, blobId: string): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (!note.images) note.images = [];
+    const idx = note.images.findIndex((img) => img.blobId === blobId);
+    if (idx === -1) throw new Error(`Image not found: ${blobId}`);
+    note.images.splice(idx, 1);
+    note.updatedAt = new Date().toISOString();
+    return { ...note, images: [...note.images] };
   }
 }

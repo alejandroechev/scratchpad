@@ -3,7 +3,7 @@
  *
  * Priority: VITE_STORAGE_BACKEND env var -> automerge (default) -> memory (fallback for tests)
  */
-import type { Note } from "../domain/models/note.js";
+import type { Note, NoteImage } from "../domain/models/note.js";
 import type { NoteFilters } from "../domain/services/note-repository.js";
 import { InMemoryNoteStore } from "./memory/note-store.js";
 
@@ -52,6 +52,16 @@ export async function archiveNote(id: string): Promise<Note> {
 export async function deleteNote(id: string): Promise<void> {
   if (backend === "automerge") return (await automerge()).deleteNote(id);
   return memoryStore.delete(id);
+}
+
+export async function addImage(noteId: string, image: NoteImage): Promise<Note> {
+  if (backend === "automerge") return (await automerge()).addImage(noteId, image);
+  return memoryStore.addImage(noteId, image);
+}
+
+export async function removeImage(noteId: string, blobId: string): Promise<Note> {
+  if (backend === "automerge") return (await automerge()).removeImage(noteId, blobId);
+  return memoryStore.removeImage(noteId, blobId);
 }
 
 /** Subscribe to remote doc changes. Returns unsubscribe function. No-op for memory backend. */

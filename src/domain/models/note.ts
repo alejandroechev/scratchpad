@@ -1,6 +1,14 @@
+export interface NoteImage {
+  blobId: string;      // SHA-256 hex
+  fileName: string;    // original filename
+  sizeBytes: number;
+  createdAt: string;
+}
+
 export interface Note {
   id: string;
   content: string;
+  images?: NoteImage[];
   createdAt: string;
   updatedAt: string;
   archived: boolean;
@@ -25,6 +33,7 @@ export function createNote(id: string, content: string): Note {
   return {
     id,
     content,
+    images: [],
     createdAt: now,
     updatedAt: now,
     archived: false,
