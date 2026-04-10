@@ -52,7 +52,8 @@ export async function getDocHandle(): Promise<DocHandle<ScratchPadDoc>> {
   if (docHandleInstance) return docHandleInstance;
 
   const repo = getRepo();
-  const savedUrl = localStorage.getItem(DOC_URL_KEY) || DEFAULT_DOC_URL;
+  // Hardcoded env var always wins — it's the shared doc for all devices
+  const savedUrl = DEFAULT_DOC_URL || localStorage.getItem(DOC_URL_KEY);
 
   if (savedUrl) {
     const handle = await repo.find<ScratchPadDoc>(savedUrl as AutomergeUrl);
