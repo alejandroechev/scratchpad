@@ -7,6 +7,7 @@ import { SearchBar } from "./ui/components/SearchBar";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
+import { removeImage } from "./infra/store-provider.js";
 
 function AppContent() {
   const [search, setSearch] = useState("");
@@ -23,6 +24,7 @@ function AppContent() {
         initialContent={note?.content ?? ""}
         initialCreatedAt={note?.createdAt ?? ""}
         initialUpdatedAt={note?.updatedAt ?? ""}
+        images={note?.images}
         onSave={async (content) => {
           await editNote(selectedNoteId, content);
           setSelectedNoteId(null);
@@ -36,6 +38,9 @@ function AppContent() {
           setSelectedNoteId(null);
         }}
         onBack={() => setSelectedNoteId(null)}
+        onRemoveImage={async (blobId) => {
+          await removeImage(selectedNoteId, blobId);
+        }}
       />
     );
   }

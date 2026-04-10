@@ -1,5 +1,6 @@
 import { extractUrls } from "../../domain/models/note.js";
 import type { Note } from "../../domain/models/note.js";
+import { ImageThumbnail } from "./ImageThumbnail.js";
 
 interface NoteCardProps {
   note: Note;
@@ -21,6 +22,7 @@ function formatRelativeTime(isoDate: string): string {
 export function NoteCard({ note, onClick }: NoteCardProps) {
   const urls = extractUrls(note.content);
   const preview = note.content.length > 120 ? note.content.slice(0, 120) + "..." : note.content;
+  const images = note.images ?? [];
 
   return (
     <div
@@ -29,7 +31,23 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
                  hover:border-amber-300 transition-colors"
       data-testid={`note-card-${note.id}`}
     >
-      <p className="text-sm text-gray-900 whitespace-pre-wrap break-words">{preview}</p>
+      <div className="flex gap-2">
+        {images.length > 0 && (
+          <div className="flex-shrink-0 relative">
+            <ImageThumbnail blobId={images[0].blobId} className="w-12 h-12" />
+            {images.length > 1 && (
+              <span
+                className="absolute -top-1 -right-1 bg-amber-500 text-white text-[10px] font-bold
+                           rounded-full w-5 h-5 flex items-center justify-center"
+                data-testid="image-count-badge"
+              >
+                📷 {images.length}
+              </span>
+            )}
+          </div>
+        )}
+        <p className="text-sm text-gray-900 whitespace-pre-wrap break-words flex-1">{preview}</p>
+      </div>
 
       {urls.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">

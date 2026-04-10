@@ -1,25 +1,31 @@
 import { useState } from "react";
 import { extractUrls } from "../../domain/models/note.js";
+import type { NoteImage } from "../../domain/models/note.js";
+import { ImageThumbnail } from "../components/ImageThumbnail.js";
 
 interface NoteDetailPageProps {
   noteId: string;
   initialContent: string;
   initialCreatedAt: string;
   initialUpdatedAt: string;
+  images?: NoteImage[];
   onSave: (content: string) => void;
   onArchive: () => void;
   onDelete: () => void;
   onBack: () => void;
+  onRemoveImage?: (blobId: string) => void;
 }
 
 export function NoteDetailPage({
   initialContent,
   initialCreatedAt,
   initialUpdatedAt,
+  images,
   onSave,
   onArchive,
   onDelete,
   onBack,
+  onRemoveImage,
 }: NoteDetailPageProps) {
   const [content, setContent] = useState(initialContent);
   const hasChanges = content !== initialContent;
@@ -50,6 +56,29 @@ export function NoteDetailPage({
                      resize-none focus:outline-none focus:ring-2 focus:ring-amber-400"
           data-testid="note-editor"
         />
+
+        {images && images.length > 0 && (
+          <div data-testid="image-gallery">
+            <p className="text-xs font-semibold text-amber-700 mb-1">Imágenes</p>
+            <div className="grid grid-cols-2 gap-2">
+              {images.map((img) => (
+                <div key={img.blobId} className="relative" data-testid={`gallery-item-${img.blobId}`}>
+                  <ImageThumbnail blobId={img.blobId} className="w-full h-32" />
+                  {onRemoveImage && (
+                    <button
+                      onClick={() => onRemoveImage(img.blobId)}
+                      className="absolute top-1 right-1 bg-black/50 text-white rounded-full w-6 h-6
+                                 flex items-center justify-center text-xs hover:bg-black/70"
+                      data-testid={`remove-image-${img.blobId}`}
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {urls.length > 0 && (
           <div className="flex flex-wrap gap-1">
