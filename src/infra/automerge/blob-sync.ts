@@ -178,4 +178,7 @@ export function startBlobSyncListener(): void {
   if (navigator.onLine) {
     setTimeout(() => retryPendingUploads(), 5000);
   }
+  setInterval(() => {
+    if (navigator.onLine) retryPendingUploads();
+  }, 60_000);
 }

@@ -5,6 +5,7 @@ import { NoteList } from "./ui/components/NoteList";
 import { NoteDetailPage } from "./ui/pages/NoteDetailPage";
 import { SearchBar } from "./ui/components/SearchBar";
 import { SyncInfo } from "./ui/components/SyncInfo";
+import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
 
 function AppContent() {
@@ -43,6 +44,7 @@ function AppContent() {
     <div className="min-h-screen bg-amber-50 flex flex-col">
       <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center justify-between">
         <h1 className="text-lg font-bold">ScratchPad</h1>
+        <SyncStatus />
         <button
           onClick={() => setShowInfo(!showInfo)}
           className="text-amber-200 text-sm hover:text-white"
