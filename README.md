@@ -1,6 +1,6 @@
 # ScratchPad
 
-> **v0.3.0** — Tauri Android + Desktop native app
+> **v0.5.0** — Tauri Android + Desktop native app
 
 A personal scratchpad for quickly jotting down notes, pasting links, and capturing fleeting ideas.
 
@@ -8,10 +8,13 @@ A personal scratchpad for quickly jotting down notes, pasting links, and capturi
 
 - ✏️ **Quick-add bar** — always visible at top, enter to submit
 - 📝 **Plain text notes** — with automatic URL detection and tappable link chips
+- 📷 **Image attachments** — attach photos from camera/gallery, with thumbnails and gallery view
+- 📤 **Android share target** — share screenshots/images from any app directly to ScratchPad
 - 🔍 **Search** — filter notes by content text in real-time
-- 📋 **Note detail** — tap to expand, edit, save/discard changes
+- 📋 **Note detail** — tap to expand, edit, save/discard, manage images
 - 👆 **Swipe gestures** — swipe left to archive, swipe right to delete
-- 🔄 **Offline-first sync** — Automerge CRDTs sync across devices via SyncEngine
+- 🔄 **Offline-first sync** — Automerge CRDTs + blob storage sync across devices via SyncEngine
+- ⬆️ **Upload status** — real-time indicator showing pending blob uploads
 - 🔐 **Device registration** — first-time setup with sync server password
 - 📱 **Mobile-first UI** — designed for Android (Pixel 5 viewport), also runs on desktop
 - ⓘ **Sync info panel** — tap ⓘ to see version, doc URL, and sync status
