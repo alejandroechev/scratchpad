@@ -77,6 +77,13 @@ export function getDocUrl(): string {
   return localStorage.getItem(DOC_URL_KEY) || "";
 }
 
+/** Subscribe to document changes (local + remote). Returns unsubscribe function. */
+export async function onDocChange(callback: () => void): Promise<() => void> {
+  const handle = await getDocHandle();
+  handle.on("change", callback);
+  return () => handle.off("change", callback);
+}
+
 export async function waitForDoc(): Promise<ScratchPadDoc> {
   const handle = await getDocHandle();
   const doc = handle.doc();

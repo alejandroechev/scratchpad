@@ -17,6 +17,15 @@ export function useNotes(filters?: NoteFilters) {
     refresh();
   }, [refresh]);
 
+  // Listen for remote doc changes (real-time sync)
+  useEffect(() => {
+    let unsubscribe: (() => void) | null = null;
+    store.onDocChange(() => refresh()).then((unsub) => {
+      unsubscribe = unsub;
+    });
+    return () => { unsubscribe?.(); };
+  }, [refresh]);
+
   const addNote = useCallback(async (content: string) => {
     await store.createNote(content);
     await refresh();

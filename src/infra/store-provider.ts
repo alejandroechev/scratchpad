@@ -53,3 +53,12 @@ export async function deleteNote(id: string): Promise<void> {
   if (backend === "automerge") return (await automerge()).deleteNote(id);
   return memoryStore.delete(id);
 }
+
+/** Subscribe to remote doc changes. Returns unsubscribe function. No-op for memory backend. */
+export async function onDocChange(callback: () => void): Promise<() => void> {
+  if (backend === "automerge") {
+    const { onDocChange } = await import("./automerge/repo.js");
+    return onDocChange(callback);
+  }
+  return () => {};
+}
