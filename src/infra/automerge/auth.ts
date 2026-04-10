@@ -84,6 +84,12 @@ export function clearAuth(): void {
   localStorage.removeItem(DEVICE_ID_KEY);
 }
 
+export function getAuthHeaders(): Record<string, string> {
+  const token = getStoredToken();
+  if (!token) return {};
+  return { Authorization: `Bearer ${token}` };
+}
+
 export function getAuthenticatedWsUrl(): string {
   const baseUrl = import.meta.env.VITE_SYNC_SERVER_URL || "ws://localhost:3030";
   const token = getStoredToken();
