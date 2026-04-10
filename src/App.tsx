@@ -7,7 +7,8 @@ import { SearchBar } from "./ui/components/SearchBar";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
-import { removeImage } from "./infra/store-provider.js";
+import { removeImage, addImage, createNote } from "./infra/store-provider.js";
+import { storeAndSyncBlob } from "./infra/automerge/blob-sync.js";
 
 function AppContent() {
   const [search, setSearch] = useState("");
@@ -41,6 +42,15 @@ function AppContent() {
         onRemoveImage={async (blobId) => {
           await removeImage(selectedNoteId, blobId);
         }}
+        onAddImage={async (file) => {
+          const { blobId, sizeBytes } = await storeAndSyncBlob(file);
+          await addImage(selectedNoteId, {
+            blobId,
+            fileName: file.name,
+            sizeBytes,
+            createdAt: new Date().toISOString(),
+          });
+        }}
       />
     );
   }
@@ -61,7 +71,19 @@ function AppContent() {
 
       {showInfo && <SyncInfo />}
 
-      <QuickAddBar onAdd={addNote} />
+      <QuickAddBar
+        onAdd={addNote}
+        onAddImage={async (file) => {
+          const { blobId, sizeBytes } = await storeAndSyncBlob(file);
+          const note = await createNote("");
+          await addImage(note.id, {
+            blobId,
+            fileName: file.name,
+            sizeBytes,
+            createdAt: new Date().toISOString(),
+          });
+        }}
+      />
       <SearchBar value={search} onChange={setSearch} />
 
       {loading ? (

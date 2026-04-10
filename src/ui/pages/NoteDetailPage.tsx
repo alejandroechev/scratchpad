@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { extractUrls } from "../../domain/models/note.js";
 import type { NoteImage } from "../../domain/models/note.js";
 import { ImageThumbnail } from "../components/ImageThumbnail.js";
@@ -14,6 +14,7 @@ interface NoteDetailPageProps {
   onDelete: () => void;
   onBack: () => void;
   onRemoveImage?: (blobId: string) => void;
+  onAddImage?: (file: File) => void;
 }
 
 export function NoteDetailPage({
@@ -26,9 +27,17 @@ export function NoteDetailPage({
   onDelete,
   onBack,
   onRemoveImage,
+  onAddImage,
 }: NoteDetailPageProps) {
   const [content, setContent] = useState(initialContent);
   const hasChanges = content !== initialContent;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && onAddImage) onAddImage(file);
+    e.target.value = "";
+  };
   const urls = extractUrls(content);
 
   return (
@@ -77,6 +86,28 @@ export function NoteDetailPage({
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {onAddImage && (
+          <div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleFileChange}
+              className="hidden"
+              data-testid="detail-file-input"
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="rounded-lg border border-amber-300 px-3 py-2 text-sm text-amber-700
+                         hover:bg-amber-100"
+              data-testid="detail-add-image-button"
+            >
+              📷 Adjuntar imagen
+            </button>
           </div>
         )}
 
