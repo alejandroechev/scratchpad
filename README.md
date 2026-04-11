@@ -1,6 +1,6 @@
 # ScratchPad
 
-> **v0.5.0** — Tauri Android + Desktop native app
+> **v0.6.0** — Tauri Android + Desktop + macOS native app
 
 A personal scratchpad for quickly jotting down notes, pasting links, and capturing fleeting ideas.
 
@@ -16,7 +16,9 @@ A personal scratchpad for quickly jotting down notes, pasting links, and capturi
 - 🔄 **Offline-first sync** — Automerge CRDTs + blob storage sync across devices via SyncEngine
 - ⬆️ **Upload status** — real-time indicator showing pending blob uploads
 - 🔐 **Device registration** — first-time setup with sync server password
-- 📱 **Mobile-first UI** — designed for Android (Pixel 5 viewport), also runs on desktop
+- 👤 **Multi-user profiles** — hardcoded Ale/Dani profiles, each with their own synced document
+- 📱 **Mobile-first UI** — designed for Android (Pixel 5 viewport), also runs on desktop and macOS
+- 🍎 **macOS release** — unsigned .dmg for ARM (M1+) and Intel, auto-built via CI
 - ⓘ **Sync info panel** — tap ⓘ to see version, doc URL, and sync status
 
 ## Tech Stack
