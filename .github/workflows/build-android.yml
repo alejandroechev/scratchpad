@@ -72,7 +72,6 @@ jobs:
         env:
           VITE_STORAGE_BACKEND: automerge
           VITE_SYNC_SERVER_URL: wss://sync.stormlab.app
-          VITE_AUTOMERGE_DOC_URL: automerge:25avBccAaFeLJJ8qVEBq8gBf4Ht3
 
       - name: Sign APK
         run: |

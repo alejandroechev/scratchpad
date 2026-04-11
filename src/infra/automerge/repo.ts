@@ -5,6 +5,7 @@ import type { AutomergeUrl, DocHandle } from "@automerge/automerge-repo";
 import type { ScratchPadDoc } from "./schema.js";
 import { CURRENT_SCHEMA_VERSION } from "./schema.js";
 import { getAuthenticatedWsUrl } from "./auth.js";
+import { getActiveProfile } from "../profile-store.js";
 
 const DOC_URL_KEY = "scratchpad-automerge-doc-url";
 const IDB_NAME = "scratchpad-automerge";
@@ -52,8 +53,9 @@ export async function getDocHandle(): Promise<DocHandle<ScratchPadDoc>> {
   if (docHandleInstance) return docHandleInstance;
 
   const repo = getRepo();
-  // Hardcoded env var always wins — it's the shared doc for all devices
-  const savedUrl = DEFAULT_DOC_URL || localStorage.getItem(DOC_URL_KEY);
+  // Priority: active profile docUrl → env var → localStorage fallback
+  const profileUrl = getActiveProfile()?.docUrl;
+  const savedUrl = profileUrl || DEFAULT_DOC_URL || localStorage.getItem(DOC_URL_KEY);
 
   if (savedUrl) {
     const handle = await repo.find<ScratchPadDoc>(savedUrl as AutomergeUrl);
@@ -82,6 +84,10 @@ export async function onDocChange(callback: () => void): Promise<() => void> {
   const handle = await getDocHandle();
   handle.on("change", callback);
   return () => handle.off("change", callback);
+}
+
+export function resetDocHandle(): void {
+  docHandleInstance = null;
 }
 
 export async function waitForDoc(): Promise<ScratchPadDoc> {

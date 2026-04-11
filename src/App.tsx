@@ -9,11 +9,14 @@ import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
 import { removeImage, addImage, createNote } from "./infra/store-provider.js";
 import { storeAndSyncBlob } from "./infra/automerge/blob-sync.js";
+import { getActiveProfile, clearActiveProfile } from "./infra/profile-store.js";
+import { resetDocHandle } from "./infra/automerge/repo.js";
 
 function AppContent() {
   const [search, setSearch] = useState("");
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [showInfo, setShowInfo] = useState(false);
+  const activeProfile = getActiveProfile();
   const filters = useMemo(() => ({ search: search || undefined }), [search]);
   const { notes, loading, addNote, editNote, archiveNote, removeNote } = useNotes(filters);
 
@@ -58,7 +61,22 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-amber-50 flex flex-col">
       <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center justify-between">
-        <h1 className="text-lg font-bold">ScratchPad</h1>
+        <div className="flex items-center">
+          <h1 className="text-lg font-bold">ScratchPad</h1>
+          {activeProfile && (
+            <button
+              onClick={() => {
+                clearActiveProfile();
+                resetDocHandle();
+                window.location.reload();
+              }}
+              className="text-xs bg-amber-700 px-2 py-0.5 rounded ml-2 hover:bg-amber-800"
+              data-testid="profile-badge"
+            >
+              {activeProfile.name}
+            </button>
+          )}
+        </div>
         <SyncStatus />
         <button
           onClick={() => setShowInfo(!showInfo)}
