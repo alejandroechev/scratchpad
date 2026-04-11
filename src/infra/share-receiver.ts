@@ -4,12 +4,14 @@
  *
  * Uses a queue-based approach: polls on startup and on each app focus event.
  * Only active on mobile (Tauri Android/iOS).
+ * All imports are dynamic to avoid triggering automerge init on desktop.
  */
-import { storeAndSyncBlob } from "./automerge/blob-sync.js";
-import { createNote, addImage } from "./store-provider.js";
 
 async function handleImageIntent(contentUri: string): Promise<void> {
   const { readFile } = await import("@tauri-apps/plugin-fs");
+  const { storeAndSyncBlob } = await import("./automerge/blob-sync.js");
+  const { createNote, addImage } = await import("./store-provider.js");
+
   const bytes = await readFile(contentUri);
   const file = new File([bytes], "shared-image.jpg", { type: "image/jpeg" });
   const { blobId, sizeBytes } = await storeAndSyncBlob(file);

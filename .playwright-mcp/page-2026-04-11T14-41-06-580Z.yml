@@ -1,0 +1,14 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - heading "ScratchPad" [level=1] [ref=e5]
+    - button "ⓘ" [ref=e6]
+  - generic [ref=e8]:
+    - textbox "Escribe una nota..." [ref=e9]
+    - button "📷" [ref=e10]
+    - button "+" [disabled] [ref=e11]
+  - textbox "Buscar notas..." [ref=e13]
+  - generic [ref=e20] [cursor=pointer]:
+    - paragraph [ref=e22]: Test note with a link https://github.com
+    - link "github.com" [ref=e24]:
+      - /url: https://github.com
+    - paragraph [ref=e25]: ahora

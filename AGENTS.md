@@ -58,10 +58,17 @@ npx playwright test
 npx tsc -b
 # STOP if there are type errors. Fix them.
 
-# 4. Visual validation (UI features only)
-# Take screenshots using Playwright MCP of every screen affected by the change.
-# Review each screenshot visually. Store in screenshots/ folder.
+# 4. Visual validation (MANDATORY for every release)
+# Start dev server with memory backend, navigate with Playwright MCP, take screenshots:
+#   a. Start: $env:VITE_STORAGE_BACKEND = "memory"; npm run dev
+#   b. Navigate to http://localhost:5173
+#   c. Screenshot the main screen (empty state)
+#   d. Add a note with text + URL, screenshot the list
+#   e. Tap the note, screenshot the detail view
+#   f. Check browser console for errors (zero errors required)
+#   g. Store screenshots in screenshots/ folder
 # If Playwright MCP is not available, STOP and tell the user.
+# STOP if any screen is broken, shows errors, or doesn't render correctly.
 ```
 
 ### Documentation
@@ -78,7 +85,7 @@ Before running `git commit`, mentally verify:
 - [ ] `npx vitest run --coverage` shows ≥ 90% statement coverage?
 - [ ] `npx playwright test` — all E2E tests pass?
 - [ ] `npx tsc -b` — zero type errors?
-- [ ] Visual screenshots taken and reviewed (if UI feature)?
+- [ ] Visual validation done via Playwright MCP (main screen, add note, detail view, zero console errors)?
 - [ ] README updated (if public-facing change)?
 - [ ] System diagram updated (if architecture changed)?
 - [ ] ADR written (if major design decision)?

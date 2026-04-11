@@ -1,0 +1,12 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - heading "ScratchPad" [level=1] [ref=e5]
+    - button "ⓘ" [ref=e6]
+  - generic [ref=e8]:
+    - textbox "Escribe una nota..." [ref=e9]
+    - button "📷" [ref=e10]
+    - button "+" [disabled] [ref=e11]
+  - textbox "Buscar notas..." [ref=e13]
+  - generic [ref=e14]:
+    - paragraph [ref=e15]: Sin notas aún
+    - paragraph [ref=e16]: Escribe algo arriba para empezar

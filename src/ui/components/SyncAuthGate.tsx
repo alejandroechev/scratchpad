@@ -22,7 +22,7 @@ export function SyncAuthGate({ children }: SyncAuthGateProps) {
       setStatus("authenticated");
       return;
     }
-    checkAuthStatus().then((result) => setStatus(result.status));
+    checkAuthStatus().then((result) => setStatus(result.status)).catch(() => setStatus("needs-registration"));
   }, []);
 
   if (status === "checking") {

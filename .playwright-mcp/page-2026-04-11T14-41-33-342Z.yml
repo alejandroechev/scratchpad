@@ -1,0 +1,16 @@
+- generic [ref=e26]:
+  - banner [ref=e27]:
+    - button "←" [ref=e28]
+    - heading "Detalle" [level=1] [ref=e29]
+    - button "Guardar" [disabled] [ref=e30]
+  - generic [ref=e31]:
+    - textbox [ref=e32]: Test note with a link https://github.com
+    - button "📷 Adjuntar imagen" [ref=e34]
+    - link "🔗 github.com" [ref=e36] [cursor=pointer]:
+      - /url: https://github.com
+    - generic [ref=e37]:
+      - paragraph [ref=e38]: "Creado: 11/4/2026, 10:41:05"
+      - paragraph [ref=e39]: "Actualizado: 11/4/2026, 10:41:05"
+    - generic [ref=e40]:
+      - button "📦 Archivar" [ref=e41]
+      - button "🗑️ Eliminar" [ref=e42]
