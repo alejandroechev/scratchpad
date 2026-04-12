@@ -68,14 +68,14 @@ npm run tauri android build # Android release build
 
 1. Bump the version in both `package.json` and `src-tauri/tauri.conf.json`
 2. Push to master
-3. CI builds the Android APK and creates a GitHub Release with the APK attached
-4. Download the APK from the Releases page and install on your phone
+3. CI builds the Android APK (signed) and macOS DMGs (ARM + Intel), then creates a GitHub Release with all artifacts attached
+4. Download the APK or DMG from the Releases page and install on your device
 
 ## Sync Architecture
 
-All devices share a single Automerge document (`VITE_AUTOMERGE_DOC_URL`). On first launch, the app prompts for a device name and the sync server registration key. Once registered, the device receives a JWT token used for authenticated WebSocket connections. Data syncs automatically in the background and works fully offline.
+Each user (Ale / Dani) has their own Automerge document. On first launch, the app shows a profile picker, then prompts for a device name and the sync server registration key. Once registered, the device receives a JWT token used for authenticated WebSocket connections. Data syncs automatically in the background and works fully offline. Images shared from other Android apps are received via share intent and stored as blob attachments.
 
-See [ADR-001](docs/adrs/001-local-first-automerge.md) and [ADR-002](docs/adrs/002-sync-auth-device-registration.md) for details.
+See [ADR-001](docs/adrs/001-local-first-automerge.md), [ADR-002](docs/adrs/002-sync-auth-device-registration.md), [ADR-003](docs/adrs/003-android-share-intent.md), and [ADR-004](docs/adrs/004-multi-user-profiles.md) for details.
 
 ## License
 
