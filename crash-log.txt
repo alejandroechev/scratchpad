@@ -1,0 +1,31 @@
+--------- beginning of main
+04-12 15:52:27.752   958   958 E SurfaceFlinger: alpha changed 0.011 -> 0.000 - DimTransitionLayer for Surface(name=Task=4032)/@0x6a2070f#8136
+04-12 15:52:27.919   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023547
+04-12 15:52:27.921   942   986 E HeatmapThread: !@ CAM New BSOH: 100
+04-12 15:52:27.988  9048 30399 E SCS@AiSearch user 0: (FsmDataManager) getAllHits: No hits
+04-12 15:52:27.996  1174  2522 E IPCThreadState: Binder transaction failure. id: 18332782, BR_*: 29189, error: -22 (Invalid argument)
+04-12 15:52:28.005   872   912 E audio_hw_proxy_mixer: proxy-proxy_set_mixer_value_int: cannot find ABOX Display Mixer Control
+04-12 15:52:28.020   958   958 E BpTransactionCompletedListener: Failed to transact (-32)
+04-12 15:52:28.919   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023548
+04-12 15:52:28.924   942   986 E HeatmapThread: !@ CAM New BSOH: 100
+04-12 15:52:29.920   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023549
+04-12 15:52:29.929   942   986 E HeatmapThread: !@ CAM New BSOH: 100
+--------- beginning of system
+04-12 15:52:30.540  1174  2377 E Pageboost: ioinfo read failed
+04-12 15:52:30.919   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023550
+04-12 15:52:30.927   942   986 E HeatmapThread: !@ CAM New BSOH: 100
+04-12 15:52:31.091   911   945 E BatteryDump: !@new_battery_dump : 4175,1327,1400,1500,74,295,299,349,295,0,314,330,0,Charging,NO_CHARGING,Normal,Good,USB_CDP,2,Normal,0,0,9298,0x0,0x10000,0x0,0,0,0000,0000,00000000,0,0,0,0,209,4095,7364,990,0,
+04-12 15:52:31.923   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023551
+04-12 15:52:31.932   942   986 E HeatmapThread: !@ CAM New BSOH: 100
+04-12 15:52:31.942  1174 10696 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+04-12 15:52:31.944  1174 10696 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+04-12 15:52:31.945  1174 10696 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+04-12 15:52:32.249  1174  2522 E BatteryStatsService: Invalid uid for waking network packet: -1
+04-12 15:52:32.920   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023552
+04-12 15:52:32.929   942   986 E HeatmapThread: !@ CAM New BSOH: 100
+04-12 15:52:33.919   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023553
+04-12 15:52:33.922   942   986 E HeatmapThread: !@ CAM New BSOH: 100
+04-12 15:52:34.752 30538 30538 E oid.apps.photos: Not starting debugger since process cannot load the jdwp agent.
+04-12 15:52:34.919   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023554
+04-12 15:52:34.923   942   986 E HeatmapThread: !@ CAM New BSOH: 100
+04-12 15:52:35.069 30538 30565 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.

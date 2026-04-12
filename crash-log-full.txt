@@ -1,0 +1,504 @@
+--------- beginning of main
+04-12 15:52:55.417  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.417  1114 16394 I libsfextcp: GetMaxResolution(104)
+04-12 15:52:55.418  1114 16394 I libsfextcp: name(c2.exynos.h264.decoder) width(8192) height(8192) isSoftware(0)
+04-12 15:52:55.418  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.418  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.419 12486 30301 V MediaMetadataRetriever: extractMetadata(9)
+04-12 15:52:55.419  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.419 12486 30301 V MediaMetadataRetriever: extractMetadata(18)
+04-12 15:52:55.419  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.419 12486 30301 V MediaMetadataRetriever: extractMetadata(19)
+04-12 15:52:55.419  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.420 12486 30301 V MediaMetadataRetriever: extractMetadata(20)
+04-12 15:52:55.420  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.420 12486 30301 V MediaMetadataRetriever: extractMetadata(24)
+04-12 15:52:55.420  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.420 12486 30301 V MediaMetadataRetriever: destructor
+04-12 15:52:55.420 12486 30301 V MediaMetadataRetriever: disconnect
+04-12 15:52:55.420  1114 16394 V MetadataRetrieverClient: disconnect from pid 12486
+04-12 15:52:55.421  1114 16394 V MetadataRetrieverClient: MetadataRetrieverClient destructor
+04-12 15:52:55.421  1114 16394 V MetadataRetrieverClient: disconnect from pid 12486
+04-12 15:52:55.427  5660 11419 V MediaProvider: calling app has PERMISSION_READ_VIDEO? true
+04-12 15:52:55.436  5660  5929 V MediaProvider: calling app has PERMISSION_READ_VIDEO? true
+04-12 15:52:55.436  1174  2096 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.437 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:55.437 13430 13477 I MediaSyncer: generation: Generation(added=608745, modified=608759)
+04-12 15:52:55.438  5660  5779 V MediaProvider: Deleted backup of old file path: /storage/emulated/0/Android/media/com.whatsapp/WhatsApp/.Shared/pUrY-w27Y3VLYj+gE93VqMBTI8XB75pDRlsp5Ny5Vog=.tmp
+04-12 15:52:55.440  1174  3844 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.441 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:55.442  5660 10106 I MediaProvider: Deleted 1 0 0 0 0 0 0 items on external_primary due to com.whatsapp
+04-12 15:52:55.446  5660  5929 V MediaProvider: calling app has PERMISSION_READ_VIDEO? true
+04-12 15:52:55.448  5660  5929 V MediaProvider: calling app has PERMISSION_READ_VIDEO? true
+04-12 15:52:55.450  5660 10888 V MediaProvider: calling app has PERMISSION_READ_VIDEO? true
+04-12 15:52:55.457  5660  5929 W MediaProvider: isAppCloneUserPair for user 0: false
+04-12 15:52:55.460  1174  3844 W JobInfo : Job 'com.google.android.providers.media.module/com.android.providers.media.MediaService#-300' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+04-12 15:52:55.461  1174  2096 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.466  5660  7427 I MediaProvider: Begin Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x1000010 xflg=0x4 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService }
+04-12 15:52:55.469  5660  7427 V MediaMetadataRetriever: constructor
+04-12 15:52:55.469  1114 16394 V MetadataRetrieverClient: MetadataRetrieverClient constructor pid(5660)
+04-12 15:52:55.469  1114 16394 V MediaPlayerService: Create new media retriever from pid 5660
+04-12 15:52:55.470  5660  7427 V MediaMetadataRetriever: setDataSource(158, 0, 576460752303423487)
+04-12 15:52:55.470  1114 16394 V MetadataRetrieverClient: setDataSource fd=11, offset=0, length=576460752303423487
+04-12 15:52:55.470  1114 16394 V MetadataRetrieverClient: st_dev  = 65084
+04-12 15:52:55.470  1114 16394 V MetadataRetrieverClient: st_mode = 33200
+04-12 15:52:55.470  1114 16394 V MetadataRetrieverClient: st_uid  = 10319
+04-12 15:52:55.470  1114 16394 V MetadataRetrieverClient: st_gid  = 1023
+04-12 15:52:55.470  1114 16394 V MetadataRetrieverClient: st_size = 3101511
+04-12 15:52:55.470  1114 16394 V MetadataRetrieverClient: calculated length = 3101511
+04-12 15:52:55.470  1114 16394 V MetadataRetrieverClient: player type = 4
+04-12 15:52:55.470  1114 16394 D StagefrightMetadataRetriever: FileSource remote
+04-12 15:52:55.471 13430 13477 I MediaSyncer: loaded: 33ms, Success(maxMediaId=0, maxGenAdded=-9223372036854775808, maxGenModified=608767, count=0)
+04-12 15:52:55.473  1112  9032 I MediaExtractorFactory: Created an extractor 'SECMPEG4Extractor' with confidence 0.41
+04-12 15:52:55.474  1114 16394 V MetadataRetrieverClient: setDataSource(fd) return(0)
+04-12 15:52:55.474  5660  7427 V MediaMetadataRetriever: setDataSource(fd) return(0)
+04-12 15:52:55.474  5660  7427 V MediaMetadataRetriever: extractMetadata(12)
+04-12 15:52:55.474  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.475 13430 13476 I MediaSyncer: delete-reconcileUpdate: 0
+04-12 15:52:55.475  5660 10888 W MediaProvider: isAppCloneUserPair for user 0: false
+04-12 15:52:55.475  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.475  1114 16394 I libsfextcp: GetMaxResolution(104)
+04-12 15:52:55.475  1114 16394 I libsfextcp: name(c2.exynos.h264.decoder) width(8192) height(8192) isSoftware(0)
+04-12 15:52:55.475  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.475  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.476  5660  7427 V MediaMetadataRetriever: destructor
+04-12 15:52:55.476  5660  7427 V MediaMetadataRetriever: disconnect
+04-12 15:52:55.476  1114 16394 V MetadataRetrieverClient: disconnect from pid 5660
+04-12 15:52:55.476  1114 16394 V MetadataRetrieverClient: MetadataRetrieverClient destructor
+04-12 15:52:55.476  1114 16394 V MetadataRetrieverClient: disconnect from pid 5660
+04-12 15:52:55.476  5660  7427 V MediaMetadataRetriever: constructor
+04-12 15:52:55.477  1114 16394 V MetadataRetrieverClient: MetadataRetrieverClient constructor pid(5660)
+04-12 15:52:55.477  1114 16394 V MediaPlayerService: Create new media retriever from pid 5660
+04-12 15:52:55.477  5660  7427 V MediaMetadataRetriever: setDataSource(158, 0, 576460752303423487)
+04-12 15:52:55.477  1114 16394 V MetadataRetrieverClient: setDataSource fd=11, offset=0, length=576460752303423487
+04-12 15:52:55.477  1114 16394 V MetadataRetrieverClient: st_dev  = 65084
+04-12 15:52:55.477  1114 16394 V MetadataRetrieverClient: st_mode = 33200
+04-12 15:52:55.477  1114 16394 V MetadataRetrieverClient: st_uid  = 10319
+04-12 15:52:55.477  1114 16394 V MetadataRetrieverClient: st_gid  = 1023
+04-12 15:52:55.477  1114 16394 V MetadataRetrieverClient: st_size = 3101511
+04-12 15:52:55.477  1114 16394 V MetadataRetrieverClient: calculated length = 3101511
+04-12 15:52:55.477  1114 16394 V MetadataRetrieverClient: player type = 4
+04-12 15:52:55.477  1114 16394 D StagefrightMetadataRetriever: FileSource remote
+04-12 15:52:55.482  1112  9032 I MediaExtractorFactory: Created an extractor 'SECMPEG4Extractor' with confidence 0.41
+04-12 15:52:55.482  1114 16394 V MetadataRetrieverClient: setDataSource(fd) return(0)
+04-12 15:52:55.482  5660 10888 W SQLiteLog: (28) walCheckpoint: eMode(0), mxFrame(258), nBackfill(258), /data/data/com.google.android.providers.media.module/databases/external.db-wal taking (5) ms
+04-12 15:52:55.482  5660  7427 V MediaMetadataRetriever: setDataSource(fd) return(0)
+04-12 15:52:55.482  5660  7427 V MediaMetadataRetriever: extractMetadata(12)
+04-12 15:52:55.482  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.483  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.483  1114 16394 I libsfextcp: GetMaxResolution(104)
+04-12 15:52:55.483  1174  2096 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.483  1114 16394 I libsfextcp: name(c2.exynos.h264.decoder) width(8192) height(8192) isSoftware(0)
+04-12 15:52:55.483  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.483  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.484  5660  7427 V MediaMetadataRetriever: extractMetadata(5)
+04-12 15:52:55.484  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.484  5660  7427 V MediaMetadataRetriever: extractMetadata(0)
+04-12 15:52:55.484  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.484 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:55.484  5660  7427 V MediaMetadataRetriever: extractMetadata(1)
+04-12 15:52:55.485  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.485  5660  7427 V MediaMetadataRetriever: extractMetadata(2)
+04-12 15:52:55.485  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.485  5660  7427 V MediaMetadataRetriever: extractMetadata(13)
+04-12 15:52:55.485  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.485  5660  7427 V MediaMetadataRetriever: extractMetadata(3)
+04-12 15:52:55.485  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.485  5660  7427 V MediaMetadataRetriever: extractMetadata(4)
+04-12 15:52:55.485  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.486  5660  7427 V MediaMetadataRetriever: extractMetadata(6)
+04-12 15:52:55.486  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.486  5660  7427 V MediaMetadataRetriever: extractMetadata(7)
+04-12 15:52:55.486  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.486  5660  7427 V MediaMetadataRetriever: extractMetadata(8)
+04-12 15:52:55.486  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.486  5660  7427 V MediaMetadataRetriever: extractMetadata(9)
+04-12 15:52:55.487  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.487  5660  7427 V MediaMetadataRetriever: extractMetadata(10)
+04-12 15:52:55.487  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.487  5660  7427 V MediaMetadataRetriever: extractMetadata(11)
+04-12 15:52:55.487  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.487  5660  7427 V MediaMetadataRetriever: extractMetadata(13)
+04-12 15:52:55.487  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.487  5660  7427 V MediaMetadataRetriever: extractMetadata(14)
+04-12 15:52:55.488  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.488  5660  7427 V MediaMetadataRetriever: extractMetadata(15)
+04-12 15:52:55.488  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.488  5660  7427 V MediaMetadataRetriever: extractMetadata(20)
+04-12 15:52:55.488  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.488  5660  7427 V MediaMetadataRetriever: extractMetadata(25)
+04-12 15:52:55.488  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.488  5660  7427 V MediaMetadataRetriever: extractMetadata(18)
+04-12 15:52:55.488  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.489  5660  7427 V MediaMetadataRetriever: extractMetadata(19)
+04-12 15:52:55.489  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.489  5660  7427 V MediaMetadataRetriever: extractMetadata(18)
+04-12 15:52:55.489  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.489  5660  7427 V MediaMetadataRetriever: extractMetadata(19)
+04-12 15:52:55.489  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.489  5660  7427 V MediaMetadataRetriever: extractMetadata(24)
+04-12 15:52:55.489  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.490  5660  7427 V MediaMetadataRetriever: extractMetadata(35)
+04-12 15:52:55.490  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.490  5660  7427 V MediaMetadataRetriever: extractMetadata(36)
+04-12 15:52:55.490  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.490  5660  7427 V MediaMetadataRetriever: extractMetadata(37)
+04-12 15:52:55.490  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.490  5660  7427 V MediaMetadataRetriever: extractMetadata(40)
+04-12 15:52:55.490  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.490  5660  7427 V MediaMetadataRetriever: destructor
+04-12 15:52:55.490  5660  7427 V MediaMetadataRetriever: disconnect
+04-12 15:52:55.490  1114 16394 V MetadataRetrieverClient: disconnect from pid 5660
+04-12 15:52:55.491  1114 16394 V MetadataRetrieverClient: MetadataRetrieverClient destructor
+04-12 15:52:55.491  1114 16394 V MetadataRetrieverClient: disconnect from pid 5660
+04-12 15:52:55.498  1174  2096 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.498 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:55.499 13430 13477 I MediaSyncer: generation: Generation(added=608745, modified=608767)
+04-12 15:52:55.499  5660  7427 I MediaProvider: End Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x1000010 xflg=0x4 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService }
+04-12 15:52:55.526  5660  5899 W MediaProvider: isAppCloneUserPair for user 0: false
+04-12 15:52:55.530 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:55.530  1174  2096 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.546 13430 13477 I MediaSyncer: loaded: 47ms, Success(maxMediaId=86442, maxGenAdded=608757, maxGenModified=608775, count=1)
+04-12 15:52:55.548 27132 27503 I BaseThreadPoolExecutor: [#CMH#] Task com.samsung.cmh.core.task.MediaContentSyncTask@fef672a is submitted
+04-12 15:52:55.549  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.551  1114 16394 V MetadataRetrieverClient: MetadataRetrieverClient constructor pid(13430)
+04-12 15:52:55.551  1114 16394 V MediaPlayerService: Create new media retriever from pid 13430
+04-12 15:52:55.552  1114 16394 V MetadataRetrieverClient: setDataSource fd=11, offset=0, length=576460752303423487
+04-12 15:52:55.552  1114 16394 V MetadataRetrieverClient: st_dev  = 108
+04-12 15:52:55.552  1114 16394 V MetadataRetrieverClient: st_mode = 33200
+04-12 15:52:55.552  1114 16394 V MetadataRetrieverClient: st_uid  = 10319
+04-12 15:52:55.552  1114 16394 V MetadataRetrieverClient: st_gid  = 1023
+04-12 15:52:55.552  1114 16394 V MetadataRetrieverClient: st_size = 3101511
+04-12 15:52:55.552  1114 16394 V MetadataRetrieverClient: calculated length = 3101511
+04-12 15:52:55.552  1114 16394 V MetadataRetrieverClient: player type = 4
+04-12 15:52:55.552  1114 16394 D StagefrightMetadataRetriever: FileSource remote
+04-12 15:52:55.561  1112  2429 I MediaExtractorFactory: Created an extractor 'SECMPEG4Extractor' with confidence 0.41
+04-12 15:52:55.561  1114 16394 V MetadataRetrieverClient: setDataSource(fd) return(0)
+04-12 15:52:55.562  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.563  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.563  1114 16394 I libsfextcp: GetMaxResolution(104)
+04-12 15:52:55.563  1114 16394 I libsfextcp: name(c2.exynos.h264.decoder) width(8192) height(8192) isSoftware(0)
+04-12 15:52:55.563  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.563  1114 16394 I Utils   : kKeyRotation = 90
+04-12 15:52:55.564  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.564  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.564  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.564  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.564  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.564  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.564  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.564  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.564  1114 16394 V MetadataRetrieverClient: extractMetadata
+04-12 15:52:55.564  1114 16394 V MetadataRetrieverClient: disconnect from pid 13430
+04-12 15:52:55.565  1114 16394 V MetadataRetrieverClient: MetadataRetrieverClient destructor
+04-12 15:52:55.565  1114 16394 V MetadataRetrieverClient: disconnect from pid 13430
+04-12 15:52:55.565 13430 13470 W SefInterface$Companion: This file doesn't have SEF
+04-12 15:52:55.570  5660 10888 I MediaProvider: Deleted 1 0 0 0 0 0 0 items on external_primary due to com.whatsapp
+04-12 15:52:55.570  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.571  1174  3844 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.588 12486 30301 I Kumiho-Kumiho: getPackageName: com.whatsapp
+04-12 15:52:55.594 12486 30301 I Kumiho-Kumiho: getPackageName: com.whatsapp
+04-12 15:52:55.597 12486 30301 I Kumiho-Kumiho: getPackageName: com.whatsapp
+04-12 15:52:55.615 27132 30792 I MediaContentSyncTask: [#CMH#] No of Row (SEC MP :  24045, Max Id : 2147531091) (CMH : 24044, Max Id : 2147531090) - Time :23
+04-12 15:52:55.619 27132 30792 I MediaContentSyncTask: [#CMH#] Rebuilding contents count 1
+04-12 15:52:55.619 27132 30792 I ImageFeatures: [#CMH#] Not support file type 
+04-12 15:52:55.625 27132 30792 I MediaContentSyncTask: [#CMH#] Insert ITEM :  1
+04-12 15:52:55.625 27132 30792 I BaseThreadPoolExecutor: [#CMH#] afterExecute FutureTask
+04-12 15:52:55.625 27132 30792 I ControllerEventHandler: [#CMH#] New Task for wait content sync job 
+04-12 15:52:55.625 27132 30792 I BaseThreadPoolExecutor: [#CMH#] Task com.samsung.cmh.core.task.MediaContentSyncTask@fef672a is submitted
+04-12 15:52:55.653 12486 30301 I Kumiho-Kumiho: getPackageName: com.whatsapp
+04-12 15:52:55.680 27132 30792 I MediaContentSyncTask: [#CMH#] No of Row (SEC MP :  24045, Max Id : 2147531091) (CMH : 24045, Max Id : 2147531091) - Time :24
+04-12 15:52:55.685  9048 30399 E SCS@AiSearch user 0: (FsmDataManager) getAllHits: No hits
+04-12 15:52:55.685  9048 30399 I SCS@AiSearch user 0: (IndexManager) [GALLERY-0] entering in addIndex():  
+04-12 15:52:55.686  9048 30399 I SCS@AiSearch user 0: (IndexManager) [INSERT] index=[com.google.android.providers.media], size=2
+04-12 15:52:55.686  9048 30399 I SCS@AiSearch user 0: (IndexManager) getIndexWriter(): indexName com.google.android.providers.media
+04-12 15:52:55.692  9048 30399 I SCS@AiSearch user 0: (IndexManager) [INSERT] Done
+04-12 15:52:55.692  9048 30399 I SCS@AiSearch user 0: (IndexSearcherManager) [GALLERY-0] entering in refreshSearcherManager():  refreshSearcherManager for com.google.android.providers.media
+04-12 15:52:55.723  5660 10106 V MediaProvider: calling app has PERMISSION_READ_IMAGES? true
+04-12 15:52:55.733  5660  5929 V MediaProvider: calling app has PERMISSION_READ_IMAGES? true
+04-12 15:52:55.734  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.735 13430 13477 I MediaSyncer: generation: Generation(added=608757, modified=608775)
+04-12 15:52:55.739  5660  5779 V MediaProvider: Deleted backup of old file path: /storage/emulated/0/Android/media/com.whatsapp/WhatsApp/.Shared/6s7-qykugHF0ClC6NlWcyet8RVoXWaJtJXh-FPeez+4=.tmp
+04-12 15:52:55.743  5660 10888 I MediaProvider: Deleted 1 0 0 0 0 0 0 items on external_primary due to com.whatsapp
+04-12 15:52:55.743  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.743 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:55.748  5660 10106 V MediaProvider: calling app has PERMISSION_READ_IMAGES? true
+04-12 15:52:55.748  9048 30399 I SCS@AiSearch user 0: (j) Lucene segment merge is triggered by GET_READER, took 27ms
+04-12 15:52:55.749  9048 30399 I SCS@AiSearch user 0: (IndexSearcherManager) [GALLERY-0] leaving from refreshSearcherManager():  
+04-12 15:52:55.749  9048 30399 I SCS@AiSearch user 0: (IndexManager) [GALLERY-0] entering in waitUntilCommitTaskFinished (idx=com.google.android.providers.media)():  
+04-12 15:52:55.749  9048 19446 I SCS@AiSearch user 0: (IndexManager) [pool-18-thread-1] entering in commitIndexWriter():  
+04-12 15:52:55.750  5660  5929 V MediaProvider: calling app has PERMISSION_READ_IMAGES? true
+04-12 15:52:55.751  5660 10888 V MediaProvider: calling app has PERMISSION_READ_IMAGES? true
+04-12 15:52:55.754 27132 30792 I MediaContentSyncTask: [#CMH#] MP time stamp :  1776023575566, CMH time stamp : 1776023574743
+04-12 15:52:55.755  5660 10106 W MediaProvider: isAppCloneUserPair for user 0: false
+04-12 15:52:55.760  1174  3844 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.761 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:55.761  1174  2567 W JobInfo : Job 'com.google.android.providers.media.module/com.android.providers.media.MediaService#-300' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+04-12 15:52:55.768  5660  7427 I MediaProvider: Begin Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x1000010 xflg=0x4 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService }
+04-12 15:52:55.772  5660  7427 I Kumiho-Kumiho: getPackageName: com.google.android.providers.media.module
+04-12 15:52:55.778  5660  7427 I MediaProvider: End Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x1000010 xflg=0x4 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService }
+04-12 15:52:55.781  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.781 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:55.783 27132 30792 I MediaContentSyncTask: [#CMH#] Update ITEM  :  1
+04-12 15:52:55.784 27132 30792 I MediaContentSyncTask: [#CMH#] Update Cursor Count (1=>1), Time: 1 
+04-12 15:52:55.785 27132 30792 I MediaContentSyncTask: [#CMH#] Update ITEM :  1
+04-12 15:52:55.789 12486 30778 W SQLiteLog: (28) walCheckpoint: eMode(0), mxFrame(101), nBackfill(101), /data/data/com.whatsapp/databases/media.db-wal taking (1) ms
+04-12 15:52:55.795  9048 19446 I SCS@AiSearch user 0: (IndexManager) [pool-18-thread-1] leaving from commitIndexWriter():  
+04-12 15:52:55.795  9048 30399 I SCS@AiSearch user 0: (IndexManager) [GALLERY-0] leaving from waitUntilCommitTaskFinished (idx=com.google.android.providers.media)():  
+04-12 15:52:55.795  9048 30399 I SCS@AiSearch user 0: (IndexManager) addIndex(): done
+04-12 15:52:55.796  9048 30399 I SCS@AiSearch user 0: (BaseCollector::GALLERY) fetch: fetching took  489 ms
+04-12 15:52:55.796  9048 30399 I SCS@AiSearch user 0: (BaseCollector::GALLERY) fetchChanges: applied 2 items
+04-12 15:52:55.800  5660  5899 W MediaProvider: isAppCloneUserPair for user 0: false
+04-12 15:52:55.804  1174  2096 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.805 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:55.805 27132 30792 I BaseThreadPoolExecutor: [#CMH#] afterExecute FutureTask
+04-12 15:52:55.805 27132 30792 I ControllerEventHandler: [#CMH#] Alive Privacy Ignored Policy Called:  false
+04-12 15:52:55.809 13430 13477 I MediaSyncer: loaded: 73ms, Success(maxMediaId=0, maxGenAdded=-9223372036854775808, maxGenModified=608783, count=0)
+04-12 15:52:55.812 13430 13477 I MediaSyncer: generation: Generation(added=608757, modified=608783)
+04-12 15:52:55.841  5660  5929 W MediaProvider: isAppCloneUserPair for user 0: false
+04-12 15:52:55.845 13430 13477 I MediaSyncer: loaded: 33ms, Success(maxMediaId=86443, maxGenAdded=608773, maxGenModified=608794, count=1)
+04-12 15:52:55.845  1174  3844 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.846 27132 27503 I BaseThreadPoolExecutor: [#CMH#] Task com.samsung.cmh.core.task.MediaContentSyncTask@fef672a is submitted
+04-12 15:52:55.847 13430  6011 W SefInterface$Companion: This file doesn't have SEF
+04-12 15:52:55.849  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.856  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.893  5660 10888 I MediaProvider: Deleted 1 0 0 0 0 0 0 items on external_primary due to com.whatsapp
+04-12 15:52:55.894  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:55.894 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:55.897 30538 30577 W JobInfo : Requested important-while-foreground flag for job555009766 is ignored and takes no effect
+04-12 15:52:55.898 27132 30792 I MediaContentSyncTask: [#CMH#] No of Row (SEC MP :  24046, Max Id : 2147531092) (CMH : 24045, Max Id : 2147531091) - Time :22
+04-12 15:52:55.903 27132 30792 I MediaContentSyncTask: [#CMH#] Rebuilding contents count 1
+04-12 15:52:55.903 27132 30792 I ImageFeatures: [#CMH#] Bulk Image Date:  1776023575000
+04-12 15:52:55.903 30538 30577 D ConnectivityManager: StackLog: [android.net.ConnectivityManager.sendRequestForNetwork(ConnectivityManager.java:4736)] [android.net.ConnectivityManager.registerDefaultNetworkCallbackForUid(ConnectivityManager.java:5461)] [android.net.ConnectivityManager.registerDefaultNetworkCallback(ConnectivityManager.java:5428)] [android.net.ConnectivityManager.registerDefaultNetworkCallback(ConnectivityManager.java:5402)] [b$$ExternalSyntheticApiModelOutline8.m(D8$$SyntheticClass:66)] [apq.b(PG:191)] [apq.a(PG:35)] [ciwl.g(PG:3)] [ciwh.b(PG:57)] [bnrx.b(PG:68)] [cikm.w(PG:11)] [cisp.run(PG:107)] [jcn.run(PG:23)] [java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)] [java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)] [java.lang.Thread.run(Thread.java:1119)]
+04-12 15:52:55.904  1174  2567 D ConnectivityService: requestNetwork for uid/pid:10346/30538 activeRequest: null callbackRequest: 4839 [NetworkRequest [ REQUEST id=4840, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false declaredMethods: AVAIL|LOST|NC|BLK
+04-12 15:52:55.905  1174  2186 D ConnectivityService:    accepting network in place of null for NetworkRequest [ REQUEST id=4840, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+04-12 15:52:55.906 27132 30792 I MediaContentSyncTask: [#CMH#] Insert ITEM :  1
+04-12 15:52:55.906 27132 30792 I BaseThreadPoolExecutor: [#CMH#] afterExecute FutureTask
+04-12 15:52:55.906 27132 30792 I ControllerEventHandler: [#CMH#] New Task for wait content sync job 
+04-12 15:52:55.906 27132 30792 I BaseThreadPoolExecutor: [#CMH#] Task com.samsung.cmh.core.task.MediaContentSyncTask@fef672a is submitted
+04-12 15:52:55.907  1174  2175 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=4840, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+04-12 15:52:55.907  1174  2175 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=4840, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+04-12 15:52:55.908 12486 30301 I Kumiho-Kumiho: getPackageName: com.whatsapp
+04-12 15:52:55.908  1174  2175 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=4840, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+04-12 15:52:55.908  1174  2175 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=4840, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+04-12 15:52:55.909  1174  2186 D ConnectivityService: Rematched networks [computed 1ms] [applied 1ms] [issued 2]
+04-12 15:52:55.909  1174  2186 D ConnectivityService: NetworkReassignment :
+04-12 15:52:55.909  1174  2186 D ConnectivityService:   4840 : null ΓåÆ 119
+04-12 15:52:55.912 12486 30301 I Kumiho-Kumiho: getPackageName: com.whatsapp
+04-12 15:52:55.914 12486 30301 I Kumiho-Kumiho: getPackageName: com.whatsapp
+04-12 15:52:55.919   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023575
+04-12 15:52:55.919   942   986 D HeatmapThread: !@ batteryplugType : 2
+04-12 15:52:55.920   942   986 D HeatmapThread: !@ batteryLevel : 74  batteryTemperature : 299 
+04-12 15:52:55.920   942   986 D HeatmapThread: !@ Heatmap currtime: 29600392
+04-12 15:52:55.920   942   986 D HeatmapThread: !@ Heatmap prevtime: 29600366
+04-12 15:52:55.920   942   986 D HeatmapThread: !@ Heatmap plugstarttime: 29600385
+04-12 15:52:55.920   942   986 D HeatmapThread: !@ Heatmap prevv_dsoh_update_time: 29599579
+04-12 15:52:55.920   942   986 E HeatmapThread: !@ CAM New BSOH: 100
+04-12 15:52:55.921 30538 30577 D ConnectivityManager: StackLog: [android.net.ConnectivityManager.unregisterNetworkCallback(ConnectivityManager.java:5571)] [cqo.a(PG:405)] [b.C(PG:1)] [iyx.a(PG:217)] [chsp.y(PG:108)] [civz.b(PG:11)] [cikm.w(PG:11)] [cisp.run(PG:99)] [jcn.run(PG:23)] [java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)] [java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)] [java.lang.Thread.run(Thread.java:1119)]
+04-12 15:52:55.922  1174  2186 D ConnectivityService:  Removing from current network [119 WIFI], leaving 225 requests.
+04-12 15:52:55.953 27132 30792 I MediaContentSyncTask: [#CMH#] No of Row (SEC MP :  24046, Max Id : 2147531092) (CMH : 24046, Max Id : 2147531092) - Time :22
+04-12 15:52:55.977 12486 30301 I Kumiho-Kumiho: getPackageName: com.whatsapp
+04-12 15:52:56.027 27132 30792 I MediaContentSyncTask: [#CMH#] MP time stamp :  1776023575849, CMH time stamp : 1776023575566
+04-12 15:52:56.046  5660  5899 V MediaProvider: calling app has PERMISSION_READ_IMAGES? true
+04-12 15:52:56.052 27132 30792 I MediaContentSyncTask: [#CMH#] Update ITEM  :  1
+04-12 15:52:56.052  5660  5929 V MediaProvider: calling app has PERMISSION_READ_IMAGES? true
+04-12 15:52:56.052  1174  2096 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.052 27132 30792 I MediaContentSyncTask: [#CMH#] Update Cursor Count (1=>1), Time: 0 
+04-12 15:52:56.053 13430 13477 I MediaSyncer: generation: Generation(added=608773, modified=608794)
+04-12 15:52:56.053 27132 30792 I MediaContentSyncTask: [#CMH#] Update ITEM :  1
+04-12 15:52:56.054  5660  5779 V MediaProvider: Deleted backup of old file path: /storage/emulated/0/Android/media/com.whatsapp/WhatsApp/.Shared/aPtfTJq5TFEiyJZXL7Q2AFQPK0jzS7Z8Dw4NyXGE-Bk=.tmp
+04-12 15:52:56.057  5660 11419 I MediaProvider: Deleted 1 0 0 0 0 0 0 items on external_primary due to com.whatsapp
+04-12 15:52:56.057  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.057 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:56.061  5660  5929 V MediaProvider: calling app has PERMISSION_READ_IMAGES? true
+04-12 15:52:56.063  5660 11419 V MediaProvider: calling app has PERMISSION_READ_IMAGES? true
+04-12 15:52:56.064  5660 10888 V MediaProvider: calling app has PERMISSION_READ_IMAGES? true
+04-12 15:52:56.072  1174  2567 W JobInfo : Job 'com.google.android.providers.media.module/com.android.providers.media.MediaService#-300' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+04-12 15:52:56.076 27132 30792 I BaseThreadPoolExecutor: [#CMH#] afterExecute FutureTask
+04-12 15:52:56.076 27132 30792 I ControllerEventHandler: [#CMH#] Alive Privacy Ignored Policy Called:  false
+04-12 15:52:56.077  5660  7427 I MediaProvider: Begin Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x1000010 xflg=0x4 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService }
+04-12 15:52:56.079  5660  7427 I Kumiho-Kumiho: getPackageName: com.google.android.providers.media.module
+04-12 15:52:56.084 13430 13477 I MediaSyncer: loaded: 32ms, Success(maxMediaId=0, maxGenAdded=-9223372036854775808, maxGenModified=608799, count=0)
+04-12 15:52:56.088  5660  7427 W SQLiteLog: (28) walCheckpoint: eMode(0), mxFrame(280), nBackfill(280), /data/data/com.google.android.providers.media.module/databases/external.db-wal taking (4) ms
+04-12 15:52:56.090  1174  2096 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.091 27282 27356 I UriTaskContentObserver: (REDACTED) Throttling content uri change event for %s
+04-12 15:52:56.092  5660  7427 I MediaProvider: End Intent { act=android.intent.action.MEDIA_SCANNER_SCAN_FILE dat=file:///... flg=0x1000010 xflg=0x4 cmp=com.google.android.providers.media.module/com.android.providers.media.MediaService }
+04-12 15:52:56.094 13430 13477 I MediaSyncer: generation: Generation(added=608773, modified=608799)
+--------- beginning of system
+04-12 15:52:56.101   627   627 D io_stats: !@   8,0 r 13705461 256207356 w 2076433 48418380 d 422882 43470544 f 42581 293410 iot 1247252 0 th 0 0 0 pt 0 inp 0 0 41061.067
+04-12 15:52:56.101   627   627 D io_stats: !@ Read_top(KB): com.whatsapp(12486) 2900 mediaextractor(1112) 1880 mediaserver(1114) 1688
+04-12 15:52:56.101   627   627 D io_stats: !@ Write_top(KB): rs.media.module(5660) 18908 com.whatsapp(12486) 2164 kworker/u20:0(20342) 1948
+04-12 15:52:56.127 13430 13477 I MediaSyncer: loaded: 33ms, Success(maxMediaId=86444, maxGenAdded=608789, maxGenModified=608806, count=1)
+04-12 15:52:56.128 27132 27503 I BaseThreadPoolExecutor: [#CMH#] Task com.samsung.cmh.core.task.MediaContentSyncTask@fef672a is submitted
+04-12 15:52:56.128  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.130 13430 13469 W SefInterface$Companion: This file doesn't have SEF
+04-12 15:52:56.137  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.181 27132 30792 I MediaContentSyncTask: [#CMH#] No of Row (SEC MP :  24047, Max Id : 2147531093) (CMH : 24046, Max Id : 2147531092) - Time :19
+04-12 15:52:56.183  5660  5660 D WM-DelayedWorkTracker: Scheduling work 52288840-49a6-4364-83ba-cf0bfeb6146d
+04-12 15:52:56.183  5660  5660 D WM-GreedyScheduler: Starting tracking for 52288840-49a6-4364-83ba-cf0bfeb6146d
+04-12 15:52:56.183  5660  6007 D WM-ConstraintTracker: BatteryNotLowTracker: initial state = true
+04-12 15:52:56.183  5660  6007 D WM-BrdcstRcvrCnstrntTrc: BatteryNotLowTracker: registering receiver
+04-12 15:52:56.184  5660  6007 D WM-GreedyScheduler: Constraints met: Scheduling work ID WorkGenerationalId(workSpecId=52288840-49a6-4364-83ba-cf0bfeb6146d, generation=0)
+04-12 15:52:56.184 27132 30792 I MediaContentSyncTask: [#CMH#] Rebuilding contents count 1
+04-12 15:52:56.185 27132 30792 I ImageFeatures: [#CMH#] Bulk Image Date:  1776023576000
+04-12 15:52:56.185  5660  6007 D WM-Processor: Processor: processing WorkGenerationalId(workSpecId=52288840-49a6-4364-83ba-cf0bfeb6146d, generation=0)
+04-12 15:52:56.186 27132 30792 I MediaContentSyncTask: [#CMH#] Insert ITEM :  1
+04-12 15:52:56.186 27132 30792 I BaseThreadPoolExecutor: [#CMH#] afterExecute FutureTask
+04-12 15:52:56.186 27132 30792 I ControllerEventHandler: [#CMH#] New Task for wait content sync job 
+04-12 15:52:56.186 27132 30792 I BaseThreadPoolExecutor: [#CMH#] Task com.samsung.cmh.core.task.MediaContentSyncTask@fef672a is submitted
+04-12 15:52:56.187  5660  5660 D WM-WorkerWrapper: Starting work for com.android.providers.media.photopicker.sync.ProactiveSyncWorker
+04-12 15:52:56.188  5660 14812 I PSyncWorker: Starting proactive picker sync from sync source: 1
+04-12 15:52:56.188  5660 14812 I PickerSyncTracker: Created new sync future java.util.concurrent.CompletableFuture@6492bc8[Not completed, 1 dependents]. Future map: {52288840-49a6-4364-83ba-cf0bfeb6146d=java.util.concurrent.CompletableFuture@6492bc8[Not completed, 1 dependents]}
+04-12 15:52:56.188  5660 14812 D PickerSyncController: syncAllMediaFromProvider() LOCAL, auth=com.android.providers.media.photopicker, retry=true
+04-12 15:52:56.188  5660 14812 D PickerSyncController: getSyncRequestParams() LOCAL, auth=com.android.providers.media.photopicker
+04-12 15:52:56.189  5660  5660 D WM-SystemJobService: onStartJob for WorkGenerationalId(workSpecId=52288840-49a6-4364-83ba-cf0bfeb6146d, generation=0)
+04-12 15:52:56.191  5660  6007 D WM-Processor: Work WorkGenerationalId(workSpecId=52288840-49a6-4364-83ba-cf0bfeb6146d, generation=0) is already enqueued for processing
+04-12 15:52:56.215  5660 14812 D PickerSyncController:    Latest ID/Gen=8086ef0be263d501:external_primary/608805
+04-12 15:52:56.215  5660 14812 D PickerSyncController:    Cached ID/Gen=8086ef0be263d501:external_primary/608737
+04-12 15:52:56.215  5660 14812 D PickerSyncController:    RESULT=SyncRequestParams{type=MEDIA_INCREMENTAL, gen=608737, latest=Bundle[{last_media_sync_generation=608805, media_collection_id=8086ef0be263d501:external_primary}], pageSize=1000}
+04-12 15:52:56.216  5660 14812 I PickerSyncController: Executing SyncAdd. isLocal: true. authority: com.android.providers.media.photopicker
+04-12 15:52:56.216  5660 14812 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+04-12 15:52:56.216  5660 14812 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Locked by thread pool-5-thread-10]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+04-12 15:52:56.216  5660 14812 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+04-12 15:52:56.216  5660 14812 D ExternalDbFacade: Token received for queryMedia = null
+04-12 15:52:56.233 27132 30792 I MediaContentSyncTask: [#CMH#] No of Row (SEC MP :  24047, Max Id : 2147531093) (CMH : 24047, Max Id : 2147531093) - Time :22
+04-12 15:52:56.249  5660 14812 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+04-12 15:52:56.249  5660 14812 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Locked by thread pool-5-thread-10]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+04-12 15:52:56.249  5660 14812 D PickerSyncController: Saving next page token: 1776023574000|86441 for key: local_provider:media_add:resume
+04-12 15:52:56.249  5660 14812 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+04-12 15:52:56.250  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.250  5660 14812 D PickerNotificationSender: Sending a notification for media update
+04-12 15:52:56.250  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.251  5660 14812 D PickerNotificationSender: Sending a notification for merged album media update Videos
+04-12 15:52:56.251  5660 14812 D PickerNotificationSender: Sending a notification for album media update Videos
+04-12 15:52:56.251  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.251  5660 14812 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+04-12 15:52:56.251  5660 14812 D PickerNotificationSender: Sending a notification for album media update Favorites
+04-12 15:52:56.251  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.252  5660 14812 D ExternalDbFacade: Token received for queryMedia = 1776023574000|86441
+04-12 15:52:56.280  5660 14812 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+04-12 15:52:56.280  5660 14812 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Locked by thread pool-5-thread-10]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+04-12 15:52:56.280  5660 14812 D PickerSyncController: Clearing next page token for key: local_provider:media_add:resume
+04-12 15:52:56.280  5660 14812 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+04-12 15:52:56.280  5660 14812 D PickerNotificationSender: Sending a notification for media update
+04-12 15:52:56.280  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.280  5660 14812 D PickerNotificationSender: Sending a notification for merged album media update Videos
+04-12 15:52:56.281  5660 14812 D PickerNotificationSender: Sending a notification for album media update Videos
+04-12 15:52:56.281  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.281  5660 14812 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+04-12 15:52:56.281  5660 14812 D PickerNotificationSender: Sending a notification for album media update Favorites
+04-12 15:52:56.281  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.281  5660 14812 I PickerSyncController: Paged sync successful. QueryArgs: Bundle[{android.provider.extra.PAGE_TOKEN=1776023574000|86441, android.provider.extra.SYNC_GENERATION=608737, android.provider.extra.PAGE_SIZE=1000}] Total Rows: 4
+04-12 15:52:56.281  5660 14812 I PickerSyncController: Executing SyncRemove. isLocal: true. authority: com.android.providers.media.photopicker
+04-12 15:52:56.281  5660 14812 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+04-12 15:52:56.281  5660 14812 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Locked by thread pool-5-thread-10]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+04-12 15:52:56.281  5660 14812 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+04-12 15:52:56.282  5660 14812 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+04-12 15:52:56.282  5660 14812 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Locked by thread pool-5-thread-10]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+04-12 15:52:56.282  5660 14812 D PickerSyncController: Clearing next page token for key: local_provider:media_remove:resume
+04-12 15:52:56.282  5660 14812 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@47540bf[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+04-12 15:52:56.282  5660 14812 D PickerNotificationSender: Sending a notification for media update
+04-12 15:52:56.283  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.283  5660 14812 D PickerNotificationSender: Sending a notification for merged album media update Videos
+04-12 15:52:56.283  5660 14812 D PickerNotificationSender: Sending a notification for album media update Videos
+04-12 15:52:56.283  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.283  5660 14812 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+04-12 15:52:56.283  5660 14812 D PickerNotificationSender: Sending a notification for album media update Favorites
+04-12 15:52:56.283  1174  2567 D SyncManager: userId - 0 auto - true
+04-12 15:52:56.284  5660 14812 I PickerSyncController: Paged sync successful. QueryArgs: Bundle[{android.provider.extra.PAGE_TOKEN=1776023574000|86441, android.provider.extra.SYNC_GENERATION=608737, android.provider.extra.PAGE_SIZE=1000}] Total Rows: 0
+04-12 15:52:56.284  5660 14812 I PickerSyncTracker: Marked sync future complete for work id: 52288840-49a6-4364-83ba-cf0bfeb6146d. Future map: {}
+04-12 15:52:56.284  5660 14812 I PSyncWorker: Completed picker proactive sync complete from local provider.
+04-12 15:52:56.285  5660  5903 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=52288840-49a6-4364-83ba-cf0bfeb6146d, tags={ com.android.providers.media.photopicker.sync.ProactiveSyncWorker } ]
+04-12 15:52:56.286  5660  5660 D WM-Processor: Processor 52288840-49a6-4364-83ba-cf0bfeb6146d executed; reschedule = false
+04-12 15:52:56.286  5660  5660 D WM-GreedyScheduler: Stopping tracking for WorkGenerationalId(workSpecId=52288840-49a6-4364-83ba-cf0bfeb6146d, generation=0)
+04-12 15:52:56.286  5660  5660 D WM-SystemJobService: 52288840-49a6-4364-83ba-cf0bfeb6146d executed on JobScheduler
+04-12 15:52:56.290  5660  5811 D WM-GreedyScheduler: Cancelling work ID 52288840-49a6-4364-83ba-cf0bfeb6146d
+04-12 15:52:56.291  5660  5811 D WM-GreedyScheduler: Ignoring {WorkSpec: d52aa9d4-574e-4054-a1e0-eddaf1bef92c}. Requires device idle.
+04-12 15:52:56.291  5660  5811 D WM-GreedyScheduler: Ignoring {WorkSpec: 7e7aab48-bedf-4619-93ee-296437932d9e}. Requires device idle.
+04-12 15:52:56.291  5660  5811 D WM-GreedyScheduler: Ignoring {WorkSpec: ccf7830c-92c3-4f4b-99dc-38016879dbfe}. Requires device idle.
+04-12 15:52:56.291  5660  5811 D WM-BrdcstRcvrCnstrntTrc: BatteryNotLowTracker: unregistering receiver
+04-12 15:52:56.305 27132 30792 I MediaContentSyncTask: [#CMH#] MP time stamp :  1776023576130, CMH time stamp : 1776023575849
+04-12 15:52:56.312  1174  2298 D SemWifiSwitchForIndividualAppsService: isSkipNetworkCondition - result:2
+04-12 15:52:56.329 27132 30792 I MediaContentSyncTask: [#CMH#] Update ITEM  :  1
+04-12 15:52:56.330 27132 30792 I MediaContentSyncTask: [#CMH#] Update Cursor Count (1=>1), Time: 1 
+04-12 15:52:56.331 27132 30792 I MediaContentSyncTask: [#CMH#] Update ITEM :  1
+04-12 15:52:56.351 27132 30792 I BaseThreadPoolExecutor: [#CMH#] afterExecute FutureTask
+04-12 15:52:56.352 27132 30792 I ControllerEventHandler: [#CMH#] Alive Privacy Ignored Policy Called:  false
+04-12 15:52:56.436  9048  9048 I SCS@AiSearch user 0: (ObserverWorker::AOSP_MP) [main] entering in startWork triggered by [content://media/external/file/86275, content://media/external/file/86276, content://media/external/file/86281, content://media/external/file/86282, content://media/external/file/86306, content://media/external/file/86307, content://media/external/file/86309, content://media/external/file/86310, content://media/external/file/86441, content://media/external/file/86442, content://media/external/file/86443, content://media/external/file/86444]():  
+04-12 15:52:56.436  9048  9048 I SCS@AiSearch user 0: (BaseCollector::AOSP_MP) [main] entering in onChange():  
+04-12 15:52:56.437  9048 16086 I SCS@AiSearch user 0: (BaseCollector::AOSP_MP) [AOSP_MP-0] entering in collectChanges():  
+04-12 15:52:56.443  1174  3844 D PackageManager: setEnabledSetting : userId = 0 packageName = com.samsung.android.scs cmp = androidx.work.impl.background.systemalarm.RescheduleReceiver newState = 1 callingPackage = com.samsung.android.scs
+04-12 15:52:56.443  1174  3844 D ApplicationPolicy: getApplicationStateEnabled : pkg = com.samsung.android.scs userId : 0
+04-12 15:52:56.443  1174  3844 D ApplicationPolicy: getApplicationComponentState : pkg = com.samsung.android.scs userId : 0
+04-12 15:52:56.522  9048 16086 I SCS@AiSearch user 0: (BaseCollector::AOSP_MP) fetchInternal values : maxSyncId: 86432 indexCount: 15165 sourceCount: 15165
+04-12 15:52:56.530  9048 16086 I SCS@AiSearch user 0: (IndexManager) [AOSP_MP-0] entering in addIndex():  
+04-12 15:52:56.531  9048 16086 I SCS@AiSearch user 0: (BaseCollector::AOSP_MP) fetch: fetching took  50 ms
+04-12 15:52:56.531  9048 16086 I SCS@AiSearch user 0: (BaseCollector::AOSP_MP) fetchChanges: applied 0 items
+04-12 15:52:56.531  9048 16086 I SCS@AiSearch user 0: (BaseCollector::AOSP_MP) Collect finished. Result: true
+04-12 15:52:56.531  9048 16086 I SCS@AiSearch user 0: (BaseCollector::AOSP_MP) enqueue ObserverWorker name: com.sec.android.app.myfiles, policy: APPEND_OR_REPLACE
+04-12 15:52:56.531  9048  9169 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=454504c6-82cb-4552-9016-775b83d8717c, tags={ com.sec.android.app.myfiles, com.samsung.android.scs.ai.search.data.collector.base.ObserverWorker } ]
+04-12 15:52:56.543  1174  2567 D PackageManager: setEnabledSetting : userId = 0 packageName = com.samsung.android.scs cmp = androidx.work.impl.background.systemalarm.RescheduleReceiver newState = 1 callingPackage = com.samsung.android.scs
+04-12 15:52:56.543  1174  2567 D ApplicationPolicy: getApplicationStateEnabled : pkg = com.samsung.android.scs userId : 0
+04-12 15:52:56.544  1174  2567 D ApplicationPolicy: getApplicationComponentState : pkg = com.samsung.android.scs userId : 0
+04-12 15:52:56.546  9048  9168 W JobInfo : Requested important-while-foreground flag for job62002 is ignored and takes no effect
+04-12 15:52:56.586  1174  2300 D OpenNetworkQos[4.00]: getOpenNetworkQosNoInternetStatus: false
+04-12 15:52:56.586  1174  2300 D OpenNetworkQos[4.00]: getOpenNetworkQosScores: 30 30 26 
+04-12 15:52:56.586  1174  2300 D KNOX_MDM_SettingsProvider: isChangeAllowed() : name = wifi_wcm_qos_sharing_score_summary
+04-12 15:52:56.586  1174  2300 I WifiProfileShare: network QoS data was changed (score), updateQoSData networkType: false, qosData: true
+04-12 15:52:56.587  1174  3257 V WifiProfileShare.Caster: update wips network, size: 0
+04-12 15:52:56.587  1174  3257 D WifiProfileShare: nearby scanning settings run
+04-12 15:52:56.587  1174  3257 D WifiProfileShare: network score provider settings enabled
+04-12 15:52:56.587  1174  3257 D OpenNetworkQos[4.00]: getOpenNetworkQosScores: 30 30 26 
+04-12 15:52:56.587  1174  3257 D OpenNetworkQos[4.00]: getOpenNetworkQosNoInternetStatus: false
+04-12 15:52:56.587  1174  3257 I WifiProfileShare.Caster: current network type: 0, score: [30, 30, 26]
+04-12 15:52:56.588  1174  3257 V WifiProfileShare.Cache: update network score 64:97:14:**:**:45
+04-12 15:52:56.588  1174  3257 D WifiProfileShare.ScanMatcher: getMcfDataList size:2
+04-12 15:52:56.588  1174  3257 I WifiProfileShare.Caster: qos data was updated , before:type:QOS, pBssid:50:d7:21, qosData:7c after:type:QOS, pBssid:50:d7:21, qosData:7c
+04-12 15:52:56.589  1174  3257 I [MCFSDK_android_1.3.7026]_4_McfCasterImpl: isNetworkEnabled - type : 1 ret : true
+04-12 15:52:56.589  1174  3257 D WifiProfileShare.McfCast: -ME--- mIsNetworkEnabled :true
+04-12 15:52:56.589  1174  3257 D WifiProfileShare.McfCast: updateQoSData ignored, same contents
+04-12 15:52:56.589  1174  3257 D WifiProfileShare.MCF: success update QosData !
+04-12 15:52:56.589  1174  3257 I [MCFSDK_android_1.3.7026]_4_McfCasterImpl: isNetworkEnabled - type : 1 ret : true
+04-12 15:52:56.589  1174  3257 D WifiProfileShare.McfCast: -ME--- mIsNetworkEnabled :true
+04-12 15:52:56.589  1174  3257 D WifiProfileShare.McfCast: -ME--- updatePasswordDate pwdData size:2
+04-12 15:52:56.656  5840  6910 I SDHMS:x : SIOP:: AP:361 BAT:299 USB:298 CHG:353 PA:335 CP:337 WIFI:337 CF:330 BLK:0 SUBBAT:0 LRPTHM:332 SKIN:321 SKINF:321 SKINB:321 LRP2:321 LRF2:321 LRB2:321 AP2:321 CHG2:319 WIFI2:320 RCV2:317 SPK2:294 FCAM:299 UPSPK:319 DNSPK:299 VAP02:333 VWIFI:321 AMB2:272 AVGCUR:1032 AVGSYS:457 POWER:4310
+04-12 15:52:56.919   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023576
+04-12 15:52:56.921   942   986 D HeatmapThread: !@ batteryplugType : 2
+04-12 15:52:56.921   942   986 D HeatmapThread: !@ batteryLevel : 74  batteryTemperature : 299 
+04-12 15:52:56.921   942   986 D HeatmapThread: !@ Heatmap currtime: 29600392
+04-12 15:52:56.921   942   986 D HeatmapThread: !@ Heatmap prevtime: 29600366
+04-12 15:52:56.921   942   986 D HeatmapThread: !@ Heatmap plugstarttime: 29600385
+04-12 15:52:56.921   942   986 D HeatmapThread: !@ Heatmap prevv_dsoh_update_time: 29599579
+04-12 15:52:56.921   942   986 E HeatmapThread: !@ CAM New BSOH: 100
+04-12 15:52:57.022  1174  3753 D SemWifiUsabilityStatsMonitor: onWifiUsabilityStats - seqNum 4386, isSameBssidAndFreq true
+04-12 15:52:57.024  1174  2271 I SemWifiLinkQualityMonitor: Link stat: 1822 / 50 / 1.11 (1010) / 216 / -67.0 || 100.0 : 216.00 / 0.5 : 0.90 / 0.55 : 0.03 / G (G) || 14c7c3455765: 0.111 / 72.028 / N || N N / 0 0 / N 2.0 / N X 2 / 41061988 0 || 2026-04-12 15:52:56  / 0: 0 0 0 0 0 0 / 0: 0 0 0 0 0 0 / 0: 0 0 0 0 0 0
+04-12 15:52:57.024  1174  2272 D InsDataManager: onOutageCountUpdate() - Outage Data: 0, LQ : N. Outage Triggered: false
+04-12 15:52:57.025  1174  2272 D SemInsManager: {"bssid": "14c7c3455765","rssi": -67.0,"latency": 0.11106863974584064,"outage_count": 0,"lq_callback_triggered": false,"outage_log": "Link stat: 1822 / 50 / 1.11 (1010) / 216 / -67.0 || 100.0 : 216.00 / 0.5 : 0.90 / 0.55 : 0.03 / G (G) || 14c7c3455765: 0.111 / 72.028 / N || N N / 0 0 / N 2.0 / N X 2 / 41061988 0 || 2026-04-12 15:52:56  / 0: 0 0 0 0 0 0 / 0: 0 0 0 0 0 0 / 0: 0 0 0 0 0 0""Magnetic Sensor Events size": "0""Pressure Sensor Events size": "0"}
+04-12 15:52:57.026  1174  2289 D SGM:GameManager: identifyGamePackage. com.android.settings, mCurrentUserId: 0, callingMethodInfo: com.samsung.android.game.SemGameManager.isGamePackage(SemGameManager.java:106)
+04-12 15:52:57.027  1174  2289 D SGM:SemGameManager: isGamePackage(), pkgName=com.android.settings, ret=false
+04-12 15:52:57.326  1174  2298 D SemWifiSwitchForIndividualAppsService: isSkipNetworkCondition - result:2
+04-12 15:52:57.628  1174  3164 I NSLocationMonitor: getGPSUsingApps() called
+04-12 15:52:57.629  3113 27278 I NSLocationManager_FLP: getGPSUsingApps, No change
+04-12 15:52:57.640  1174  3164 D FreecessHandler: freeze com.whatsapp(10337) result : 18
+04-12 15:52:57.843  9048 30399 I SCS@AiSearch user 0: (BaseCollector::GALLERY) doesDataKeepChanging: postpone count: 0 - source count: very first = 24044, previous = 24044, current = 24047
+04-12 15:52:57.873 30538 30578 W JobInfo : Requested important-while-foreground flag for job555009767 is ignored and takes no effect
+04-12 15:52:57.878 30538 30574 D ConnectivityManager: StackLog: [android.net.ConnectivityManager.sendRequestForNetwork(ConnectivityManager.java:4736)] [android.net.ConnectivityManager.registerDefaultNetworkCallbackForUid(ConnectivityManager.java:5461)] [android.net.ConnectivityManager.registerDefaultNetworkCallback(ConnectivityManager.java:5428)] [android.net.ConnectivityManager.registerDefaultNetworkCallback(ConnectivityManager.java:5402)] [b$$ExternalSyntheticApiModelOutline8.m(D8$$SyntheticClass:66)] [apq.b(PG:191)] [apq.a(PG:35)] [ciwl.g(PG:3)] [ciwh.b(PG:57)] [bnrx.b(PG:68)] [cikm.w(PG:11)] [cisp.run(PG:107)] [jcn.run(PG:23)] [java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)] [java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)] [java.lang.Thread.run(Thread.java:1119)]
+04-12 15:52:57.879  1174  2567 D ConnectivityService: requestNetwork for uid/pid:10346/30538 activeRequest: null callbackRequest: 4841 [NetworkRequest [ REQUEST id=4842, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false declaredMethods: AVAIL|LOST|NC|BLK
+04-12 15:52:57.879  1174  2186 D ConnectivityService:    accepting network in place of null for NetworkRequest [ REQUEST id=4842, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+04-12 15:52:57.880  1174  2175 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=4842, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+04-12 15:52:57.880  1174  2175 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=4842, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+04-12 15:52:57.881  1174  2175 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=4842, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+04-12 15:52:57.881  1174  2186 D ConnectivityService: Rematched networks [computed 0ms] [applied 1ms] [issued 0]
+04-12 15:52:57.881  1174  2175 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=4842, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10346 RequestorUid: 10346 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+04-12 15:52:57.881  1174  2186 D ConnectivityService: NetworkReassignment :
+04-12 15:52:57.881  1174  2186 D ConnectivityService:   4842 : null ΓåÆ 119
+04-12 15:52:57.890 30538 30577 D ConnectivityManager: StackLog: [android.net.ConnectivityManager.unregisterNetworkCallback(ConnectivityManager.java:5571)] [cqo.a(PG:405)] [b.C(PG:1)] [iyx.a(PG:217)] [chsp.y(PG:108)] [civz.b(PG:11)] [cikm.w(PG:11)] [cisp.run(PG:99)] [jcn.run(PG:23)] [java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)] [java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)] [java.lang.Thread.run(Thread.java:1119)]
+04-12 15:52:57.891  1174  2186 D ConnectivityService:  Removing from current network [119 WIFI], leaving 225 requests.
+04-12 15:52:57.919   942   986 E HeatmapThread: ECT Thread time in milliseconds: 1776023577
+04-12 15:52:57.921   942   986 D HeatmapThread: !@ batteryplugType : 2
+04-12 15:52:57.921   942   986 D HeatmapThread: !@ batteryLevel : 74  batteryTemperature : 299 
+04-12 15:52:57.921   942   986 D HeatmapThread: !@ Heatmap currtime: 29600392
+04-12 15:52:57.921   942   986 D HeatmapThread: !@ Heatmap prevtime: 29600366
+04-12 15:52:57.921   942   986 D HeatmapThread: !@ Heatmap plugstarttime: 29600385
+04-12 15:52:57.921   942   986 D HeatmapThread: !@ Heatmap prevv_dsoh_update_time: 29599579
+04-12 15:52:57.921   942   986 E HeatmapThread: !@ CAM New BSOH: 100
