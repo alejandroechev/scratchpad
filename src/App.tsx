@@ -107,15 +107,17 @@ function AppContent() {
             </button>
           )}
         </div>
-        <SyncStatus />
-        <button onClick={() => setShowArchive(true)} className="text-amber-200 text-sm hover:text-white" data-testid="archive-nav-button">📦</button>
-        <button
-          onClick={() => setShowInfo(!showInfo)}
-          className="text-amber-200 text-sm hover:text-white"
-          data-testid="info-button"
-        >
-          ⓘ
-        </button>
+        <div className="flex items-center gap-3">
+          <SyncStatus />
+          <button onClick={() => setShowArchive(true)} className="text-amber-200 text-sm hover:text-white" data-testid="archive-nav-button">Archivo</button>
+          <button
+            onClick={() => setShowInfo(!showInfo)}
+            className="text-amber-200 text-sm hover:text-white"
+            data-testid="info-button"
+          >
+            ⓘ
+          </button>
+        </div>
       </header>
 
       {showInfo && <SyncInfo />}

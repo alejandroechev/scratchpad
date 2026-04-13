@@ -52,21 +52,21 @@ export function QuickAddBar({ onAdd, onAddImage }: QuickAddBarProps) {
           data-testid="quick-add-file-input"
         />
         <button
-          onClick={() => fileInputRef.current?.click()}
-          className="rounded-lg bg-amber-500 px-3 py-2 text-sm font-medium text-white
-                     hover:bg-amber-600"
-          data-testid="quick-add-image-button"
-        >
-          📷
-        </button>
-        <button
           onClick={handleSubmit}
           disabled={!text.trim()}
           className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white
                      hover:bg-amber-700 disabled:opacity-40 disabled:cursor-not-allowed"
           data-testid="quick-add-button"
         >
-          ✏️
+          Agregar
+        </button>
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="rounded-lg bg-amber-500 px-3 py-2 text-sm font-medium text-white
+                     hover:bg-amber-600"
+          data-testid="quick-add-image-button"
+        >
+          📷
         </button>
       </div>
     </div>
