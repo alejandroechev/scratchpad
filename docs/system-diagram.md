@@ -6,24 +6,26 @@ graph TD
         PROF[Profile Picker<br/>Ale / Dani]
         AUTH[SyncAuthGate<br/>Device Registration]
         SHARE[Share Receiver<br/>Android Intent]
-        QAB[QuickAddBar + 📷]
+        QAB[Unified Input Bar + 📷]
+        FCR[FilterChipRow<br/>🔍 Search + Label Filters]
         NL[NoteList + SwipeableCards]
-        NDP[NoteDetailPage + Gallery]
-        SB[SearchBar]
+        AP[ArchivePage<br/>📦 Archived Notes + Unarchive]
+        NDP[NoteDetailPage + Gallery + Labels]
         SS[SyncStatus ⬆️]
         Hook[useNotes Hook]
         SP[Store Provider]
         BS[Blob Sync<br/>SHA-256 + Retry Queue]
-        AM[Automerge Doc<br/>Per-user ScratchPadDoc]
+        AM[Automerge Doc<br/>Per-user ScratchPadDoc + Labels]
         IDB[(IndexedDB<br/>Docs + Blobs)]
 
         PROF -->|"select profile<br/>→ docUrl"| AUTH
         AUTH -->|authenticated| QAB
         SHARE -->|"shared image"| SP
         QAB --> Hook
+        FCR --> Hook
         NL --> Hook
+        AP --> Hook
         NDP --> Hook
-        SB --> Hook
         Hook --> SP
         SP --> AM
         SP --> BS
@@ -36,8 +38,8 @@ graph TD
         REG[/auth/register/]
         WS[WebSocket Server<br/>JWT Verified]
         BLOB[/blobs/:id/<br/>Content-Addressed]
-        AleDoc[(Ale's Doc)]
-        DaniDoc[(Dani's Doc)]
+        AleDoc[(Ale's Doc + Labels)]
+        DaniDoc[(Dani's Doc + Labels)]
         BlobStore[(Blob Filesystem)]
         REG -->|JWT token| WS
         WS --> AleDoc

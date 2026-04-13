@@ -1,18 +1,20 @@
 # ScratchPad
 
-> **v0.6.0** — Tauri Android + Desktop + macOS native app
+> **v0.7.0** — Labels, Archive View, and Unified Input
 
 A personal scratchpad for quickly jotting down notes, pasting links, and capturing fleeting ideas.
 
 ## Features
 
-- ✏️ **Quick-add bar** — always visible at top, enter to submit
+- ✏️ **Unified input bar** — single add/edit interface at top with autocomplete and enter to submit
 - 📝 **Plain text notes** — with automatic URL detection and tappable link chips
+- 🏷️ **Labels** — freeform tags for organizing notes with autocomplete and filter chips
 - 📷 **Image attachments** — attach photos from camera/gallery, with thumbnails and gallery view
 - 📤 **Android share target** — share screenshots/images from any app directly to ScratchPad
-- 🔍 **Search** — filter notes by content text in real-time
-- 📋 **Note detail** — tap to expand, edit, save/discard, manage images
-- 👆 **Swipe gestures** — swipe left to archive, swipe right to delete
+- 🔍 **Search & filter** — search bar chip plus dynamic label filter chips in unified interface
+- 📋 **Note detail** — tap to expand, edit, save/discard, manage images and labels
+- 👆 **Archive gesture** — swipe left or right to archive notes (no delete)
+- 📦 **Archive view** — dedicated page for archived notes with unarchive functionality
 - 🔄 **Offline-first sync** — Automerge CRDTs + blob storage sync across devices via SyncEngine
 - ⬆️ **Upload status** — real-time indicator showing pending blob uploads
 - 🔐 **Device registration** — first-time setup with sync server password
