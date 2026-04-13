@@ -33,9 +33,13 @@ test.describe("ScratchPad Notes", () => {
     await input.fill("Read a book about TypeScript");
     await page.getByTestId("quick-add-button").click();
 
-    // Search
-    const search = page.getByTestId("search-input");
-    await search.fill("grocer");
+    // Click search chip to expand search input
+    const searchChip = page.getByTestId("search-chip");
+    await searchChip.click();
+
+    // Type in expanded search input
+    const searchInput = page.getByTestId("search-chip-input");
+    await searchInput.fill("grocer");
 
     // Only matching note visible
     await expect(page.getByText("Buy groceries")).toBeVisible();

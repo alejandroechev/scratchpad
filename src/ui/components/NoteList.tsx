@@ -5,10 +5,9 @@ interface NoteListProps {
   notes: Note[];
   onNoteClick: (id: string) => void;
   onArchive: (id: string) => void;
-  onDelete: (id: string) => void;
 }
 
-export function NoteList({ notes, onNoteClick, onArchive, onDelete }: NoteListProps) {
+export function NoteList({ notes, onNoteClick, onArchive }: NoteListProps) {
   if (notes.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-amber-600">
@@ -26,7 +25,6 @@ export function NoteList({ notes, onNoteClick, onArchive, onDelete }: NoteListPr
           note={note}
           onClick={onNoteClick}
           onArchive={onArchive}
-          onDelete={onDelete}
         />
       ))}
     </div>

@@ -11,7 +11,6 @@ interface NoteDetailPageProps {
   images?: NoteImage[];
   onSave: (content: string) => void;
   onArchive: () => void;
-  onDelete: () => void;
   onBack: () => void;
   onRemoveImage?: (blobId: string) => void;
   onAddImage?: (file: File) => void;
@@ -24,7 +23,6 @@ export function NoteDetailPage({
   images,
   onSave,
   onArchive,
-  onDelete,
   onBack,
   onRemoveImage,
   onAddImage,
@@ -133,24 +131,14 @@ export function NoteDetailPage({
           <p>Actualizado: {new Date(initialUpdatedAt).toLocaleString("es")}</p>
         </div>
 
-        <div className="flex gap-2 mt-2">
-          <button
-            onClick={onArchive}
-            className="flex-1 rounded-lg border border-amber-300 py-2 text-sm text-amber-700
-                       hover:bg-amber-100"
-            data-testid="archive-button"
-          >
-            📦 Archivar
-          </button>
-          <button
-            onClick={onDelete}
-            className="flex-1 rounded-lg border border-red-300 py-2 text-sm text-red-600
-                       hover:bg-red-50"
-            data-testid="delete-button"
-          >
-            🗑️ Eliminar
-          </button>
-        </div>
+        <button
+          onClick={onArchive}
+          className="w-full rounded-lg border border-amber-300 py-2 text-sm text-amber-700
+                     hover:bg-amber-100"
+          data-testid="archive-button"
+        >
+          📦 Archivar
+        </button>
       </div>
     </div>
   );

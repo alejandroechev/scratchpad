@@ -3,7 +3,7 @@ import { useNotes } from "./ui/hooks/useNotes";
 import { QuickAddBar } from "./ui/components/QuickAddBar";
 import { NoteList } from "./ui/components/NoteList";
 import { NoteDetailPage } from "./ui/pages/NoteDetailPage";
-import { SearchBar } from "./ui/components/SearchBar";
+import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
@@ -14,11 +14,14 @@ import { resetDocHandle } from "./infra/automerge/repo.js";
 
 function AppContent() {
   const [search, setSearch] = useState("");
+  const [activeLabel, setActiveLabel] = useState<string | null>(null);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [showInfo, setShowInfo] = useState(false);
   const activeProfile = getActiveProfile();
-  const filters = useMemo(() => ({ search: search || undefined }), [search]);
-  const { notes, loading, addNote, editNote, archiveNote, removeNote } = useNotes(filters);
+  const filters = useMemo(() => ({ search: search || undefined, label: activeLabel || undefined }), [search, activeLabel]);
+  const { notes, loading, addNote, editNote, archiveNote } = useNotes(filters);
+
+  const allLabels = useMemo(() => [...new Set(notes.flatMap(n => n.labels ?? []))].sort(), [notes]);
 
   if (selectedNoteId) {
     const note = notes.find((n) => n.id === selectedNoteId);
@@ -35,10 +38,6 @@ function AppContent() {
         }}
         onArchive={async () => {
           await archiveNote(selectedNoteId);
-          setSelectedNoteId(null);
-        }}
-        onDelete={async () => {
-          await removeNote(selectedNoteId);
           setSelectedNoteId(null);
         }}
         onBack={() => setSelectedNoteId(null)}
@@ -102,7 +101,13 @@ function AppContent() {
           });
         }}
       />
-      <SearchBar value={search} onChange={setSearch} />
+      <FilterChipRow
+        labels={allLabels}
+        activeLabel={activeLabel}
+        onLabelSelect={setActiveLabel}
+        searchText={search}
+        onSearchChange={setSearch}
+      />
 
       {loading ? (
         <div className="flex items-center justify-center py-16">
@@ -113,7 +118,6 @@ function AppContent() {
           notes={notes}
           onNoteClick={setSelectedNoteId}
           onArchive={archiveNote}
-          onDelete={removeNote}
         />
       )}
     </div>

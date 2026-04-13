@@ -66,7 +66,7 @@ export function QuickAddBar({ onAdd, onAddImage }: QuickAddBarProps) {
                      hover:bg-amber-700 disabled:opacity-40 disabled:cursor-not-allowed"
           data-testid="quick-add-button"
         >
-          +
+          ✏️
         </button>
       </div>
     </div>
