@@ -73,10 +73,16 @@ function AppContent() {
         labels={note?.labels}
         allLabels={allLabels}
         onAddLabel={async (label) => {
+          console.log('Adding label:', label);
           await addLabel(selectedNoteId, label);
+          await refresh(); // Refresh to update UI
+          console.log('Label added successfully');
         }}
         onRemoveLabel={async (label) => {
+          console.log('Removing label:', label);
           await removeLabel(selectedNoteId, label);
+          await refresh(); // Refresh to update UI
+          console.log('Label removed successfully');
         }}
       />
     );

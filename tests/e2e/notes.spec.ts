@@ -125,18 +125,20 @@ test.describe("ScratchPad Notes", () => {
     // Add another label
     await labelInput.fill("urgente");
     await labelInput.press("Enter");
-    await expect(page.getByText("urgente")).toBeVisible();
+    await expect(page.getByTestId("label-section").getByText("urgente")).toBeVisible();
     
     // Remove a label
     await page.getByTestId("remove-label-trabajo").click();
     await page.waitForTimeout(100); // Wait for async operation
-    await expect(page.getByText("trabajo")).not.toBeVisible();
-    await expect(page.getByText("urgente")).toBeVisible();
+    await expect(page.getByTestId("label-section").getByText("trabajo")).not.toBeVisible();
+    await expect(page.getByTestId("label-section").getByText("urgente")).toBeVisible();
     
     // Go back and verify label shows on card
     await page.getByTestId("back-button").click();
     
-    // Should see the remaining label chip on the note card
-    await expect(page.getByText("urgente")).toBeVisible();
+    // Should see the remaining label chip on the note card (urgente only, not trabajo)
+    const noteCard = page.getByTestId(/note-card-/);
+    await expect(noteCard.getByText("urgente")).toBeVisible();
+    await expect(noteCard.getByText("trabajo")).not.toBeVisible();
   });
 });
