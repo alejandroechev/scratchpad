@@ -27,8 +27,14 @@ A personal scratchpad for quickly jotting down notes, pasting links, and capturi
 
 ### Release & Versioning
 - **Bump version on every change** — after committing a meaningful change, bump the patch (or minor/major as appropriate) in both `package.json` and `src-tauri/tauri.conf.json`. Keep them in sync.
-- **CI auto-releases** — the `build-android.yml` workflow creates a GitHub Release with a signed APK for every push to master that touches `src/`, `src-tauri/`, `vite.config.ts`, or `package.json`. The release tag is `v<version>` from `package.json`.
+- **CI auto-releases** — the `build-android.yml` and `build-macos.yml` workflows create a GitHub Release with a signed APK and unsigned DMGs for every push to master that touches `src/`, `src-tauri/`, `vite.config.ts`, or `package.json`. The release tag is `v<version>` from `package.json`.
 - **Never reuse a version tag** — always bump before pushing so CI creates a fresh release.
+- **Rebuild desktop app** — after every release, rebuild the Windows desktop app and update the local executable:
+  ```bash
+  npx tauri build
+  Copy-Item src-tauri\target\release\app.exe "$env:USERPROFILE\.local\bin\scratchpad.exe" -Force
+  ```
+  This is NOT automated by CI — it must be done manually on the dev machine after pushing.
 
 ### Coding — TDD Workflow (strict, per-function)
 
