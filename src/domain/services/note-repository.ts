@@ -12,6 +12,7 @@ export interface NoteRepository {
   list(filters?: NoteFilters): Note[];
   update(id: string, content: string): Note;
   archive(id: string): Note;
+  unarchive(id: string): Note;
   delete(id: string): void;
   addImage(noteId: string, image: NoteImage): Note;
   removeImage(noteId: string, blobId: string): Note;

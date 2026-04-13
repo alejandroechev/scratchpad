@@ -49,6 +49,11 @@ export async function archiveNote(id: string): Promise<Note> {
   return memoryStore.archive(id);
 }
 
+export async function unarchiveNote(id: string): Promise<Note> {
+  if (backend === "automerge") return (await automerge()).unarchiveNote(id);
+  return memoryStore.unarchive(id);
+}
+
 export async function deleteNote(id: string): Promise<void> {
   if (backend === "automerge") return (await automerge()).deleteNote(id);
   return memoryStore.delete(id);

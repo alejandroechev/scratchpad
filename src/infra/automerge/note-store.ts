@@ -71,6 +71,18 @@ export async function archiveNote(id: string): Promise<Note> {
   return doc.notes[id];
 }
 
+export async function unarchiveNote(id: string): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[id];
+    if (!note) throw new Error(`Note not found: ${id}`);
+    note.archived = false;
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[id];
+}
+
 export async function deleteNote(id: string): Promise<void> {
   const handle = await getDocHandle();
   handle.change((doc) => {

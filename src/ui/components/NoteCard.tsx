@@ -49,6 +49,16 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
         <p className="text-sm text-gray-900 whitespace-pre-wrap break-words flex-1">{preview}</p>
       </div>
 
+      {(note.labels ?? []).length > 0 && (
+        <div className="mt-1 flex flex-wrap gap-1">
+          {(note.labels ?? []).map((label) => (
+            <span key={label} className="rounded-full bg-amber-100 text-amber-700 px-2 py-0.5 text-[10px]">
+              {label}
+            </span>
+          ))}
+        </div>
+      )}
+
       {urls.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
           {urls.map((url, i) => (

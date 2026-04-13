@@ -59,6 +59,14 @@ export class InMemoryNoteStore implements NoteRepository {
     return { ...note };
   }
 
+  unarchive(id: string): Note {
+    const note = this.notes.get(id);
+    if (!note) throw new Error(`Note not found: ${id}`);
+    note.archived = false;
+    note.updatedAt = new Date().toISOString();
+    return { ...note };
+  }
+
   delete(id: string): void {
     if (!this.notes.has(id)) throw new Error(`Note not found: ${id}`);
     this.notes.delete(id);

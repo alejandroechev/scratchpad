@@ -80,4 +80,63 @@ test.describe("ScratchPad Notes", () => {
     // Back on the list with updated content
     await expect(page.getByText("Updated content")).toBeVisible();
   });
+
+  test("can archive a note and unarchive it from archive view", async ({ page }) => {
+    await page.goto("/");
+    // Add a note
+    const input = page.getByTestId("quick-add-input");
+    await input.fill("Archive test note");
+    await page.getByTestId("quick-add-button").click();
+    // Click note to open detail
+    await page.getByText("Archive test note").click();
+    // Archive it
+    await page.getByTestId("archive-button").click();
+    // Note should be gone from main list
+    await expect(page.getByText("Archive test note")).not.toBeVisible();
+    // Go to archive
+    await page.getByTestId("archive-nav-button").click();
+    // Note should be in archive
+    await expect(page.getByText("Archive test note")).toBeVisible();
+    // Unarchive it - using a more specific selector
+    await page.locator('[data-testid^="unarchive-button-"]').first().click();
+    // Go back to main view
+    await page.getByTestId("archive-back-button").click();
+    // Note should be back in main list
+    await expect(page.getByText("Archive test note")).toBeVisible();
+  });
+
+  test("can add and remove labels on a note", async ({ page }) => {
+    await page.goto("/");
+    const input = page.getByTestId("quick-add-input");
+    await input.fill("Label test note");
+    await page.getByTestId("quick-add-button").click();
+    
+    // Click note to open detail
+    await page.getByText("Label test note").click();
+    
+    // Add a label
+    const labelInput = page.getByTestId("add-label-input");
+    await labelInput.fill("trabajo");
+    await labelInput.press("Enter");
+    
+    // Label should appear as chip
+    await expect(page.getByText("trabajo")).toBeVisible();
+    
+    // Add another label
+    await labelInput.fill("urgente");
+    await labelInput.press("Enter");
+    await expect(page.getByText("urgente")).toBeVisible();
+    
+    // Remove a label
+    await page.getByTestId("remove-label-trabajo").click();
+    await page.waitForTimeout(100); // Wait for async operation
+    await expect(page.getByText("trabajo")).not.toBeVisible();
+    await expect(page.getByText("urgente")).toBeVisible();
+    
+    // Go back and verify label shows on card
+    await page.getByTestId("back-button").click();
+    
+    // Should see the remaining label chip on the note card
+    await expect(page.getByText("urgente")).toBeVisible();
+  });
 });
