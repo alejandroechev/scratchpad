@@ -81,6 +81,7 @@ npx tsc -b
 - **README** Update readme file with any relevant public change to the app
 - **System Diagram** Keep always up to date a mermaid system level diagram of the app architecture in docs/system-diagram.md
 - **ADR** For every major design and architecture decision add an Architecture Decision Record in docs/adrs
+- **Docs Sync Validation** After completing feature work, explicitly verify README, system diagram, and ADRs are up to date with the changes. This applies to ALL work — not just Ralph loop tasks.
 
 ### Commit Checklist
 
@@ -95,3 +96,19 @@ Before running `git commit`, mentally verify:
 - [ ] README updated (if public-facing change)?
 - [ ] System diagram updated (if architecture changed)?
 - [ ] ADR written (if major design decision)?
+
+### Release Completion Gate
+
+A feature or release is **NOT considered done** until:
+- [ ] Code is pushed to master
+- [ ] CI pipeline is confirmed green (tsc + vitest + playwright)
+- [ ] Android APK build pipeline is confirmed green (monitor via `gh run view`)
+- [ ] macOS DMG build pipeline is confirmed green
+- [ ] Desktop app rebuilt and `scratchpad.exe` updated locally:
+  ```bash
+  npx tauri build
+  Copy-Item src-tauri\target\release\app.exe "$env:USERPROFILE\.local\bin\scratchpad.exe" -Force
+  ```
+- [ ] Docs verified up to date (README, system diagram, ADRs)
+
+Do NOT consider work complete after just pushing. Monitor pipelines and confirm all builds succeed.
