@@ -64,6 +64,16 @@ export async function removeImage(noteId: string, blobId: string): Promise<Note>
   return memoryStore.removeImage(noteId, blobId);
 }
 
+export async function addLabel(noteId: string, label: string): Promise<Note> {
+  if (backend === "automerge") return (await automerge()).addLabel(noteId, label);
+  return memoryStore.addLabel(noteId, label);
+}
+
+export async function removeLabel(noteId: string, label: string): Promise<Note> {
+  if (backend === "automerge") return (await automerge()).removeLabel(noteId, label);
+  return memoryStore.removeLabel(noteId, label);
+}
+
 /** Subscribe to remote doc changes. Returns unsubscribe function. No-op for memory backend. */
 export async function onDocChange(callback: () => void): Promise<() => void> {
   if (backend === "automerge") {

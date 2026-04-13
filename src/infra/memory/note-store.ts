@@ -34,6 +34,10 @@ export class InMemoryNoteStore implements NoteRepository {
       results = results.filter((n) => n.content.toLowerCase().includes(q));
     }
 
+    if (filters?.label) {
+      results = results.filter((n) => n.labels?.includes(filters.label!));
+    }
+
     // Newest first
     results.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     return results.map((n) => ({ ...n }));
@@ -78,5 +82,28 @@ export class InMemoryNoteStore implements NoteRepository {
     note.images.splice(idx, 1);
     note.updatedAt = new Date().toISOString();
     return { ...note, images: [...note.images] };
+  }
+
+  addLabel(noteId: string, label: string): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (!note.labels) note.labels = [];
+    if (!note.labels.includes(label)) {
+      note.labels.push(label);
+      note.updatedAt = new Date().toISOString();
+    }
+    return { ...note, labels: [...note.labels] };
+  }
+
+  removeLabel(noteId: string, label: string): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (!note.labels) note.labels = [];
+    const initialLength = note.labels.length;
+    note.labels = note.labels.filter(l => l !== label);
+    if (note.labels.length !== initialLength) {
+      note.updatedAt = new Date().toISOString();
+    }
+    return { ...note, labels: [...note.labels] };
   }
 }

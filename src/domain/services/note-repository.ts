@@ -3,6 +3,7 @@ import type { Note, NoteImage } from "../models/note.js";
 export interface NoteFilters {
   includeArchived?: boolean;
   search?: string;
+  label?: string;
 }
 
 export interface NoteRepository {
@@ -14,4 +15,6 @@ export interface NoteRepository {
   delete(id: string): void;
   addImage(noteId: string, image: NoteImage): Note;
   removeImage(noteId: string, blobId: string): Note;
+  addLabel(noteId: string, label: string): Note;
+  removeLabel(noteId: string, label: string): Note;
 }

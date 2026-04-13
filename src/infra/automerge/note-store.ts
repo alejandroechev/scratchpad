@@ -39,6 +39,10 @@ export async function listNotes(filters?: NoteFilters): Promise<Note[]> {
     results = results.filter((n) => n.content.toLowerCase().includes(q));
   }
 
+  if (filters?.label) {
+    results = results.filter((n) => n.labels?.includes(filters.label!));
+  }
+
   results.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return results;
 }
@@ -98,6 +102,37 @@ export async function removeImage(noteId: string, blobId: string): Promise<Note>
     if (idx === -1) throw new Error(`Image not found: ${blobId}`);
     note.images.splice(idx, 1);
     note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[noteId];
+}
+
+export async function addLabel(noteId: string, label: string): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (!note.labels) note.labels = [];
+    if (!note.labels.includes(label)) {
+      note.labels.push(label);
+      note.updatedAt = new Date().toISOString();
+    }
+  });
+  const doc = handle.doc()!;
+  return doc.notes[noteId];
+}
+
+export async function removeLabel(noteId: string, label: string): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (!note.labels) note.labels = [];
+    const initialLength = note.labels.length;
+    note.labels = note.labels.filter(l => l !== label);
+    if (note.labels.length !== initialLength) {
+      note.updatedAt = new Date().toISOString();
+    }
   });
   const doc = handle.doc()!;
   return doc.notes[noteId];

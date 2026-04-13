@@ -102,9 +102,11 @@ describe('Schema migration v1→v2', () => {
       },
     };
     migrateDoc(doc);
-    expect(doc.schemaVersion).toBe(2);
+    expect(doc.schemaVersion).toBe(3);
     expect(doc.notes.n1.images).toEqual([]);
     expect(doc.notes.n2.images).toEqual([]);
+    expect(doc.notes.n1.labels).toEqual([]);
+    expect(doc.notes.n2.labels).toEqual([]);
   });
 
   it('does not overwrite existing images', () => {
@@ -120,14 +122,31 @@ describe('Schema migration v1→v2', () => {
     expect(doc.notes.n1.images![0].blobId).toBe(img.blobId);
   });
 
-  it('is idempotent — skips if already v2', () => {
+  it('is idempotent — skips if already v3', () => {
     const doc: ScratchPadDoc = {
-      schemaVersion: 2,
+      schemaVersion: 3,
       notes: {
-        n1: { id: 'n1', content: 'ok', images: [], createdAt: '', updatedAt: '', archived: false },
+        n1: { id: 'n1', content: 'ok', images: [], labels: [], createdAt: '', updatedAt: '', archived: false },
       },
     };
     migrateDoc(doc);
-    expect(doc.schemaVersion).toBe(2);
+    expect(doc.schemaVersion).toBe(3);
+  });
+
+  it('migrates v2→v3: adds labels[] to notes without it', () => {
+    const img = makeImage();
+    const doc: ScratchPadDoc = {
+      schemaVersion: 2,
+      notes: {
+        n1: { id: 'n1', content: 'has image', images: [img], createdAt: '', updatedAt: '', archived: false },
+        n2: { id: 'n2', content: 'no image', images: [], createdAt: '', updatedAt: '', archived: false },
+      },
+    };
+    migrateDoc(doc);
+    expect(doc.schemaVersion).toBe(3);
+    expect(doc.notes.n1.labels).toEqual([]);
+    expect(doc.notes.n2.labels).toEqual([]);
+    expect(doc.notes.n1.images).toEqual([img]); // preserved
+    expect(doc.notes.n2.images).toEqual([]);
   });
 });

@@ -9,6 +9,7 @@ export interface Note {
   id: string;
   content: string;
   images?: NoteImage[];
+  labels?: string[];
   createdAt: string;
   updatedAt: string;
   archived: boolean;
@@ -34,6 +35,7 @@ export function createNote(id: string, content: string): Note {
     id,
     content,
     images: [],
+    labels: [],
     createdAt: now,
     updatedAt: now,
     archived: false,
