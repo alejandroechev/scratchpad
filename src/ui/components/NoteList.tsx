@@ -10,9 +10,12 @@ interface NoteListProps {
   onToggleTask: (id: string) => void;
   onToggleDone?: (id: string) => void;
   allLabels: string[];
+  selectedNoteIds?: Set<string>;
+  onToggleSelect?: (id: string) => void;
 }
 
-export function NoteList({ notes, onNoteClick, onArchive, onAddImage, onAddLabel, onToggleTask, onToggleDone, allLabels }: NoteListProps) {
+export function NoteList({ notes, onNoteClick, onArchive, onAddImage, onAddLabel, onToggleTask, onToggleDone, allLabels, selectedNoteIds, onToggleSelect }: NoteListProps) {
+  const selectionMode = (selectedNoteIds?.size ?? 0) > 0;
   if (notes.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-amber-600">
@@ -35,6 +38,9 @@ export function NoteList({ notes, onNoteClick, onArchive, onAddImage, onAddLabel
           onToggleTask={onToggleTask}
           onToggleDone={onToggleDone}
           allLabels={allLabels}
+          isSelected={selectedNoteIds?.has(note.id)}
+          onToggleSelect={onToggleSelect}
+          selectionMode={selectionMode}
         />
       ))}
     </div>

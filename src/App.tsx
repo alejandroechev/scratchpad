@@ -21,11 +21,30 @@ function AppContent() {
   const [showInfo, setShowInfo] = useState(false);
   const [showArchive, setShowArchive] = useState(false);
   const [tasksOnly, setTasksOnly] = useState(false);
+  const [selectedNoteIds, setSelectedNoteIds] = useState<Set<string>>(new Set());
   const activeProfile = getActiveProfile();
   const filters = useMemo(() => ({ search: search || undefined, label: activeLabel || undefined, tasksOnly: tasksOnly || undefined }), [search, activeLabel, tasksOnly]);
   const { notes, loading, addNote, editNote, archiveNote, refresh } = useNotes(filters);
 
   const allLabels = useMemo(() => [...new Set(notes.flatMap(n => n.labels ?? []))].sort(), [notes]);
+
+  const toggleSelect = (id: string) => {
+    setSelectedNoteIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+  const clearSelection = () => setSelectedNoteIds(new Set());
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') clearSelection();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   useEffect(() => {
     if (activeLabel && !allLabels.includes(activeLabel)) {
@@ -161,6 +180,8 @@ function AppContent() {
             await refresh();
           }}
           allLabels={allLabels}
+          selectedNoteIds={selectedNoteIds}
+          onToggleSelect={toggleSelect}
         />
       )}
     </div>

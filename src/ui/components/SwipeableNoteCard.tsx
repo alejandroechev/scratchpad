@@ -12,9 +12,12 @@ interface SwipeableNoteCardProps {
   onToggleTask: (id: string) => void;
   onToggleDone?: (id: string) => void;
   allLabels: string[];
+  isSelected?: boolean;
+  onToggleSelect?: (id: string) => void;
+  selectionMode?: boolean;
 }
 
-const ACTION_PANEL_WIDTH = 240;
+const ACTION_PANEL_WIDTH = 300;
 const SWIPE_THRESHOLD = 60;
 
 export function SwipeableNoteCard({
@@ -26,6 +29,9 @@ export function SwipeableNoteCard({
   onToggleTask,
   onToggleDone,
   allLabels,
+  isSelected,
+  onToggleSelect,
+  selectionMode,
 }: SwipeableNoteCardProps) {
   const startX = useRef(0);
   const currentX = useRef(0);
@@ -119,6 +125,14 @@ export function SwipeableNoteCard({
           <ClipboardDocumentCheckIcon className="w-5 h-5" />
           <span>{note.isTask ? "Quitar tarea" : "Hacer tarea"}</span>
         </button>
+        <button
+          onClick={() => { onToggleSelect?.(note.id); closePanel(); }}
+          className="flex-1 bg-cyan-500 text-white flex flex-col items-center justify-center text-xs gap-1"
+          data-testid={`swipe-select-${note.id}`}
+        >
+          <CheckIcon className="w-5 h-5" />
+          <span>Seleccionar</span>
+        </button>
       </div>}
 
       {/* Hidden file input for image upload */}
@@ -150,7 +164,7 @@ export function SwipeableNoteCard({
           zIndex: 10,
         }}
       >
-        <NoteCard note={note} onClick={revealed ? () => closePanel() : onClick} onToggleDone={onToggleDone} />
+        <NoteCard note={note} onClick={revealed ? () => closePanel() : onClick} onToggleDone={onToggleDone} isSelected={isSelected} onToggleSelect={onToggleSelect} selectionMode={selectionMode} />
       </div>
 
       {/* Context menu */}
@@ -184,6 +198,13 @@ export function SwipeableNoteCard({
           >
             <ClipboardDocumentCheckIcon className="w-4 h-4 text-purple-500" />
             {note.isTask ? "Quitar tarea" : "Hacer tarea"}
+          </button>
+          <button
+            onClick={() => { onToggleSelect?.(note.id); setContextMenu(null); }}
+            className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
+          >
+            <CheckIcon className="w-4 h-4 text-cyan-500" />
+            {isSelected ? "Deseleccionar" : "Seleccionar"}
           </button>
         </div>
       )}

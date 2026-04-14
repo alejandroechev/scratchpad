@@ -1,4 +1,5 @@
-import { CameraIcon } from "@heroicons/react/24/outline";
+import { CameraIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { extractUrls } from "../../domain/models/note.js";
 import type { Note } from "../../domain/models/note.js";
 import { ImageThumbnail } from "./ImageThumbnail.js";
@@ -6,6 +7,10 @@ import { ImageThumbnail } from "./ImageThumbnail.js";
 interface NoteCardProps {
   note: Note;
   onClick: (id: string) => void;
+  onToggleDone?: (id: string) => void;
+  isSelected?: boolean;
+  onToggleSelect?: (id: string) => void;
+  selectionMode?: boolean;
 }
 
 function formatRelativeTime(isoDate: string): string {
@@ -20,18 +25,32 @@ function formatRelativeTime(isoDate: string): string {
   return `hace ${days}d`;
 }
 
-export function NoteCard({ note, onClick }: NoteCardProps) {
+export function NoteCard({ note, onClick, onToggleDone, isSelected, onToggleSelect, selectionMode }: NoteCardProps) {
   const urls = extractUrls(note.content);
   const images = note.images ?? [];
 
+  const handleClick = () => {
+    if (selectionMode && onToggleSelect) {
+      onToggleSelect(note.id);
+    } else {
+      onClick(note.id);
+    }
+  };
+
   return (
     <div
-      onClick={() => onClick(note.id)}
-      className="bg-white rounded-lg p-3 shadow-sm border border-amber-100 cursor-pointer
-                 hover:border-amber-300 transition-colors"
+      onClick={handleClick}
+      className={`bg-white rounded-lg p-3 shadow-sm cursor-pointer transition-colors relative ${
+        isSelected ? "border-2 border-amber-500" : "border border-amber-100 hover:border-amber-300"
+      }`}
       data-testid={`note-card-${note.id}`}
     >
-      <div className="flex gap-2">
+      {isSelected && (
+        <div className="absolute top-1 left-1 bg-amber-500 text-white rounded-full w-5 h-5 flex items-center justify-center z-10" data-testid={`note-selected-${note.id}`}>
+          <CheckIcon className="w-3 h-3" />
+        </div>
+      )}
+      <div className="flex gap-2 items-center">
         {images.length > 0 && (
           <div className="flex-shrink-0 relative">
             <ImageThumbnail blobId={images[0].blobId} className="w-12 h-12" />
@@ -46,7 +65,20 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
             )}
           </div>
         )}
-        <p className="text-sm text-gray-900 break-words flex-1 line-clamp-2">{note.content}</p>
+        <p className={`text-sm break-words flex-1 line-clamp-2 ${note.taskDone ? "line-through text-gray-400" : "text-gray-900"}`}>{note.content}</p>
+        {note.isTask && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onToggleDone?.(note.id); }}
+            className="flex-shrink-0 ml-1"
+            data-testid={`task-checkbox-${note.id}`}
+          >
+            {note.taskDone ? (
+              <CheckCircleIcon className="w-6 h-6 text-green-500" />
+            ) : (
+              <div className="w-6 h-6 rounded-full border-2 border-amber-400" />
+            )}
+          </button>
+        )}
       </div>
 
       {(note.labels ?? []).length > 0 && (
