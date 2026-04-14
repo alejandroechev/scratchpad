@@ -8,7 +8,7 @@ import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
-import { removeImage, addImage, createNote, unarchiveNote, addLabel, removeLabel } from "./infra/store-provider.js";
+import { addImage, createNote, unarchiveNote } from "./infra/store-provider.js";
 import { storeAndSyncBlob } from "./infra/automerge/blob-sync.js";
 import { getActiveProfile, clearActiveProfile } from "./infra/profile-store.js";
 import { resetDocHandle } from "./infra/automerge/repo.js";
@@ -99,6 +99,11 @@ function AppContent() {
 
       <QuickAddBar
         onAdd={addNote}
+        onAddAndOpen={async (content) => {
+          const note = await createNote(content);
+          await refresh();
+          setSelectedNoteId(note.id);
+        }}
         onAddImage={async (file) => {
           const { blobId, sizeBytes } = await storeAndSyncBlob(file);
           const note = await createNote("");

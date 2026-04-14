@@ -2,16 +2,20 @@ import { useRef, useState } from "react";
 
 interface QuickAddBarProps {
   onAdd: (content: string) => void;
+  onAddAndOpen?: (content: string) => void;
   onAddImage?: (file: File) => void;
 }
 
-export function QuickAddBar({ onAdd, onAddImage }: QuickAddBarProps) {
+export function QuickAddBar({ onAdd, onAddAndOpen, onAddImage }: QuickAddBarProps) {
   const [text, setText] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = () => {
     const trimmed = text.trim();
-    if (!trimmed) return;
+    if (!trimmed) {
+      onAddAndOpen?.("");
+      return;
+    }
     onAdd(trimmed);
     setText("");
   };
@@ -30,7 +34,7 @@ export function QuickAddBar({ onAdd, onAddImage }: QuickAddBarProps) {
   };
 
   return (
-    <div className="sticky top-0 z-10 bg-amber-600 p-3">
+    <div className="bg-amber-600 p-3">
       <div className="flex gap-2">
         <input
           type="text"
@@ -53,9 +57,8 @@ export function QuickAddBar({ onAdd, onAddImage }: QuickAddBarProps) {
         />
         <button
           onClick={handleSubmit}
-          disabled={!text.trim()}
           className="rounded-lg bg-amber-800 px-4 py-2 text-sm font-medium text-white
-                     hover:bg-amber-900 disabled:opacity-40 disabled:cursor-not-allowed"
+                     hover:bg-amber-900"
           data-testid="quick-add-button"
         >
           Agregar
