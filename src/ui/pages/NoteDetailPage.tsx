@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import { extractUrls } from "../../domain/models/note.js";
 import type { NoteImage } from "../../domain/models/note.js";
 import { ImageThumbnail } from "../components/ImageThumbnail.js";
@@ -38,8 +38,27 @@ export function NoteDetailPage({
   const [content, setContent] = useState(initialContent);
   const [labelInput, setLabelInput] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const hasChanges = content !== initialContent;
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef(content);
+  contentRef.current = content;
+
+  // Debounced auto-save
+  useEffect(() => {
+    if (content === initialContent) return;
+    const timer = setTimeout(() => {
+      onSave(content);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [content]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save on unmount
+  useEffect(() => {
+    return () => {
+      if (contentRef.current !== initialContent) {
+        onSave(contentRef.current);
+      }
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const suggestions = useMemo(() => {
     if (!labelInput.trim() || !allLabels) return [];
@@ -77,20 +96,17 @@ export function NoteDetailPage({
   const urls = extractUrls(content);
 
   return (
-    <div className="min-h-screen bg-amber-50 flex flex-col">
+    <div className="min-h-screen bg-amber-50 flex flex-col pb-[env(safe-area-inset-bottom,20px)]">
       <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center gap-3">
-        <button onClick={onBack} className="text-white text-lg" data-testid="back-button">
+        <button onClick={() => {
+          if (contentRef.current !== initialContent) {
+            onSave(contentRef.current);
+          }
+          onBack();
+        }} className="text-white text-lg" data-testid="back-button">
           ←
         </button>
         <h1 className="text-lg font-bold flex-1">Detalle</h1>
-        <button
-          onClick={() => onSave(content)}
-          disabled={!hasChanges}
-          className="text-sm bg-amber-700 px-3 py-1 rounded disabled:opacity-40"
-          data-testid="save-button"
-        >
-          Guardar
-        </button>
       </header>
 
       <div className="flex-1 p-3 flex flex-col gap-3">

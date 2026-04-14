@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNotes } from "./ui/hooks/useNotes";
 import { QuickAddBar } from "./ui/components/QuickAddBar";
 import { NoteList } from "./ui/components/NoteList";
@@ -24,6 +24,12 @@ function AppContent() {
   const { notes, loading, addNote, editNote, archiveNote, refresh } = useNotes(filters);
 
   const allLabels = useMemo(() => [...new Set(notes.flatMap(n => n.labels ?? []))].sort(), [notes]);
+
+  useEffect(() => {
+    if (activeLabel && !allLabels.includes(activeLabel)) {
+      setActiveLabel(null);
+    }
+  }, [allLabels, activeLabel]);
 
   if (showArchive) {
     return (
@@ -51,7 +57,6 @@ function AppContent() {
         images={note?.images}
         onSave={async (content) => {
           await editNote(selectedNoteId, content);
-          setSelectedNoteId(null);
         }}
         onArchive={async () => {
           await archiveNote(selectedNoteId);
@@ -89,7 +94,7 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-amber-50 flex flex-col">
+    <div className="min-h-screen bg-amber-50 flex flex-col pb-[env(safe-area-inset-bottom,20px)]">
       <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center justify-between">
         <div className="flex items-center">
           <h1 className="text-lg font-bold">ScratchPad</h1>
