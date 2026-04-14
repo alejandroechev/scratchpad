@@ -1,6 +1,6 @@
 # ScratchPad
 
-> **v0.7.0** — Labels, Archive View, and Unified Input
+> **v0.8.0** — Auto-Save, Swipe Actions, Image Viewer & UX Polish
 
 A personal scratchpad for quickly jotting down notes, pasting links, and capturing fleeting ideas.
 
@@ -10,11 +10,19 @@ A personal scratchpad for quickly jotting down notes, pasting links, and capturi
 - 📝 **Plain text notes** — with automatic URL detection and tappable link chips
 - 🏷️ **Labels** — freeform tags for organizing notes with autocomplete and filter chips
 - 📷 **Image attachments** — attach photos from camera/gallery, with thumbnails and gallery view
+- 🖼️ **Full-screen image viewer** — tap a thumbnail to open a full-screen overlay with pinch-to-zoom
 - 📤 **Android share target** — share screenshots/images from any app directly to ScratchPad
 - 🔍 **Search & filter** — search bar chip plus dynamic label filter chips in unified interface
-- 📋 **Note detail** — tap to expand, edit, save/discard, manage images and labels
-- 👆 **Archive gesture** — swipe left or right to archive notes (no delete)
+- 💾 **Auto-save** — debounced 1-second auto-save in detail view; also saves on back/unmount
+- ↩️ **Undo / Redo** — ↩/↪ buttons in the detail header on mobile for quick text corrections
+- 📋 **Note detail** — tap to expand and edit; clean view focused on content
+- 👆 **Swipe action menu** — swipe left on a note card to reveal Archive, Image, and Label actions
 - 📦 **Archive view** — dedicated page for archived notes with unarchive functionality
+- ➕ **Empty note creation** — tap Agregar with no text to create a blank note and jump to detail
+- 🕐 **Sort by last updated** — notes sorted by most-recently-edited, with updatedAt shown on cards
+- 📌 **Sticky header** — header, input bar, and filter chips stay pinned while scrolling
+- 🎨 **Unified header colors** — input bar and filter row match the amber-600 header
+- 📐 **Bottom safe area** — padding for phone navigation buttons
 - 🔄 **Offline-first sync** — Automerge CRDTs + blob storage sync across devices via SyncEngine
 - ⬆️ **Upload status** — real-time indicator showing pending blob uploads
 - 🔐 **Device registration** — first-time setup with sync server password
@@ -77,7 +85,7 @@ npm run tauri android build # Android release build
 
 Each user (Ale / Dani) has their own Automerge document. On first launch, the app shows a profile picker, then prompts for a device name and the sync server registration key. Once registered, the device receives a JWT token used for authenticated WebSocket connections. Data syncs automatically in the background and works fully offline. Images shared from other Android apps are received via share intent and stored as blob attachments.
 
-See [ADR-001](docs/adrs/001-local-first-automerge.md), [ADR-002](docs/adrs/002-sync-auth-device-registration.md), [ADR-003](docs/adrs/003-android-share-intent.md), and [ADR-004](docs/adrs/004-multi-user-profiles.md) for details.
+See [ADR-001](docs/adrs/001-local-first-automerge.md), [ADR-002](docs/adrs/002-sync-auth-device-registration.md), [ADR-003](docs/adrs/003-android-share-intent.md), [ADR-004](docs/adrs/004-multi-user-profiles.md), and [ADR-005](docs/adrs/005-swipe-action-menu.md) for details.
 
 ## License
 
