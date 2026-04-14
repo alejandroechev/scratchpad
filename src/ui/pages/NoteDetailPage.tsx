@@ -2,6 +2,7 @@ import { useRef, useState, useMemo, useEffect } from "react";
 import { extractUrls } from "../../domain/models/note.js";
 import type { NoteImage } from "../../domain/models/note.js";
 import { ImageThumbnail } from "../components/ImageThumbnail.js";
+import { ImageViewerOverlay } from "../components/ImageViewerOverlay.js";
 
 interface NoteDetailPageProps {
   noteId: string;
@@ -38,6 +39,8 @@ export function NoteDetailPage({
   const [content, setContent] = useState(initialContent);
   const [labelInput, setLabelInput] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [viewingImage, setViewingImage] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef(content);
   contentRef.current = content;
@@ -106,11 +109,28 @@ export function NoteDetailPage({
         }} className="text-white text-lg" data-testid="back-button">
           ←
         </button>
+        <button
+          onClick={() => {
+            textareaRef.current?.focus();
+            document.execCommand('undo');
+          }}
+          className="text-white text-sm px-1 md:hidden"
+          data-testid="undo-button"
+        >↩</button>
+        <button
+          onClick={() => {
+            textareaRef.current?.focus();
+            document.execCommand('redo');
+          }}
+          className="text-white text-sm px-1 md:hidden"
+          data-testid="redo-button"
+        >↪</button>
         <h1 className="text-lg font-bold flex-1">Detalle</h1>
       </header>
 
       <div className="flex-1 p-3 flex flex-col gap-3">
         <textarea
+          ref={textareaRef}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className="flex-1 min-h-[200px] rounded-lg border border-amber-200 bg-white p-3 text-sm text-gray-900
@@ -124,7 +144,9 @@ export function NoteDetailPage({
             <div className="grid grid-cols-2 gap-2">
               {images.map((img) => (
                 <div key={img.blobId} className="relative" data-testid={`gallery-item-${img.blobId}`}>
-                  <ImageThumbnail blobId={img.blobId} className="w-full h-32" />
+                  <div onClick={() => setViewingImage(img.blobId)} className="cursor-pointer">
+                    <ImageThumbnail blobId={img.blobId} className="w-full h-32" />
+                  </div>
                   {onRemoveImage && (
                     <button
                       onClick={() => onRemoveImage(img.blobId)}
@@ -275,6 +297,10 @@ export function NoteDetailPage({
           📦 Archivar
         </button>
       </div>
+
+      {viewingImage && (
+        <ImageViewerOverlay blobId={viewingImage} onClose={() => setViewingImage(null)} />
+      )}
     </div>
   );
 }
