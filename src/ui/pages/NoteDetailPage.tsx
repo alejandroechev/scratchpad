@@ -51,7 +51,7 @@ export function NoteDetailPage({
 
   return (
     <div className="min-h-screen bg-amber-50 flex flex-col pb-[env(safe-area-inset-bottom,20px)]">
-      <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center gap-3">
+      <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center gap-3 pt-[env(safe-area-inset-top)]">
         <button onClick={() => {
           if (contentRef.current !== initialContent) {
             onSave(contentRef.current);

@@ -40,7 +40,7 @@ export function ArchivePage({ onBack, onUnarchive }: ArchivePageProps) {
 
   return (
     <div className="min-h-screen bg-amber-50 flex flex-col" data-testid="archive-page">
-      <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center">
+      <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center pt-[env(safe-area-inset-top)]">
         <button
           onClick={onBack}
           className="text-amber-200 hover:text-white mr-3"

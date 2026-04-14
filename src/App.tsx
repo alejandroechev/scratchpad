@@ -97,7 +97,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-amber-50 flex flex-col pb-[env(safe-area-inset-bottom,20px)]">
-      <div className="sticky top-0 z-20">
+      <div className="sticky top-0 z-20 pt-[env(safe-area-inset-top)] bg-amber-600">
         <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center justify-between">
           <div className="flex items-center">
             <h1 className="text-lg font-bold">ScratchPad</h1>
