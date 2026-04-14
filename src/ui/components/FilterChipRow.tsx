@@ -12,7 +12,7 @@ export function FilterChipRow({ labels, activeLabel, onLabelSelect, searchText, 
   const [searchExpanded, setSearchExpanded] = useState(false);
 
   return (
-    <div className="px-3 py-2 bg-amber-50 flex gap-2 overflow-x-auto" data-testid="filter-chip-row">
+    <div className="px-3 py-2 bg-amber-500 flex gap-2 overflow-x-auto" data-testid="filter-chip-row">
       {/* Search chip */}
       {searchExpanded ? (
         <div className="flex items-center gap-1 min-w-[200px]">

@@ -30,7 +30,7 @@ export function QuickAddBar({ onAdd, onAddImage }: QuickAddBarProps) {
   };
 
   return (
-    <div className="sticky top-0 z-10 bg-amber-50 p-3 border-b border-amber-200">
+    <div className="sticky top-0 z-10 bg-amber-600 p-3">
       <div className="flex gap-2">
         <input
           type="text"
@@ -38,8 +38,8 @@ export function QuickAddBar({ onAdd, onAddImage }: QuickAddBarProps) {
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Escribe una nota..."
-          className="flex-1 rounded-lg border border-amber-300 bg-white px-3 py-2 text-sm text-gray-900
-                     placeholder:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
+          className="flex-1 rounded-lg border border-amber-400 bg-white px-3 py-2 text-sm text-gray-900
+                     placeholder:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-300"
           data-testid="quick-add-input"
         />
         <input
@@ -54,16 +54,16 @@ export function QuickAddBar({ onAdd, onAddImage }: QuickAddBarProps) {
         <button
           onClick={handleSubmit}
           disabled={!text.trim()}
-          className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white
-                     hover:bg-amber-700 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="rounded-lg bg-amber-800 px-4 py-2 text-sm font-medium text-white
+                     hover:bg-amber-900 disabled:opacity-40 disabled:cursor-not-allowed"
           data-testid="quick-add-button"
         >
           Agregar
         </button>
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="rounded-lg bg-amber-500 px-3 py-2 text-sm font-medium text-white
-                     hover:bg-amber-600"
+          className="rounded-lg bg-amber-700 px-3 py-2 text-sm font-medium text-white
+                     hover:bg-amber-800"
           data-testid="quick-add-image-button"
         >
           📷
