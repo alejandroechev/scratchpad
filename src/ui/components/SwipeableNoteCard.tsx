@@ -53,15 +53,15 @@ export function SwipeableNoteCard({
     if (!swiping) return;
     currentX.current = e.touches[0].clientX;
     const dx = currentX.current - startX.current;
-    // Only allow left swipe (negative), or dragging back if already revealed
-    const base = revealed ? -ACTION_PANEL_WIDTH : 0;
-    setOffset(Math.min(0, base + dx));
+    // Only allow right swipe (positive), or dragging back if already revealed
+    const base = revealed ? ACTION_PANEL_WIDTH : 0;
+    setOffset(Math.max(0, base + dx));
   };
 
   const handleTouchEnd = () => {
     setSwiping(false);
-    if (offset < -SWIPE_THRESHOLD) {
-      setOffset(-ACTION_PANEL_WIDTH);
+    if (offset > SWIPE_THRESHOLD) {
+      setOffset(ACTION_PANEL_WIDTH);
       setRevealed(true);
     } else {
       setOffset(0);
@@ -92,8 +92,8 @@ export function SwipeableNoteCard({
   return (
     <div className={`relative rounded-lg ${showLabelPopup ? "overflow-visible" : "overflow-hidden"}`} data-testid={`swipeable-card-${note.id}`}>
       {/* Action panel behind the card — only rendered when swiped */}
-      {(revealed || offset < 0) && <div
-        className="absolute right-0 top-0 bottom-0 flex items-stretch rounded-r-lg overflow-hidden"
+      {(revealed || offset > 0) && <div
+        className="absolute left-0 top-0 bottom-0 flex items-stretch rounded-l-lg overflow-hidden"
         style={{ width: ACTION_PANEL_WIDTH }}
       >
         <button

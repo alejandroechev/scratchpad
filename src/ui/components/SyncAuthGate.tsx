@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { checkAuthStatus, registerDevice } from "../../infra/automerge/auth.js";
 import { getStorageBackend } from "../../infra/store-provider.js";
 import { PROFILES, getActiveProfile, setActiveProfile } from "../../infra/profile-store.js";
@@ -33,7 +34,7 @@ export function SyncAuthGate({ children }: SyncAuthGateProps) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-amber-50">
         <div className="text-center text-amber-600">
-          <div className="text-2xl mb-2">🔄</div>
+          <ArrowPathIcon className="w-8 h-8 mb-2 animate-spin text-amber-600" />
           <p>Conectando con el servidor...</p>
         </div>
       </div>

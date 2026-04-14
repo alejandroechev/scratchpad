@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 import { getStorageBackend } from "../../infra/store-provider";
 
 export function SyncStatus() {
@@ -32,7 +33,7 @@ export function SyncStatus() {
       data-testid="sync-status"
       title={`${count} archivo(s) pendiente(s) de subir`}
     >
-      ⬆️ {count}
+      <ArrowUpTrayIcon className="w-4 h-4 inline" /> {count}
     </span>
   );
 }
