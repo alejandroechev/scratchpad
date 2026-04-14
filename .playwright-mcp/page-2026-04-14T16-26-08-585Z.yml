@@ -1,0 +1,11 @@
+- generic [ref=e21]:
+  - banner [ref=e22]:
+    - button "←" [ref=e23]
+    - heading "Detalle" [level=1] [ref=e24]
+  - generic [ref=e25]:
+    - textbox [active] [ref=e26]: Esta es una nota de prueba con auto-guardado https://github.com/alejandroechev/scratchpad
+    - link "🔗 github.com" [ref=e31] [cursor=pointer]:
+      - /url: https://github.com/alejandroechev/scratchpad
+    - generic [ref=e27]:
+      - paragraph [ref=e28]: "Creado: 14/4/2026, 12:25:33"
+      - paragraph [ref=e29]: "Actualizado: 14/4/2026, 12:26:03"

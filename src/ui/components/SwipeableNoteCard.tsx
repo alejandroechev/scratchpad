@@ -65,9 +65,9 @@ export function SwipeableNoteCard({
   };
 
   return (
-    <div className="relative overflow-visible rounded-lg" data-testid={`swipeable-card-${note.id}`}>
-      {/* Action panel behind the card */}
-      <div
+    <div className={`relative rounded-lg ${showLabelPopup ? "overflow-visible" : "overflow-hidden"}`} data-testid={`swipeable-card-${note.id}`}>
+      {/* Action panel behind the card — only rendered when swiped */}
+      {(revealed || offset < 0) && <div
         className="absolute right-0 top-0 bottom-0 flex items-stretch rounded-r-lg overflow-hidden"
         style={{ width: ACTION_PANEL_WIDTH }}
       >
@@ -92,7 +92,7 @@ export function SwipeableNoteCard({
         >
           <span>🏷</span><span>Etiqueta</span>
         </button>
-      </div>
+      </div>}
 
       {/* Hidden file input for image upload */}
       <input

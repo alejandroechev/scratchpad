@@ -1,0 +1,28 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - heading "ScratchPad" [level=1] [ref=e7]
+      - generic [ref=e8]:
+        - button "Archivo" [ref=e9]
+        - button "ⓘ" [ref=e10]
+    - generic [ref=e12]:
+      - textbox "Escribe una nota..." [active] [ref=e13]
+      - button "Agregar" [ref=e14]
+      - button "📷" [ref=e15]
+    - button "🔍 Buscar" [ref=e17]
+  - generic [ref=e23]:
+    - generic [ref=e24]:
+      - button "📦 Archivar" [ref=e25]:
+        - generic [ref=e26]: 📦
+        - generic [ref=e27]: Archivar
+      - button "📷 Imagen" [ref=e28]:
+        - generic [ref=e29]: 📷
+        - generic [ref=e30]: Imagen
+      - button "🏷 Etiqueta" [ref=e31]:
+        - generic [ref=e32]: 🏷
+        - generic [ref=e33]: Etiqueta
+    - generic [ref=e35] [cursor=pointer]:
+      - paragraph [ref=e37]: Nota de prueba con enlace https://github.com
+      - link "github.com" [ref=e39]:
+        - /url: https://github.com
+      - paragraph [ref=e40]: ahora

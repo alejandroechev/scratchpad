@@ -1,0 +1,17 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - heading "ScratchPad" [level=1] [ref=e7]
+      - generic [ref=e8]:
+        - button "Archivo" [ref=e9]
+        - button "ⓘ" [ref=e10]
+    - generic [ref=e12]:
+      - textbox "Escribe una nota..." [active] [ref=e13]
+      - button "Agregar" [ref=e14]
+      - button "📷" [ref=e15]
+    - button "🔍 Buscar" [ref=e17]
+  - generic [ref=e23] [cursor=pointer]:
+    - paragraph [ref=e25]: Nota de prueba con enlace https://github.com y contenido largo para ver que el line-clamp funciona correctamente mostrando solo dos líneas de texto
+    - link "github.com" [ref=e27]:
+      - /url: https://github.com
+    - paragraph [ref=e28]: ahora
