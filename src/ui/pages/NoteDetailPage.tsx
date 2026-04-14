@@ -65,7 +65,7 @@ export function NoteDetailPage({
             textareaRef.current?.focus();
             document.execCommand('undo');
           }}
-          className="text-white text-sm px-1 md:hidden"
+          className="text-white text-sm px-1 hover:text-amber-200"
           data-testid="undo-button"
         ><ArrowUturnLeftIcon className="w-5 h-5" /></button>
         <button
@@ -73,7 +73,7 @@ export function NoteDetailPage({
             textareaRef.current?.focus();
             document.execCommand('redo');
           }}
-          className="text-white text-sm px-1 md:hidden"
+          className="text-white text-sm px-1 hover:text-amber-200"
           data-testid="redo-button"
         ><ArrowUturnRightIcon className="w-5 h-5" /></button>
         <h1 className="text-lg font-bold flex-1">Detalle</h1>

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ArchiveBoxIcon, CameraIcon, TagIcon } from "@heroicons/react/24/outline";
 import { NoteCard } from "./NoteCard.js";
 import type { Note } from "../../domain/models/note.js";
@@ -29,6 +29,7 @@ export function SwipeableNoteCard({
   const [swiping, setSwiping] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const [showLabelPopup, setShowLabelPopup] = useState(false);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -64,6 +65,19 @@ export function SwipeableNoteCard({
     setRevealed(false);
     setShowLabelPopup(false);
   };
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setContextMenu({ x: e.clientX, y: e.clientY });
+  };
+
+  // Close context menu on click anywhere
+  useEffect(() => {
+    if (!contextMenu) return;
+    const close = () => setContextMenu(null);
+    window.addEventListener('click', close);
+    return () => window.removeEventListener('click', close);
+  }, [contextMenu]);
 
   return (
     <div className={`relative rounded-lg ${showLabelPopup ? "overflow-visible" : "overflow-hidden"}`} data-testid={`swipeable-card-${note.id}`}>
@@ -115,6 +129,7 @@ export function SwipeableNoteCard({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        onContextMenu={handleContextMenu}
         onClick={revealed && !showLabelPopup ? closePanel : undefined}
         style={{
           transform: `translateX(${offset}px)`,
@@ -125,6 +140,34 @@ export function SwipeableNoteCard({
       >
         <NoteCard note={note} onClick={revealed ? () => closePanel() : onClick} />
       </div>
+
+      {/* Context menu */}
+      {contextMenu && (
+        <div
+          className="fixed z-50 bg-white rounded-lg shadow-xl border border-amber-200 py-1 min-w-[160px]"
+          style={{ top: contextMenu.y, left: contextMenu.x }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => { onArchive(note.id); setContextMenu(null); }}
+            className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
+          >
+            <ArchiveBoxIcon className="w-4 h-4 text-amber-600" /> Archivar
+          </button>
+          <button
+            onClick={() => { fileInputRef.current?.click(); setContextMenu(null); }}
+            className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
+          >
+            <CameraIcon className="w-4 h-4 text-blue-500" /> Adjuntar imagen
+          </button>
+          <button
+            onClick={() => { setShowLabelPopup(true); setContextMenu(null); }}
+            className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
+          >
+            <TagIcon className="w-4 h-4 text-green-500" /> Agregar etiqueta
+          </button>
+        </div>
+      )}
 
       {/* Label popup */}
       {showLabelPopup && (
