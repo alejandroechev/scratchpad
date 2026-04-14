@@ -43,7 +43,7 @@ export async function listNotes(filters?: NoteFilters): Promise<Note[]> {
     results = results.filter((n) => n.labels?.includes(filters.label!));
   }
 
-  results.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  results.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   return results;
 }
 

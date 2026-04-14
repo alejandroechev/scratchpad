@@ -48,6 +48,17 @@ describe('InMemoryNoteStore', () => {
       expect(result).toHaveLength(2);
     });
 
+    it('sorts by updatedAt descending so recently updated notes appear first', async () => {
+      const older = store.create('older note');
+      // Small delay so updatedAt differs after update
+      await new Promise((r) => setTimeout(r, 10));
+      store.create('newer note');
+      await new Promise((r) => setTimeout(r, 10));
+      store.update(older.id, 'older note updated');
+      const result = store.list();
+      expect(result[0].id).toBe(older.id);
+    });
+
     it('filters by search text (case-insensitive)', () => {
       store.create('Buy groceries');
       store.create('Read about TypeScript');

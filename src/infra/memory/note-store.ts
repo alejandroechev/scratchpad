@@ -38,8 +38,8 @@ export class InMemoryNoteStore implements NoteRepository {
       results = results.filter((n) => n.labels?.includes(filters.label!));
     }
 
-    // Newest first
-    results.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    // Most recently updated first
+    results.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
     return results.map((n) => ({ ...n }));
   }
 
