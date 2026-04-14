@@ -11,7 +11,7 @@ export function useNotes(filters?: NoteFilters) {
     const result = await store.listNotes(filters);
     setNotes(result);
     setLoading(false);
-  }, [filters?.search, filters?.includeArchived, filters?.label]);
+  }, [filters?.search, filters?.includeArchived, filters?.label, filters?.tasksOnly]);
 
   useEffect(() => {
     refresh();
