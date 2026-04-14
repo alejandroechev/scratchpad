@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { ArchiveBoxIcon, CameraIcon, TagIcon } from "@heroicons/react/24/outline";
 import { NoteCard } from "./NoteCard.js";
 import type { Note } from "../../domain/models/note.js";
 
@@ -76,21 +77,21 @@ export function SwipeableNoteCard({
           className="flex-1 bg-amber-600 text-white flex flex-col items-center justify-center text-xs gap-1"
           data-testid={`swipe-archive-${note.id}`}
         >
-          <span>📦</span><span>Archivar</span>
+          <ArchiveBoxIcon className="w-5 h-5" /><span>Archivar</span>
         </button>
         <button
           onClick={() => fileInputRef.current?.click()}
           className="flex-1 bg-blue-500 text-white flex flex-col items-center justify-center text-xs gap-1"
           data-testid={`swipe-image-${note.id}`}
         >
-          <span>📷</span><span>Imagen</span>
+          <CameraIcon className="w-5 h-5" /><span>Imagen</span>
         </button>
         <button
           onClick={() => setShowLabelPopup(true)}
           className="flex-1 bg-green-500 text-white flex flex-col items-center justify-center text-xs gap-1"
           data-testid={`swipe-label-${note.id}`}
         >
-          <span>🏷</span><span>Etiqueta</span>
+          <TagIcon className="w-5 h-5" /><span>Etiqueta</span>
         </button>
       </div>}
 

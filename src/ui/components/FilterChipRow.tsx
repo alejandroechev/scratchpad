@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 interface FilterChipRowProps {
   labels: string[];           // all unique labels from notes
@@ -29,7 +30,7 @@ export function FilterChipRow({ labels, activeLabel, onLabelSelect, searchText, 
           <button
             onClick={() => { setSearchExpanded(false); onSearchChange(""); }}
             className="text-amber-600 text-xs"
-          >✕</button>
+          ><XMarkIcon className="w-3 h-3" /></button>
         </div>
       ) : (
         <button
@@ -38,7 +39,7 @@ export function FilterChipRow({ labels, activeLabel, onLabelSelect, searchText, 
                      hover:bg-amber-100"
           data-testid="search-chip"
         >
-          🔍 Buscar
+          <MagnifyingGlassIcon className="w-4 h-4 inline" /> Buscar
         </button>
       )}
 

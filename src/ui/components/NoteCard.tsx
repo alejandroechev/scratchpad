@@ -1,3 +1,4 @@
+import { CameraIcon } from "@heroicons/react/24/outline";
 import { extractUrls } from "../../domain/models/note.js";
 import type { Note } from "../../domain/models/note.js";
 import { ImageThumbnail } from "./ImageThumbnail.js";
@@ -40,7 +41,7 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
                            rounded-full w-5 h-5 flex items-center justify-center"
                 data-testid="image-count-badge"
               >
-                📷 {images.length}
+                <CameraIcon className="w-3 h-3 inline" /> {images.length}
               </span>
             )}
           </div>

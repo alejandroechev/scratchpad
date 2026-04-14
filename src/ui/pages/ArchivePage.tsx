@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { listNotes } from "../../infra/store-provider.js";
 import type { Note } from "../../domain/models/note.js";
 
@@ -45,7 +46,7 @@ export function ArchivePage({ onBack, onUnarchive }: ArchivePageProps) {
           className="text-amber-200 hover:text-white mr-3"
           data-testid="archive-back-button"
         >
-          ←
+          <ArrowLeftIcon className="w-5 h-5" />
         </button>
         <h1 className="text-lg font-bold">Archivo</h1>
       </header>

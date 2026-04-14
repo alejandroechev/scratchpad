@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useNotes } from "./ui/hooks/useNotes";
 import { QuickAddBar } from "./ui/components/QuickAddBar";
 import { NoteList } from "./ui/components/NoteList";
@@ -91,7 +92,7 @@ function AppContent() {
               className="text-amber-200 text-sm hover:text-white"
               data-testid="info-button"
             >
-              ⓘ
+              <InformationCircleIcon className="w-5 h-5" />
             </button>
           </div>
         </header>

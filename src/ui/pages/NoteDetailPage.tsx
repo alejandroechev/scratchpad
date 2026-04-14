@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { ArrowLeftIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon } from "@heroicons/react/24/outline";
 import { extractUrls } from "../../domain/models/note.js";
 import type { NoteImage } from "../../domain/models/note.js";
 import { ImageThumbnail } from "../components/ImageThumbnail.js";
@@ -57,7 +58,7 @@ export function NoteDetailPage({
           }
           onBack();
         }} className="text-white text-lg" data-testid="back-button">
-          ←
+          <ArrowLeftIcon className="w-5 h-5" />
         </button>
         <button
           onClick={() => {
@@ -66,7 +67,7 @@ export function NoteDetailPage({
           }}
           className="text-white text-sm px-1 md:hidden"
           data-testid="undo-button"
-        >↩</button>
+        ><ArrowUturnLeftIcon className="w-5 h-5" /></button>
         <button
           onClick={() => {
             textareaRef.current?.focus();
@@ -74,7 +75,7 @@ export function NoteDetailPage({
           }}
           className="text-white text-sm px-1 md:hidden"
           data-testid="redo-button"
-        >↪</button>
+        ><ArrowUturnRightIcon className="w-5 h-5" /></button>
         <h1 className="text-lg font-bold flex-1">Detalle</h1>
       </header>
 

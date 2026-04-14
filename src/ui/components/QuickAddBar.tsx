@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { CameraIcon } from "@heroicons/react/24/outline";
 
 interface QuickAddBarProps {
   onAdd: (content: string) => void;
@@ -69,7 +70,7 @@ export function QuickAddBar({ onAdd, onAddAndOpen, onAddImage }: QuickAddBarProp
                      hover:bg-amber-800"
           data-testid="quick-add-image-button"
         >
-          📷
+          <CameraIcon className="w-5 h-5" />
         </button>
       </div>
     </div>

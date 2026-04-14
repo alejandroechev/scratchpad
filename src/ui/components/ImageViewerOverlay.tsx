@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { getBlobUrl } from "../../infra/automerge/blob-sync.js";
 
 interface ImageViewerOverlayProps {
@@ -43,7 +44,7 @@ export function ImageViewerOverlay({ blobId, onClose }: ImageViewerOverlayProps)
         data-testid="image-viewer-close"
         aria-label="Cerrar"
       >
-        ✕
+        <XMarkIcon className="w-6 h-6" />
       </button>
 
       {url && (
