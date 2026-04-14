@@ -9,7 +9,7 @@ import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
-import { addImage, createNote, unarchiveNote, addLabel, toggleTask, toggleTaskDone } from "./infra/store-provider.js";
+import { addImage, createNote, unarchiveNote, addLabel, toggleTask, toggleTaskDone, mergeNotes } from "./infra/store-provider.js";
 import { storeAndSyncBlob } from "./infra/automerge/blob-sync.js";
 import { getActiveProfile, clearActiveProfile } from "./infra/profile-store.js";
 import { resetDocHandle } from "./infra/automerge/repo.js";
@@ -37,6 +37,17 @@ function AppContent() {
     });
   };
   const clearSelection = () => setSelectedNoteIds(new Set());
+
+  const handleMerge = async () => {
+    if (selectedNoteIds.size < 2) return;
+    const selectedNotes = notes.filter(n => selectedNoteIds.has(n.id));
+    const sorted = [...selectedNotes].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    const targetId = sorted[0].id;
+    const sourceIds = sorted.slice(1).map(n => n.id);
+    await mergeNotes(targetId, sourceIds);
+    clearSelection();
+    await refresh();
+  };
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -183,6 +194,29 @@ function AppContent() {
           selectedNoteIds={selectedNoteIds}
           onToggleSelect={toggleSelect}
         />
+      )}
+
+      {selectedNoteIds.size >= 2 && (
+        <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-amber-200 shadow-lg px-4 py-3 flex items-center justify-between pb-[env(safe-area-inset-bottom,12px)]"
+             data-testid="merge-bar">
+          <span className="text-sm text-gray-600">{selectedNoteIds.size} notas seleccionadas</span>
+          <div className="flex gap-2">
+            <button
+              onClick={clearSelection}
+              className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200"
+              data-testid="merge-cancel-button"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleMerge}
+              className="rounded-lg px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700"
+              data-testid="merge-button"
+            >
+              Combinar ({selectedNoteIds.size})
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
