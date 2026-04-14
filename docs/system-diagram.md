@@ -15,7 +15,7 @@ graph TD
         Hook[useNotes Hook]
         SP[Store Provider]
         BS[Blob Sync<br/>SHA-256 + Retry Queue]
-        AM[Automerge Doc<br/>Per-user ScratchPadDoc + Labels]
+        AM[Automerge Doc<br/>Per-user ScratchPadDoc + Labels<br/>Schema v4: isTask + taskDone]
         IDB[(IndexedDB<br/>Docs + Blobs)]
 
         PROF -->|"select profile<br/>→ docUrl"| AUTH
