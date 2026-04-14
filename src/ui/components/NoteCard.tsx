@@ -21,7 +21,6 @@ function formatRelativeTime(isoDate: string): string {
 
 export function NoteCard({ note, onClick }: NoteCardProps) {
   const urls = extractUrls(note.content);
-  const preview = note.content.length > 120 ? note.content.slice(0, 120) + "..." : note.content;
   const images = note.images ?? [];
 
   return (
@@ -46,7 +45,7 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
             )}
           </div>
         )}
-        <p className="text-sm text-gray-900 whitespace-pre-wrap break-words flex-1">{preview}</p>
+        <p className="text-sm text-gray-900 break-words flex-1 line-clamp-2">{note.content}</p>
       </div>
 
       {(note.labels ?? []).length > 0 && (
@@ -77,7 +76,7 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
         </div>
       )}
 
-      <p className="mt-2 text-xs text-amber-700">{formatRelativeTime(note.createdAt)}</p>
+      <p className="mt-2 text-xs text-amber-700">{formatRelativeTime(note.updatedAt)}</p>
     </div>
   );
 }
