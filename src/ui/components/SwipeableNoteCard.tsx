@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { ArchiveBoxIcon, CameraIcon, TagIcon } from "@heroicons/react/24/outline";
+import { ArchiveBoxIcon, CameraIcon, TagIcon, ClipboardDocumentCheckIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { NoteCard } from "./NoteCard.js";
 import type { Note } from "../../domain/models/note.js";
 
@@ -9,10 +9,12 @@ interface SwipeableNoteCardProps {
   onArchive: (id: string) => void;
   onAddImage: (id: string, file: File) => void;
   onAddLabel: (id: string, label: string) => void;
+  onToggleTask: (id: string) => void;
+  onToggleDone?: (id: string) => void;
   allLabels: string[];
 }
 
-const ACTION_PANEL_WIDTH = 180;
+const ACTION_PANEL_WIDTH = 240;
 const SWIPE_THRESHOLD = 60;
 
 export function SwipeableNoteCard({
@@ -21,6 +23,8 @@ export function SwipeableNoteCard({
   onArchive,
   onAddImage,
   onAddLabel,
+  onToggleTask,
+  onToggleDone,
   allLabels,
 }: SwipeableNoteCardProps) {
   const startX = useRef(0);
@@ -107,6 +111,14 @@ export function SwipeableNoteCard({
         >
           <TagIcon className="w-5 h-5" /><span>Etiqueta</span>
         </button>
+        <button
+          onClick={() => { onToggleTask(note.id); closePanel(); }}
+          className="flex-1 bg-purple-500 text-white flex flex-col items-center justify-center text-xs gap-1"
+          data-testid={`swipe-task-${note.id}`}
+        >
+          <ClipboardDocumentCheckIcon className="w-5 h-5" />
+          <span>{note.isTask ? "Quitar tarea" : "Hacer tarea"}</span>
+        </button>
       </div>}
 
       {/* Hidden file input for image upload */}
@@ -138,7 +150,7 @@ export function SwipeableNoteCard({
           zIndex: 10,
         }}
       >
-        <NoteCard note={note} onClick={revealed ? () => closePanel() : onClick} />
+        <NoteCard note={note} onClick={revealed ? () => closePanel() : onClick} onToggleDone={onToggleDone} />
       </div>
 
       {/* Context menu */}
@@ -165,6 +177,13 @@ export function SwipeableNoteCard({
             className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
           >
             <TagIcon className="w-4 h-4 text-green-500" /> Agregar etiqueta
+          </button>
+          <button
+            onClick={() => { onToggleTask(note.id); setContextMenu(null); }}
+            className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
+          >
+            <ClipboardDocumentCheckIcon className="w-4 h-4 text-purple-500" />
+            {note.isTask ? "Quitar tarea" : "Hacer tarea"}
           </button>
         </div>
       )}
