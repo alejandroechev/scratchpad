@@ -8,7 +8,7 @@ import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
-import { addImage, createNote, unarchiveNote } from "./infra/store-provider.js";
+import { addImage, createNote, unarchiveNote, addLabel } from "./infra/store-provider.js";
 import { storeAndSyncBlob } from "./infra/automerge/blob-sync.js";
 import { getActiveProfile, clearActiveProfile } from "./infra/profile-store.js";
 import { resetDocHandle } from "./infra/automerge/repo.js";
@@ -134,6 +134,21 @@ function AppContent() {
           notes={notes}
           onNoteClick={setSelectedNoteId}
           onArchive={archiveNote}
+          onAddImage={async (id, file) => {
+            const { blobId, sizeBytes } = await storeAndSyncBlob(file);
+            await addImage(id, {
+              blobId,
+              fileName: file.name,
+              sizeBytes,
+              createdAt: new Date().toISOString(),
+            });
+            await refresh();
+          }}
+          onAddLabel={async (id, label) => {
+            await addLabel(id, label);
+            await refresh();
+          }}
+          allLabels={allLabels}
         />
       )}
     </div>

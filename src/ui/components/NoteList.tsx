@@ -5,9 +5,12 @@ interface NoteListProps {
   notes: Note[];
   onNoteClick: (id: string) => void;
   onArchive: (id: string) => void;
+  onAddImage: (id: string, file: File) => void;
+  onAddLabel: (id: string, label: string) => void;
+  allLabels: string[];
 }
 
-export function NoteList({ notes, onNoteClick, onArchive }: NoteListProps) {
+export function NoteList({ notes, onNoteClick, onArchive, onAddImage, onAddLabel, allLabels }: NoteListProps) {
   if (notes.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-amber-600">
@@ -25,6 +28,9 @@ export function NoteList({ notes, onNoteClick, onArchive }: NoteListProps) {
           note={note}
           onClick={onNoteClick}
           onArchive={onArchive}
+          onAddImage={onAddImage}
+          onAddLabel={onAddLabel}
+          allLabels={allLabels}
         />
       ))}
     </div>
