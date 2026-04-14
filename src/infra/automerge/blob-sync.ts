@@ -12,7 +12,8 @@ const BLOB_SERVER_URL = (import.meta.env.VITE_SYNC_SERVER_URL || "ws://localhost
 const BLOB_DB_NAME = "scratchpad-blobs";
 const BLOB_STORE = "blobs";
 const PENDING_STORE = "pending-uploads";
-const DB_VERSION = 1;
+const METADATA_STORE = "blob-metadata";
+const DB_VERSION = 2;
 
 function openBlobDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -25,17 +26,23 @@ function openBlobDB(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(PENDING_STORE)) {
         db.createObjectStore(PENDING_STORE);
       }
+      if (!db.objectStoreNames.contains(METADATA_STORE)) {
+        db.createObjectStore(METADATA_STORE);
+      }
     };
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
   });
 }
 
-export async function storeLocalBlob(blobId: string, data: ArrayBuffer): Promise<void> {
+export async function storeLocalBlob(blobId: string, data: ArrayBuffer, mimeType?: string): Promise<void> {
   const db = await openBlobDB();
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(BLOB_STORE, "readwrite");
+    const tx = db.transaction([BLOB_STORE, METADATA_STORE], "readwrite");
     tx.objectStore(BLOB_STORE).put(data, blobId);
+    if (mimeType) {
+      tx.objectStore(METADATA_STORE).put({ mimeType }, blobId);
+    }
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });
@@ -49,6 +56,45 @@ export async function getLocalBlob(blobId: string): Promise<ArrayBuffer | null> 
     request.onsuccess = () => resolve(request.result ?? null);
     request.onerror = () => reject(request.error);
   });
+}
+
+async function getBlobMetadata(blobId: string): Promise<{ mimeType?: string } | null> {
+  const db = await openBlobDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(METADATA_STORE, "readonly");
+    const request = tx.objectStore(METADATA_STORE).get(blobId);
+    request.onsuccess = () => resolve(request.result ?? null);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function detectMimeType(data: ArrayBuffer): string {
+  const bytes = new Uint8Array(data);
+  if (bytes.length < 4) return "image/png";
+  
+  // PNG: 89 50 4E 47
+  if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47) {
+    return "image/png";
+  }
+  
+  // JPEG: FF D8 FF
+  if (bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF) {
+    return "image/jpeg";
+  }
+  
+  // GIF: 47 49 46
+  if (bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46) {
+    return "image/gif";
+  }
+  
+  // WEBP: 52 49 46 46 ... 57 45 42 50
+  if (bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46) {
+    if (bytes.length >= 12 && bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50) {
+      return "image/webp";
+    }
+  }
+  
+  return "image/png";
 }
 
 async function addToPendingQueue(blobId: string): Promise<void> {
@@ -105,7 +151,7 @@ export async function computeBlobId(data: ArrayBuffer): Promise<string> {
 export async function storeAndSyncBlob(file: File): Promise<{ blobId: string; localUrl: string; sizeBytes: number }> {
   const data = await file.arrayBuffer();
   const blobId = await computeBlobId(data);
-  await storeLocalBlob(blobId, data);
+  await storeLocalBlob(blobId, data, file.type);
   const localUrl = URL.createObjectURL(new Blob([data], { type: file.type }));
   await addToPendingQueue(blobId);
   uploadToServer(blobId, data).then((ok) => {
@@ -120,7 +166,9 @@ export async function storeAndSyncBlob(file: File): Promise<{ blobId: string; lo
 export async function getBlobUrl(blobId: string): Promise<string | null> {
   const local = await getLocalBlob(blobId);
   if (local) {
-    return URL.createObjectURL(new Blob([local]));
+    const metadata = await getBlobMetadata(blobId);
+    const mimeType = metadata?.mimeType || detectMimeType(local);
+    return URL.createObjectURL(new Blob([local], { type: mimeType }));
   }
   try {
     const res = await fetch(`${BLOB_SERVER_URL}/${blobId}`, {
@@ -129,8 +177,9 @@ export async function getBlobUrl(blobId: string): Promise<string | null> {
     });
     if (!res.ok) return null;
     const data = await res.arrayBuffer();
-    await storeLocalBlob(blobId, data);
-    return URL.createObjectURL(new Blob([data]));
+    const mimeType = res.headers.get("content-type") || detectMimeType(data);
+    await storeLocalBlob(blobId, data, mimeType);
+    return URL.createObjectURL(new Blob([data], { type: mimeType }));
   } catch {
     return null;
   }
