@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { extractUrls } from "../../domain/models/note.js";
 import type { NoteImage } from "../../domain/models/note.js";
 import { ImageThumbnail } from "../components/ImageThumbnail.js";
@@ -10,15 +10,8 @@ interface NoteDetailPageProps {
   initialCreatedAt: string;
   initialUpdatedAt: string;
   images?: NoteImage[];
-  labels?: string[];
-  allLabels?: string[];
   onSave: (content: string) => void;
-  onArchive: () => void;
   onBack: () => void;
-  onRemoveImage?: (blobId: string) => void;
-  onAddImage?: (file: File) => void;
-  onAddLabel?: (label: string) => void;
-  onRemoveLabel?: (label: string) => void;
 }
 
 export function NoteDetailPage({
@@ -26,22 +19,12 @@ export function NoteDetailPage({
   initialCreatedAt,
   initialUpdatedAt,
   images,
-  labels,
-  allLabels,
   onSave,
-  onArchive,
   onBack,
-  onRemoveImage,
-  onAddImage,
-  onAddLabel,
-  onRemoveLabel,
 }: NoteDetailPageProps) {
   const [content, setContent] = useState(initialContent);
-  const [labelInput, setLabelInput] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const [viewingImage, setViewingImage] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef(content);
   contentRef.current = content;
 
@@ -63,39 +46,6 @@ export function NoteDetailPage({
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const suggestions = useMemo(() => {
-    if (!labelInput.trim() || !allLabels) return [];
-    return allLabels
-      .filter(label => 
-        label.toLowerCase().includes(labelInput.toLowerCase()) &&
-        !labels?.includes(label)
-      )
-      .slice(0, 5);
-  }, [labelInput, allLabels, labels]);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && onAddImage) onAddImage(file);
-    e.target.value = "";
-  };
-
-  const handleLabelSubmit = () => {
-    const trimmedLabel = labelInput.trim();
-    if (trimmedLabel && onAddLabel && !labels?.includes(trimmedLabel)) {
-      onAddLabel(trimmedLabel);
-      setLabelInput("");
-      setShowSuggestions(false);
-    }
-  };
-
-  const handleLabelKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleLabelSubmit();
-    } else if (e.key === "Escape") {
-      setShowSuggestions(false);
-    }
-  };
   const urls = extractUrls(content);
 
   return (
@@ -147,124 +97,11 @@ export function NoteDetailPage({
                   <div onClick={() => setViewingImage(img.blobId)} className="cursor-pointer">
                     <ImageThumbnail blobId={img.blobId} className="w-full h-32" />
                   </div>
-                  {onRemoveImage && (
-                    <button
-                      onClick={() => onRemoveImage(img.blobId)}
-                      className="absolute top-1 right-1 bg-black/50 text-white rounded-full w-6 h-6
-                                 flex items-center justify-center text-xs hover:bg-black/70"
-                      data-testid={`remove-image-${img.blobId}`}
-                    >
-                      ✕
-                    </button>
-                  )}
                 </div>
               ))}
             </div>
           </div>
         )}
-
-        {onAddImage && (
-          <div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              onChange={handleFileChange}
-              className="hidden"
-              data-testid="detail-file-input"
-            />
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="rounded-lg border border-amber-300 px-3 py-2 text-sm text-amber-700
-                         hover:bg-amber-100"
-              data-testid="detail-add-image-button"
-            >
-              📷 Adjuntar imagen
-            </button>
-          </div>
-        )}
-
-        {/* Labels section */}
-        <div data-testid="label-section">
-          <p className="text-xs font-semibold text-amber-700 mb-1">Etiquetas</p>
-          
-          {/* Existing labels as removable chips */}
-          <div className="flex flex-wrap gap-1 mb-2">
-            {(labels ?? []).map((label) => (
-              <span key={label} className="inline-flex items-center gap-1 rounded-full bg-amber-100 text-amber-800 px-2 py-0.5 text-xs">
-                {label}
-                {onRemoveLabel && (
-                  <button 
-                    onClick={() => onRemoveLabel(label)} 
-                    className="text-amber-600 hover:text-amber-900" 
-                    data-testid={`remove-label-${label}`}
-                  >
-                    ✕
-                  </button>
-                )}
-              </span>
-            ))}
-          </div>
-          
-          {/* Add label input */}
-          {onAddLabel && (
-            <div className="relative">
-              <div className="flex gap-1">
-                <input 
-                  type="text" 
-                  placeholder="Agregar etiqueta..." 
-                  value={labelInput}
-                  onChange={(e) => {
-                    setLabelInput(e.target.value);
-                    setShowSuggestions(e.target.value.trim().length > 0);
-                  }}
-                  onKeyDown={handleLabelKeyDown}
-                  onBlur={() => {
-                    // Small delay to allow clicking on suggestions
-                    setTimeout(() => setShowSuggestions(false), 150);
-                  }}
-                  onFocus={() => {
-                    if (labelInput.trim()) setShowSuggestions(true);
-                  }}
-                  className="flex-1 rounded-full border border-amber-300 bg-white px-3 py-1 text-xs
-                             focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  data-testid="add-label-input" 
-                />
-                <button
-                  onClick={handleLabelSubmit}
-                  className="rounded-full bg-amber-600 text-white px-3 py-1 text-xs hover:bg-amber-700
-                             disabled:opacity-50"
-                  disabled={!labelInput.trim()}
-                  data-testid="add-label-button"
-                >
-                  +
-                </button>
-              </div>
-              
-              {/* Autocomplete suggestions */}
-              {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 bg-white border border-amber-300 rounded-lg 
-                               shadow-lg z-10 mt-1 max-h-32 overflow-y-auto">
-                  {suggestions.map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      onClick={() => {
-                        setLabelInput(suggestion);
-                        handleLabelSubmit();
-                      }}
-                      className="w-full text-left px-3 py-1 text-xs hover:bg-amber-50 first:rounded-t-lg 
-                                 last:rounded-b-lg"
-                      data-testid={`suggestion-${suggestion}`}
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
 
         {urls.length > 0 && (
           <div className="flex flex-wrap gap-1">
@@ -288,14 +125,6 @@ export function NoteDetailPage({
           <p>Actualizado: {new Date(initialUpdatedAt).toLocaleString("es")}</p>
         </div>
 
-        <button
-          onClick={onArchive}
-          className="w-full rounded-lg border border-amber-300 py-2 text-sm text-amber-700
-                     hover:bg-amber-100"
-          data-testid="archive-button"
-        >
-          📦 Archivar
-        </button>
       </div>
 
       {viewingImage && (
