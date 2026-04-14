@@ -58,37 +58,7 @@ function AppContent() {
         onSave={async (content) => {
           await editNote(selectedNoteId, content);
         }}
-        onArchive={async () => {
-          await archiveNote(selectedNoteId);
-          setSelectedNoteId(null);
-        }}
         onBack={() => setSelectedNoteId(null)}
-        onRemoveImage={async (blobId) => {
-          await removeImage(selectedNoteId, blobId);
-        }}
-        onAddImage={async (file) => {
-          const { blobId, sizeBytes } = await storeAndSyncBlob(file);
-          await addImage(selectedNoteId, {
-            blobId,
-            fileName: file.name,
-            sizeBytes,
-            createdAt: new Date().toISOString(),
-          });
-        }}
-        labels={note?.labels}
-        allLabels={allLabels}
-        onAddLabel={async (label) => {
-          console.log('Adding label:', label);
-          await addLabel(selectedNoteId, label);
-          await refresh(); // Refresh to update UI
-          console.log('Label added successfully');
-        }}
-        onRemoveLabel={async (label) => {
-          console.log('Removing label:', label);
-          await removeLabel(selectedNoteId, label);
-          await refresh(); // Refresh to update UI
-          console.log('Label removed successfully');
-        }}
       />
     );
   }
