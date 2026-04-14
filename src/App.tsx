@@ -65,63 +65,65 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-amber-50 flex flex-col pb-[env(safe-area-inset-bottom,20px)]">
-      <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center justify-between">
-        <div className="flex items-center">
-          <h1 className="text-lg font-bold">ScratchPad</h1>
-          {activeProfile && (
+      <div className="sticky top-0 z-20">
+        <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center justify-between">
+          <div className="flex items-center">
+            <h1 className="text-lg font-bold">ScratchPad</h1>
+            {activeProfile && (
+              <button
+                onClick={() => {
+                  clearActiveProfile();
+                  resetDocHandle();
+                  window.location.reload();
+                }}
+                className="text-xs bg-amber-700 px-2 py-0.5 rounded ml-2 hover:bg-amber-800"
+                data-testid="profile-badge"
+              >
+                {activeProfile.name}
+              </button>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <SyncStatus />
+            <button onClick={() => setShowArchive(true)} className="text-amber-200 text-sm hover:text-white" data-testid="archive-nav-button">Archivo</button>
             <button
-              onClick={() => {
-                clearActiveProfile();
-                resetDocHandle();
-                window.location.reload();
-              }}
-              className="text-xs bg-amber-700 px-2 py-0.5 rounded ml-2 hover:bg-amber-800"
-              data-testid="profile-badge"
+              onClick={() => setShowInfo(!showInfo)}
+              className="text-amber-200 text-sm hover:text-white"
+              data-testid="info-button"
             >
-              {activeProfile.name}
+              ⓘ
             </button>
-          )}
-        </div>
-        <div className="flex items-center gap-3">
-          <SyncStatus />
-          <button onClick={() => setShowArchive(true)} className="text-amber-200 text-sm hover:text-white" data-testid="archive-nav-button">Archivo</button>
-          <button
-            onClick={() => setShowInfo(!showInfo)}
-            className="text-amber-200 text-sm hover:text-white"
-            data-testid="info-button"
-          >
-            ⓘ
-          </button>
-        </div>
-      </header>
+          </div>
+        </header>
 
-      {showInfo && <SyncInfo />}
+        {showInfo && <SyncInfo />}
 
-      <QuickAddBar
-        onAdd={addNote}
-        onAddAndOpen={async (content) => {
-          const note = await createNote(content);
-          await refresh();
-          setSelectedNoteId(note.id);
-        }}
-        onAddImage={async (file) => {
-          const { blobId, sizeBytes } = await storeAndSyncBlob(file);
-          const note = await createNote("");
-          await addImage(note.id, {
-            blobId,
-            fileName: file.name,
-            sizeBytes,
-            createdAt: new Date().toISOString(),
-          });
-        }}
-      />
-      <FilterChipRow
-        labels={allLabels}
-        activeLabel={activeLabel}
-        onLabelSelect={setActiveLabel}
-        searchText={search}
-        onSearchChange={setSearch}
-      />
+        <QuickAddBar
+          onAdd={addNote}
+          onAddAndOpen={async (content) => {
+            const note = await createNote(content);
+            await refresh();
+            setSelectedNoteId(note.id);
+          }}
+          onAddImage={async (file) => {
+            const { blobId, sizeBytes } = await storeAndSyncBlob(file);
+            const note = await createNote("");
+            await addImage(note.id, {
+              blobId,
+              fileName: file.name,
+              sizeBytes,
+              createdAt: new Date().toISOString(),
+            });
+          }}
+        />
+        <FilterChipRow
+          labels={allLabels}
+          activeLabel={activeLabel}
+          onLabelSelect={setActiveLabel}
+          searchText={search}
+          onSearchChange={setSearch}
+        />
+      </div>
 
       {loading ? (
         <div className="flex items-center justify-center py-16">
