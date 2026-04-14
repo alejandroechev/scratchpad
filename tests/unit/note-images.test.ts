@@ -102,11 +102,13 @@ describe('Schema migration v1→v2', () => {
       },
     };
     migrateDoc(doc);
-    expect(doc.schemaVersion).toBe(3);
+    expect(doc.schemaVersion).toBe(4);
     expect(doc.notes.n1.images).toEqual([]);
     expect(doc.notes.n2.images).toEqual([]);
     expect(doc.notes.n1.labels).toEqual([]);
     expect(doc.notes.n2.labels).toEqual([]);
+    expect(doc.notes.n1.isTask).toBe(false);
+    expect(doc.notes.n2.isTask).toBe(false);
   });
 
   it('does not overwrite existing images', () => {
@@ -122,15 +124,15 @@ describe('Schema migration v1→v2', () => {
     expect(doc.notes.n1.images![0].blobId).toBe(img.blobId);
   });
 
-  it('is idempotent — skips if already v3', () => {
+  it('is idempotent — skips if already at current version', () => {
     const doc: ScratchPadDoc = {
-      schemaVersion: 3,
+      schemaVersion: 4,
       notes: {
-        n1: { id: 'n1', content: 'ok', images: [], labels: [], createdAt: '', updatedAt: '', archived: false },
+        n1: { id: 'n1', content: 'ok', images: [], labels: [], isTask: false, taskDone: false, createdAt: '', updatedAt: '', archived: false },
       },
     };
     migrateDoc(doc);
-    expect(doc.schemaVersion).toBe(3);
+    expect(doc.schemaVersion).toBe(4);
   });
 
   it('migrates v2→v3: adds labels[] to notes without it', () => {
@@ -143,7 +145,7 @@ describe('Schema migration v1→v2', () => {
       },
     };
     migrateDoc(doc);
-    expect(doc.schemaVersion).toBe(3);
+    expect(doc.schemaVersion).toBe(4);
     expect(doc.notes.n1.labels).toEqual([]);
     expect(doc.notes.n2.labels).toEqual([]);
     expect(doc.notes.n1.images).toEqual([img]); // preserved

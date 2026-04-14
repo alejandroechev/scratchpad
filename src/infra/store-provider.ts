@@ -79,6 +79,21 @@ export async function removeLabel(noteId: string, label: string): Promise<Note> 
   return memoryStore.removeLabel(noteId, label);
 }
 
+export async function mergeNotes(targetId: string, sourceIds: string[]): Promise<Note> {
+  if (backend === "automerge") return (await automerge()).mergeNotes(targetId, sourceIds);
+  return memoryStore.mergeNotes(targetId, sourceIds);
+}
+
+export async function toggleTask(id: string): Promise<Note> {
+  if (backend === "automerge") return (await automerge()).toggleTask(id);
+  return memoryStore.toggleTask(id);
+}
+
+export async function toggleTaskDone(id: string): Promise<Note> {
+  if (backend === "automerge") return (await automerge()).toggleTaskDone(id);
+  return memoryStore.toggleTaskDone(id);
+}
+
 /** Subscribe to remote doc changes. Returns unsubscribe function. No-op for memory backend. */
 export async function onDocChange(callback: () => void): Promise<() => void> {
   if (backend === "automerge") {

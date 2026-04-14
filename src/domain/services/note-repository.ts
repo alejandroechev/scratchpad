@@ -4,6 +4,7 @@ export interface NoteFilters {
   includeArchived?: boolean;
   search?: string;
   label?: string;
+  tasksOnly?: boolean;
 }
 
 export interface NoteRepository {
@@ -18,4 +19,7 @@ export interface NoteRepository {
   removeImage(noteId: string, blobId: string): Note;
   addLabel(noteId: string, label: string): Note;
   removeLabel(noteId: string, label: string): Note;
+  toggleTask(id: string): Note;
+  toggleTaskDone(id: string): Note;
+  mergeNotes(targetId: string, sourceIds: string[]): Note;
 }

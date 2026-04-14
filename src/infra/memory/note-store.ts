@@ -38,6 +38,10 @@ export class InMemoryNoteStore implements NoteRepository {
       results = results.filter((n) => n.labels?.includes(filters.label!));
     }
 
+    if (filters?.tasksOnly) {
+      results = results.filter((n) => n.isTask === true);
+    }
+
     // Most recently updated first
     results.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
     return results.map((n) => ({ ...n }));
@@ -103,6 +107,23 @@ export class InMemoryNoteStore implements NoteRepository {
     return { ...note, labels: [...note.labels] };
   }
 
+  toggleTask(id: string): Note {
+    const note = this.notes.get(id);
+    if (!note) throw new Error(`Note not found: ${id}`);
+    note.isTask = !note.isTask;
+    if (!note.isTask) note.taskDone = false;
+    note.updatedAt = new Date().toISOString();
+    return { ...note };
+  }
+
+  toggleTaskDone(id: string): Note {
+    const note = this.notes.get(id);
+    if (!note) throw new Error(`Note not found: ${id}`);
+    note.taskDone = !note.taskDone;
+    note.updatedAt = new Date().toISOString();
+    return { ...note };
+  }
+
   removeLabel(noteId: string, label: string): Note {
     const note = this.notes.get(noteId);
     if (!note) throw new Error(`Note not found: ${noteId}`);
@@ -113,5 +134,43 @@ export class InMemoryNoteStore implements NoteRepository {
       note.updatedAt = new Date().toISOString();
     }
     return { ...note, labels: [...note.labels] };
+  }
+
+  mergeNotes(targetId: string, sourceIds: string[]): Note {
+    const target = this.notes.get(targetId);
+    if (!target) throw new Error(`Note not found: ${targetId}`);
+
+    const sources = sourceIds
+      .map((id) => {
+        const note = this.notes.get(id);
+        if (!note) throw new Error(`Note not found: ${id}`);
+        return note;
+      })
+      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+
+    for (const source of sources) {
+      if (source.content) {
+        target.content = target.content
+          ? target.content + "\n---\n" + source.content
+          : source.content;
+      }
+      if (source.images?.length) {
+        target.images = [...(target.images ?? []), ...source.images];
+      }
+      if (source.labels?.length) {
+        const existingLabels = new Set(target.labels ?? []);
+        for (const label of source.labels) {
+          if (!existingLabels.has(label)) {
+            target.labels = [...(target.labels ?? []), label];
+            existingLabels.add(label);
+          }
+        }
+      }
+      source.archived = true;
+      source.updatedAt = new Date().toISOString();
+    }
+
+    target.updatedAt = new Date().toISOString();
+    return { ...target };
   }
 }

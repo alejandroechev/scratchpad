@@ -43,6 +43,10 @@ export async function listNotes(filters?: NoteFilters): Promise<Note[]> {
     results = results.filter((n) => n.labels?.includes(filters.label!));
   }
 
+  if (filters?.tasksOnly) {
+    results = results.filter((n) => n.isTask === true);
+  }
+
   results.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   return results;
 }
@@ -134,6 +138,31 @@ export async function addLabel(noteId: string, label: string): Promise<Note> {
   return doc.notes[noteId];
 }
 
+export async function toggleTask(id: string): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[id];
+    if (!note) throw new Error(`Note not found: ${id}`);
+    note.isTask = !note.isTask;
+    if (!note.isTask) note.taskDone = false;
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[id];
+}
+
+export async function toggleTaskDone(id: string): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[id];
+    if (!note) throw new Error(`Note not found: ${id}`);
+    note.taskDone = !note.taskDone;
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[id];
+}
+
 export async function removeLabel(noteId: string, label: string): Promise<Note> {
   const handle = await getDocHandle();
   handle.change((doc) => {
@@ -148,4 +177,47 @@ export async function removeLabel(noteId: string, label: string): Promise<Note> 
   });
   const doc = handle.doc()!;
   return doc.notes[noteId];
+}
+
+export async function mergeNotes(targetId: string, sourceIds: string[]): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const target = doc.notes[targetId];
+    if (!target) throw new Error(`Note not found: ${targetId}`);
+
+    const sources = sourceIds
+      .map((id) => {
+        const note = doc.notes[id];
+        if (!note) throw new Error(`Note not found: ${id}`);
+        return { id, note };
+      })
+      .sort((a, b) => b.note.updatedAt.localeCompare(a.note.updatedAt));
+
+    for (const { id, note: source } of sources) {
+      if (source.content) {
+        target.content = target.content
+          ? target.content + "\n---\n" + source.content
+          : source.content;
+      }
+      if (source.images?.length) {
+        if (!target.images) target.images = [];
+        for (const img of source.images) target.images.push(img);
+      }
+      if (source.labels?.length) {
+        if (!target.labels) target.labels = [];
+        const existing = new Set(target.labels);
+        for (const label of source.labels) {
+          if (!existing.has(label)) {
+            target.labels.push(label);
+            existing.add(label);
+          }
+        }
+      }
+      doc.notes[id].archived = true;
+      doc.notes[id].updatedAt = new Date().toISOString();
+    }
+
+    target.updatedAt = new Date().toISOString();
+  });
+  return handle.doc()!.notes[targetId];
 }
