@@ -142,7 +142,7 @@ async function uploadToServer(blobId: string, data: ArrayBuffer): Promise<boolea
 }
 
 export async function computeBlobId(data: ArrayBuffer): Promise<string> {
-  const hash = await crypto.subtle.digest("SHA-256", data);
+  const hash = await crypto.subtle.digest("SHA-256", new Uint8Array(data));
   return Array.from(new Uint8Array(hash))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
