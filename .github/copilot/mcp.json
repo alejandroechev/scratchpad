@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "scratchpad": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["tsx", "src/mcp-server/index.ts"],
+      "env": {
+        "SCRATCHPAD_SYNC_SERVER_URL": "wss://sync.stormlab.app",
+        "SCRATCHPAD_DOC_URL": "automerge:25avBccAaFeLJJ8qVEBq8gBf4Ht3",
+        "SCRATCHPAD_AUTH_TOKEN": "${SCRATCHPAD_MCP_TOKEN}"
+      },
+      "tools": ["*"]
+    }
+  }
+}
