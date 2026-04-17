@@ -63,6 +63,35 @@ function AppContent() {
     }
   }, [allLabels, activeLabel]);
 
+  // Handle Android back button for detail view
+  useEffect(() => {
+    if (!selectedNoteId) return;
+    
+    // Push a history entry so back button navigates to list instead of exiting
+    window.history.pushState({ view: 'detail' }, '');
+    
+    const handlePopState = () => {
+      setSelectedNoteId(null);
+    };
+    
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [selectedNoteId]);
+
+  // Handle Android back button for archive view
+  useEffect(() => {
+    if (!showArchive) return;
+    window.history.pushState({ view: 'archive' }, '');
+    const handlePopState = () => {
+      setShowArchive(false);
+      refresh();
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [showArchive]);
+
   if (showArchive) {
     return (
       <ArchivePage 

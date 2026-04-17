@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { ArrowLeftIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon, ClipboardDocumentIcon } from "@heroicons/react/24/outline";
 import { extractUrls } from "../../domain/models/note.js";
 import type { NoteImage } from "../../domain/models/note.js";
 import { ImageThumbnail } from "../components/ImageThumbnail.js";
@@ -50,7 +50,7 @@ export function NoteDetailPage({
   const urls = extractUrls(content);
 
   return (
-    <div className="min-h-screen bg-amber-50 flex flex-col pb-[env(safe-area-inset-bottom,20px)]">
+    <div className="h-screen bg-amber-50 flex flex-col overflow-hidden">
       <header className="bg-amber-600 text-white px-4 py-3 shadow-md flex items-center gap-3 pt-[env(safe-area-inset-top)]">
         <button onClick={() => {
           if (contentRef.current !== initialContent) {
@@ -59,6 +59,35 @@ export function NoteDetailPage({
           onBack();
         }} className="text-white text-lg" data-testid="back-button">
           <ArrowLeftIcon className="w-5 h-5" />
+        </button>
+        <h1 className="text-lg font-bold flex-1">Nota</h1>
+        <button
+          onClick={async () => {
+            try {
+              const text = await navigator.clipboard.readText();
+              if (text && textareaRef.current) {
+                const ta = textareaRef.current;
+                const start = ta.selectionStart;
+                const end = ta.selectionEnd;
+                const before = content.substring(0, start);
+                const after = content.substring(end);
+                const newContent = before + text + after;
+                setContent(newContent);
+                // Restore cursor after paste
+                requestAnimationFrame(() => {
+                  ta.selectionStart = ta.selectionEnd = start + text.length;
+                  ta.focus();
+                });
+              }
+            } catch (err) {
+              console.warn('Clipboard read failed:', err);
+            }
+          }}
+          className="text-white text-sm px-1 hover:text-amber-200"
+          data-testid="paste-button"
+          title="Pegar"
+        >
+          <ClipboardDocumentIcon className="w-5 h-5" />
         </button>
         <button
           onClick={() => {
@@ -76,10 +105,9 @@ export function NoteDetailPage({
           className="text-white text-sm px-1 hover:text-amber-200"
           data-testid="redo-button"
         ><ArrowUturnRightIcon className="w-5 h-5" /></button>
-        <h1 className="text-lg font-bold flex-1">Detalle</h1>
       </header>
 
-      <div className="flex-1 p-3 flex flex-col gap-3">
+      <div className="flex-1 p-3 flex flex-col gap-3 overflow-y-auto pb-[env(safe-area-inset-bottom,20px)]">
         <textarea
           ref={textareaRef}
           value={content}
