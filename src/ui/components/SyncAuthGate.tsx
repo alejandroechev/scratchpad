@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { checkAuthStatus, registerDevice } from "../../infra/automerge/auth.js";
+import { checkAuthStatus, registerDevice, getStoredToken } from "../../infra/automerge/auth.js";
 import { getStorageBackend } from "../../infra/store-provider.js";
 import { PROFILES, getActiveProfile, setActiveProfile } from "../../infra/profile-store.js";
 
@@ -9,11 +8,23 @@ interface SyncAuthGateProps {
 }
 
 /**
+ * Determine initial auth status synchronously from localStorage — no network needed.
+ * Local-first principle: the app starts instantly from local data.
+ */
+function getInitialStatus(): "authenticated" | "needs-registration" {
+  if (getStorageBackend() !== "automerge") return "authenticated";
+  const token = getStoredToken();
+  const profile = getActiveProfile();
+  if (token && profile) return "authenticated";
+  return "needs-registration";
+}
+
+/**
  * Gate that requires profile selection and device registration before showing the app.
  * Only active for automerge backend when sync server requires auth.
  */
 export function SyncAuthGate({ children }: SyncAuthGateProps) {
-  const [status, setStatus] = useState<"checking" | "authenticated" | "needs-registration">("checking");
+  const [status, setStatus] = useState<"authenticated" | "needs-registration">(getInitialStatus);
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
     () => getActiveProfile()?.id ?? null,
   );
@@ -22,24 +33,20 @@ export function SyncAuthGate({ children }: SyncAuthGateProps) {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  // Background validation — runs after mount but never blocks UI
   useEffect(() => {
-    if (getStorageBackend() !== "automerge") {
-      setStatus("authenticated");
-      return;
-    }
-    checkAuthStatus().then((result) => setStatus(result.status)).catch(() => setStatus("needs-registration"));
-  }, []);
+    if (getStorageBackend() !== "automerge" || status !== "authenticated") return;
+    
+    // Fire-and-forget validation — if token is invalid, log a warning but don't block
+    checkAuthStatus().then((result) => {
+      if (result.status === "needs-registration") {
+        console.warn("Auth token may be expired, sync may not work until re-registered");
+      }
+    }).catch(() => {
+      // Server unreachable — fine, we're local-first
+    });
+  }, [status]);
 
-  if (status === "checking") {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-amber-50">
-        <div className="text-center text-amber-600">
-          <ArrowPathIcon className="w-8 h-8 mb-2 animate-spin text-amber-600" />
-          <p>Conectando con el servidor...</p>
-        </div>
-      </div>
-    );
-  }
 
   // Skip profile gate for non-automerge backends (memory, etc.)
   const isAutomerge = getStorageBackend() === "automerge";
