@@ -61,9 +61,17 @@ async function initAutomerge(): Promise<void> {
     ? `${SYNC_SERVER_URL}?token=${encodeURIComponent(AUTH_TOKEN)}`
     : SYNC_SERVER_URL;
 
+  // Catch WebSocket errors so they don't crash the process
+  process.on("uncaughtException", (err) => {
+    if (err.message?.includes("401") || err.message?.includes("Unexpected server response")) {
+      console.error("Auth failed — check SCRATCHPAD_AUTH_TOKEN");
+    } else {
+      console.error("Uncaught:", err.message);
+    }
+  });
+
   repo = new Repo({
     network: [new BrowserWebSocketClientAdapter(wsUrl)],
-    // No storage — MCP server is stateless, reads from sync
   });
 
   docHandle = await repo.find<ScratchPadDoc>(DOC_URL as AutomergeUrl);
