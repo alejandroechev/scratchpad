@@ -1,0 +1,6 @@
+@echo off
+set SCRATCHPAD_SYNC_SERVER_URL=wss://sync.stormlab.app
+set SCRATCHPAD_DOC_URL=automerge:25avBccAaFeLJJ8qVEBq8gBf4Ht3
+set SCRATCHPAD_AUTH_TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjMDkzYWExYS1kMzBmLTQ2YTctODA2Zi1hZThiMDIyMmFmNTAiLCJkZXZpY2VOYW1lIjoic2NyYXRjaHBhZC1tY3Atc2VydmVyIiwiaWF0IjoxNzc2NDYxMjk5LCJleHAiOjE4MDc5OTcyOTl9.93rwnL1d0IXc_xAjrtXYS0iSrdt4noaXICd1qrHWLcY
+cd /d C:\Local\Code\ai-personal\scratchpad
+node --import tsx/esm src/mcp-server/poller.ts
