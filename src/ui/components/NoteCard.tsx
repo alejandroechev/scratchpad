@@ -28,6 +28,7 @@ function formatRelativeTime(isoDate: string): string {
 export function NoteCard({ note, onClick, onToggleDone, isSelected, onToggleSelect, selectionMode }: NoteCardProps) {
   const urls = extractUrls(note.content);
   const images = note.images ?? [];
+  const isTruncated = note.content.length > 80 || note.content.includes('\n');
 
   const handleClick = () => {
     if (selectionMode && onToggleSelect) {
@@ -80,6 +81,10 @@ export function NoteCard({ note, onClick, onToggleDone, isSelected, onToggleSele
           </button>
         )}
       </div>
+
+      {isTruncated && (
+        <p className="text-[11px] text-amber-400 -mt-0.5 ml-0.5" data-testid="more-indicator">más...</p>
+      )}
 
       {(note.labels ?? []).length > 0 && (
         <div className="mt-1 flex flex-wrap gap-1">
