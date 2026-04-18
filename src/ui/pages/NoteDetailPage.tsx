@@ -4,6 +4,7 @@ import { extractUrls } from "../../domain/models/note.js";
 import type { NoteImage } from "../../domain/models/note.js";
 import { ImageThumbnail } from "../components/ImageThumbnail.js";
 import { ImageViewerOverlay } from "../components/ImageViewerOverlay.js";
+import { readClipboard, openUrl } from "../../infra/platform.js";
 
 interface NoteDetailPageProps {
   noteId: string;
@@ -63,7 +64,7 @@ export function NoteDetailPage({
         <button
           onClick={async () => {
             try {
-              const text = await navigator.clipboard.readText();
+              const text = await readClipboard();
               if (text && textareaRef.current) {
                 const ta = textareaRef.current;
                 const start = ta.selectionStart;
@@ -131,16 +132,14 @@ export function NoteDetailPage({
 
         <div className="shrink-0 flex flex-wrap items-center gap-2 text-xs text-amber-700 pb-[env(safe-area-inset-bottom,4px)]">
           {urls.map((url, i) => (
-            <a
+            <button
               key={i}
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={(e) => { e.preventDefault(); openUrl(url); }}
               className="inline-block bg-blue-50 text-blue-600 rounded px-2 py-0.5
-                         hover:bg-blue-100 truncate max-w-[180px]"
+                         hover:bg-blue-100 truncate max-w-[180px] cursor-pointer"
             >
               {new URL(url).hostname}
-            </a>
+            </button>
           ))}
           <span className="ml-auto">{new Date(initialUpdatedAt).toLocaleDateString("es")}</span>
         </div>

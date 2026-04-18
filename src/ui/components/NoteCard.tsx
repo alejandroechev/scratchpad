@@ -3,6 +3,7 @@ import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { extractUrls } from "../../domain/models/note.js";
 import type { Note } from "../../domain/models/note.js";
 import { ImageThumbnail } from "./ImageThumbnail.js";
+import { openUrl } from "../../infra/platform.js";
 
 interface NoteCardProps {
   note: Note;
@@ -99,17 +100,14 @@ export function NoteCard({ note, onClick, onToggleDone, isSelected, onToggleSele
       {urls.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
           {urls.map((url, i) => (
-            <a
+            <button
               key={i}
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => { e.stopPropagation(); openUrl(url); }}
               className="inline-block text-xs bg-blue-50 text-blue-600 rounded px-2 py-0.5
-                         hover:bg-blue-100 truncate max-w-[200px]"
+                         hover:bg-blue-100 truncate max-w-[200px] cursor-pointer"
             >
               {new URL(url).hostname}
-            </a>
+            </button>
           ))}
         </div>
       )}
