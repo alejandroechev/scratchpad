@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo "🔍 Pre-commit: Type checking..."
+npx tsc -b || exit 1
+
+echo "🧪 Pre-commit: Unit tests + coverage..."
+npx vitest run --coverage || exit 1
+
+echo "🧹 Pre-commit: Linting..."
+npx eslint src/ --max-warnings 0 || exit 1
+
+echo "✅ Pre-commit: All checks passed!"

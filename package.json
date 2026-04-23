@@ -13,7 +13,11 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "cli": "npx tsx src/cli/index.ts",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "test:cdp": "npx tsx scripts/cdp-visual-validate.ts",
+    "test:all": "npm run test && npm run test:e2e && npm run test:cdp",
+    "pipeline:monitor": "npx tsx scripts/monitor-pipeline.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "@automerge/automerge": "^3.2.5",
@@ -51,6 +55,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "husky": "^9.1.7",
     "jsdom": "^28.1.0",
     "tailwindcss": "^4.2.1",
     "tsx": "^4.21.0",
