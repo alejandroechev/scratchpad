@@ -1,0 +1,9 @@
+import v1Schema from "../client/schemaVersions/v1.js";
+import type { MigrationTypes as V1Types } from "../client/schemaVersions/v1.js";
+import { createMigration } from "@verdant-web/store";
+
+// this is your first migration, so no logic is necessary! but you can
+// include logic here to seed initial data for users
+export default createMigration<V1Types>(v1Schema, async () => {
+  // await mutations.post.create({ title: 'Welcome to my app!' });
+});
