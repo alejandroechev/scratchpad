@@ -2,9 +2,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ImageViewerOverlay } from "../../src/ui/components/ImageViewerOverlay";
 
-vi.mock("../../src/infra/automerge/blob-sync", () => ({
-  getBlobUrl: vi.fn().mockResolvedValue("blob:http://localhost/fake-url"),
-}));
+vi.mock("../../src/infra/store-provider", async () => {
+  const actual = await vi.importActual("../../src/infra/store-provider");
+  return {
+    ...(actual as object),
+    getBlobUrl: vi.fn().mockResolvedValue("blob:http://localhost/fake-url"),
+  };
+});
 
 describe("ImageViewerOverlay", () => {
   let onClose: ReturnType<typeof vi.fn>;

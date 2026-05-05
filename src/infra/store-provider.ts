@@ -123,3 +123,40 @@ export async function onDocChange(callback: () => void): Promise<() => void> {
   }
   return () => {};
 }
+
+/** Store an image blob and return its ID. For verdant, returns a placeholder (files are handled inline). */
+export async function storeImageBlob(file: File): Promise<{ blobId: string; sizeBytes: number }> {
+  if (backend === "automerge") {
+    const { storeAndSyncBlob } = await import("./automerge/blob-sync.js");
+    const result = await storeAndSyncBlob(file);
+    return { blobId: result.blobId, sizeBytes: result.sizeBytes };
+  }
+  // For verdant and memory, images are stored inline with the note — no separate blob store
+  return { blobId: `local-${Date.now()}`, sizeBytes: file.size };
+}
+
+/** Get a displayable URL for a blob. For verdant, returns null (images use file fields). */
+export async function getBlobUrl(blobId: string): Promise<string | null> {
+  if (backend === "automerge") {
+    const { getBlobUrl } = await import("./automerge/blob-sync.js");
+    return getBlobUrl(blobId);
+  }
+  return null;
+}
+
+/** Get count of pending blob uploads. For verdant, always 0 (built-in file sync). */
+export async function getPendingBlobCount(): Promise<number> {
+  if (backend === "automerge") {
+    const { getPendingCount } = await import("./automerge/blob-sync.js");
+    return getPendingCount();
+  }
+  return 0;
+}
+
+/** Reset the doc handle / client state. Used when switching profiles. */
+export function resetBackend(): void {
+  if (backend === "automerge") {
+    import("./automerge/repo.js").then(({ resetDocHandle }) => resetDocHandle());
+  }
+  // Verdant: switching profiles = switching namespace, handled by page reload
+}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { getBlobUrl } from "../../infra/automerge/blob-sync.js";
+import { getBlobUrl } from "../../infra/store-provider.js";
 
 interface ImageViewerOverlayProps {
   blobId: string;

@@ -9,12 +9,11 @@
 
 async function handleImageIntent(contentUri: string): Promise<void> {
   const { readFile } = await import("@tauri-apps/plugin-fs");
-  const { storeAndSyncBlob } = await import("./automerge/blob-sync.js");
-  const { createNote, addImage } = await import("./store-provider.js");
+  const { createNote, addImage, storeImageBlob } = await import("./store-provider.js");
 
   const bytes = await readFile(contentUri);
   const file = new File([bytes], "shared-image.jpg", { type: "image/jpeg" });
-  const { blobId, sizeBytes } = await storeAndSyncBlob(file);
+  const { blobId, sizeBytes } = await storeImageBlob(file);
   const note = await createNote("");
   await addImage(note.id, {
     blobId,

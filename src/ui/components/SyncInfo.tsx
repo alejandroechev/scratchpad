@@ -6,15 +6,17 @@ export function SyncInfo() {
   const backend = getStorageBackend();
 
   useEffect(() => {
-    // Poll for doc URL — it may be set after initial doc creation
-    const check = () => {
-      const saved = localStorage.getItem("scratchpad-automerge-doc-url") || "";
-      setDocUrl(saved);
-    };
-    check();
-    const interval = setInterval(check, 2000);
-    return () => clearInterval(interval);
-  }, []);
+    if (backend === "automerge") {
+      const check = () => {
+        const saved = localStorage.getItem("scratchpad-automerge-doc-url") || "";
+        setDocUrl(saved);
+      };
+      check();
+      const interval = setInterval(check, 2000);
+      return () => clearInterval(interval);
+    }
+    setDocUrl(backend === "verdant" ? "Verdant local-first" : "N/A");
+  }, [backend]);
 
   return (
     <div className="mx-3 mt-2 p-3 bg-amber-100 rounded-lg text-xs text-amber-800 space-y-1">

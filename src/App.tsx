@@ -9,10 +9,8 @@ import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
-import { addImage, createNote, unarchiveNote, addLabel, toggleTask, toggleTaskDone, mergeNotes } from "./infra/store-provider.js";
-import { storeAndSyncBlob } from "./infra/automerge/blob-sync.js";
+import { addImage, createNote, unarchiveNote, addLabel, toggleTask, toggleTaskDone, mergeNotes, storeImageBlob, resetBackend } from "./infra/store-provider.js";
 import { getActiveProfile, clearActiveProfile } from "./infra/profile-store.js";
-import { resetDocHandle } from "./infra/automerge/repo.js";
 
 function AppContent() {
   const [search, setSearch] = useState("");
@@ -134,7 +132,7 @@ function AppContent() {
               <button
                 onClick={() => {
                   clearActiveProfile();
-                  resetDocHandle();
+                  resetBackend();
                   window.location.reload();
                 }}
                 className="text-xs bg-amber-700 px-2 py-0.5 rounded ml-2 hover:bg-amber-800"
@@ -167,7 +165,7 @@ function AppContent() {
             setSelectedNoteId(note.id);
           }}
           onAddImage={async (file) => {
-            const { blobId, sizeBytes } = await storeAndSyncBlob(file);
+            const { blobId, sizeBytes } = await storeImageBlob(file);
             const note = await createNote("");
             await addImage(note.id, {
               blobId,
@@ -198,7 +196,7 @@ function AppContent() {
           onNoteClick={setSelectedNoteId}
           onArchive={archiveNote}
           onAddImage={async (id, file) => {
-            const { blobId, sizeBytes } = await storeAndSyncBlob(file);
+            const { blobId, sizeBytes } = await storeImageBlob(file);
             await addImage(id, {
               blobId,
               fileName: file.name,

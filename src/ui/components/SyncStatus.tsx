@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
 import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
-import { getStorageBackend } from "../../infra/store-provider";
+import { getPendingBlobCount } from "../../infra/store-provider";
 
 export function SyncStatus() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (getStorageBackend() !== "automerge") return;
-
     let cancelled = false;
 
     async function poll() {
-      const { getPendingCount } = await import("../../infra/automerge/blob-sync");
       if (cancelled) return;
-      const n = await getPendingCount();
+      const n = await getPendingBlobCount();
       setCount(n);
     }
 

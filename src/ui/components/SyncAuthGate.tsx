@@ -12,7 +12,9 @@ interface SyncAuthGateProps {
  * Local-first principle: the app starts instantly from local data.
  */
 function getInitialStatus(): "authenticated" | "needs-registration" {
-  if (getStorageBackend() !== "automerge") return "authenticated";
+  const backend = getStorageBackend();
+  if (backend === "verdant") return "authenticated"; // Verdant handles auth via token endpoint
+  if (backend !== "automerge") return "authenticated";
   const token = getStoredToken();
   const profile = getActiveProfile();
   if (token && profile) return "authenticated";

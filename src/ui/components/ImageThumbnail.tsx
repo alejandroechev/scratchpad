@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getBlobUrl } from "../../infra/automerge/blob-sync.js";
+import { getBlobUrl } from "../../infra/store-provider.js";
 
 interface ImageThumbnailProps {
   blobId: string;
