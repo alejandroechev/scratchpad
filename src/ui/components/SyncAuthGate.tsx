@@ -13,7 +13,10 @@ interface SyncAuthGateProps {
  */
 function getInitialStatus(): "authenticated" | "needs-registration" {
   const backend = getStorageBackend();
-  if (backend === "verdant") return "authenticated"; // Verdant handles auth via token endpoint
+  if (backend === "verdant") {
+    // Verdant needs a profile selected to pick the right library
+    return getActiveProfile() ? "authenticated" : "needs-registration";
+  }
   if (backend !== "automerge") return "authenticated";
   const token = getStoredToken();
   const profile = getActiveProfile();
@@ -50,19 +53,20 @@ export function SyncAuthGate({ children }: SyncAuthGateProps) {
   }, [status]);
 
 
-  // Skip profile gate for non-automerge backends (memory, etc.)
-  const isAutomerge = getStorageBackend() === "automerge";
+  // Skip profile gate for memory backend
+  const needsDeviceRegistration = getStorageBackend() === "automerge";
 
-  // Already registered AND (profile selected OR non-automerge) → go straight to app
-  if (status === "authenticated" && (!isAutomerge || getActiveProfile())) {
+  // Already authenticated AND profile selected → go straight to app
+  if (status === "authenticated" && getActiveProfile()) {
     return <>{children}</>;
   }
 
   function handleProfileSelect(profileId: string) {
     setSelectedProfileId(profileId);
     setActiveProfile(profileId);
-    // If already registered, selecting profile is enough — reload to apply
-    if (status === "authenticated") {
+    // For verdant: profile selection is enough — reload to init the right library
+    // For automerge: if already registered, reload; otherwise show registration form
+    if (!needsDeviceRegistration || status === "authenticated") {
       window.location.reload();
     }
   }
@@ -118,8 +122,8 @@ export function SyncAuthGate({ children }: SyncAuthGateProps) {
           </div>
         </div>
 
-        {/* Registration form — only shown when device is not yet registered */}
-        {needsRegistration && (
+        {/* Registration form — only shown for automerge backend when device is not yet registered */}
+        {needsDeviceRegistration && needsRegistration && (
           <>
             <div className="border-t border-amber-200 my-4" />
             <p className="text-sm text-amber-600 text-center mb-4">Registrar dispositivo</p>

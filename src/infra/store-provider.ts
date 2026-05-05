@@ -155,8 +155,10 @@ export async function getPendingBlobCount(): Promise<number> {
 
 /** Reset the doc handle / client state. Used when switching profiles. */
 export function resetBackend(): void {
+  if (backend === "verdant") {
+    import("./verdant/note-store.js").then(({ resetVerdantClient }) => resetVerdantClient());
+  }
   if (backend === "automerge") {
     import("./automerge/repo.js").then(({ resetDocHandle }) => resetDocHandle());
   }
-  // Verdant: switching profiles = switching namespace, handled by page reload
 }

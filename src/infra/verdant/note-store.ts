@@ -2,28 +2,45 @@ import { Client } from "./client/index.js";
 import type { NoteSnapshot } from "./client/index.js";
 import type { Note, NoteImage } from "../../domain/models/note.js";
 import type { NoteFilters } from "../../domain/services/note-repository.js";
+import { getActiveProfile } from "../profile-store.js";
 
 const SYNC_SERVER_URL = import.meta.env.VITE_SYNC_SERVER_URL || "";
-const VERDANT_LIBRARY_ID = import.meta.env.VITE_VERDANT_LIBRARY_ID || "scratchpad-default";
+
+function getLibraryId(): string {
+  const profile = getActiveProfile();
+  return profile ? `scratchpad-${profile.id}` : "scratchpad-default";
+}
 
 let clientInstance: Client | null = null;
 let clientReady: Promise<Client> | null = null;
+let activeLibraryId: string | null = null;
 
 export function getClient(): Promise<Client> {
+  const libraryId = getLibraryId();
+
+  // Reset client if profile changed
+  if (clientInstance && activeLibraryId !== libraryId) {
+    clientInstance.close();
+    clientInstance = null;
+    clientReady = null;
+  }
+
   if (clientInstance) return Promise.resolve(clientInstance);
   if (clientReady) return clientReady;
+
+  activeLibraryId = libraryId;
 
   clientReady = (async () => {
     const syncConfig = SYNC_SERVER_URL
       ? {
-          authEndpoint: `${SYNC_SERVER_URL}/verdant/auth/${VERDANT_LIBRARY_ID}`,
+          authEndpoint: `${SYNC_SERVER_URL}/verdant/auth/${libraryId}`,
           initialPresence: {},
           defaultProfile: {},
         }
       : undefined;
 
     const client = new Client({
-      namespace: `scratchpad-${VERDANT_LIBRARY_ID}`,
+      namespace: `scratchpad-${libraryId}`,
       sync: syncConfig,
     });
     clientInstance = client;
@@ -31,6 +48,15 @@ export function getClient(): Promise<Client> {
   })();
 
   return clientReady;
+}
+
+export function resetVerdantClient(): void {
+  if (clientInstance) {
+    clientInstance.close();
+  }
+  clientInstance = null;
+  clientReady = null;
+  activeLibraryId = null;
 }
 
 function snapshotToNote(s: NoteSnapshot): Note {
