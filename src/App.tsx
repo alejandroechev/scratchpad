@@ -5,6 +5,7 @@ import { QuickAddBar } from "./ui/components/QuickAddBar";
 import { NoteList } from "./ui/components/NoteList";
 import { NoteDetailPage } from "./ui/pages/NoteDetailPage";
 import { ArchivePage } from "./ui/pages/ArchivePage";
+import { MigrationPage } from "./ui/pages/MigrationPage";
 import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
@@ -18,6 +19,7 @@ function AppContent() {
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [showInfo, setShowInfo] = useState(false);
   const [showArchive, setShowArchive] = useState(false);
+  const [showMigration, setShowMigration] = useState(false);
   const [tasksOnly, setTasksOnly] = useState(false);
   const [selectedNoteIds, setSelectedNoteIds] = useState<Set<string>>(new Set());
   const activeProfile = getActiveProfile();
@@ -105,6 +107,10 @@ function AppContent() {
     );
   }
 
+  if (showMigration) {
+    return <MigrationPage onClose={() => { setShowMigration(false); refresh(); }} />;
+  }
+
   if (selectedNoteId) {
     const note = notes.find((n) => n.id === selectedNoteId);
     return (
@@ -155,7 +161,19 @@ function AppContent() {
           </div>
         </header>
 
-        {showInfo && <SyncInfo />}
+        {showInfo && (
+          <>
+            <SyncInfo />
+            <div className="mx-3 mb-2">
+              <button
+                onClick={() => setShowMigration(true)}
+                className="w-full py-1.5 px-3 bg-amber-700 text-white text-xs rounded-lg hover:bg-amber-800"
+              >
+                Migrar datos desde Automerge
+              </button>
+            </div>
+          </>
+        )}
 
         <QuickAddBar
           onAdd={addNote}
