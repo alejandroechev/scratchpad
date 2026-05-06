@@ -22,7 +22,11 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "paths": {
+      "@verdant-web/store": ["./node_modules/@verdant-web/store/dist/esm/index.d.ts"]
+    }
   },
   "include": ["src"],
   "exclude": ["src/cli", "src/mcp-server", "src/infra/verdant/client"]
