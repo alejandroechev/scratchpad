@@ -64,7 +64,7 @@ function snapshotToNote(s: NoteSnapshot): Note {
     id: s.id,
     content: s.content,
     images: (s.images || []).map((img) => ({
-      blobId: img.file?.url || "",
+      blobId: img.file?.id || "",
       fileName: img.fileName,
       sizeBytes: img.sizeBytes,
       createdAt: img.createdAt,
@@ -172,7 +172,7 @@ export async function removeImage(noteId: string, blobId: string): Promise<Note>
   if (!note) throw new Error(`Note not found: ${noteId}`);
   const images = note.get("images");
   const snapshot = images.getSnapshot();
-  const idx = snapshot.findIndex((img) => (img.file?.url || "") === blobId);
+  const idx = snapshot.findIndex((img) => (img.file?.id || "") === blobId);
   if (idx === -1) throw new Error(`Image not found: ${blobId}`);
   images.delete(idx);
   note.set("updatedAt", new Date().toISOString());
@@ -263,4 +263,22 @@ export async function mergeNotes(targetId: string, sourceIds: string[]): Promise
 export async function onDocChange(callback: () => void): Promise<() => void> {
   const client = await getClient();
   return client.subscribe("operation", callback);
+}
+
+/** Look up a Verdant file by ID across all notes and return its object URL. */
+export async function getVerdantFileUrl(fileId: string): Promise<string | null> {
+  if (!fileId) return null;
+  const client = await getClient();
+  const allNotes = await client.notes.findAll().resolved;
+  for (const note of allNotes) {
+    const images = note.get("images");
+    for (let i = 0; i < images.length; i++) {
+      const imgEntity = images.get(i);
+      const file = imgEntity.get("file");
+      if (file && file.id === fileId) {
+        return file.url;
+      }
+    }
+  }
+  return null;
 }

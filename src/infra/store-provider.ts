@@ -135,8 +135,12 @@ export async function storeImageBlob(file: File): Promise<{ blobId: string; size
   return { blobId: `local-${Date.now()}`, sizeBytes: file.size };
 }
 
-/** Get a displayable URL for a blob. For verdant, returns null (images use file fields). */
+/** Get a displayable URL for a blob/file. */
 export async function getBlobUrl(blobId: string): Promise<string | null> {
+  if (backend === "verdant") {
+    const { getVerdantFileUrl } = await import("./verdant/note-store.js");
+    return getVerdantFileUrl(blobId);
+  }
   if (backend === "automerge") {
     const { getBlobUrl } = await import("./automerge/blob-sync.js");
     return getBlobUrl(blobId);
