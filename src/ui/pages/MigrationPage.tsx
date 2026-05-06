@@ -24,8 +24,19 @@ export function MigrationPage({ onClose }: { onClose: () => void }) {
 
     try {
       log("info", "Loading Automerge store...");
+      const amRepo = await import("../../infra/automerge/repo.js");
       const amStore = await import("../../infra/automerge/note-store.js");
       const blobSync = await import("../../infra/automerge/blob-sync.js");
+
+      // Force Automerge to connect to server and sync before reading
+      log("info", "Syncing with server (waiting up to 15 seconds)...");
+      const handle = await amRepo.getDocHandle();
+      const startWait = Date.now();
+      while (Date.now() - startWait < 15_000) {
+        const doc = handle.doc();
+        if (doc && Object.keys(doc.notes || {}).length > 0) break;
+        await new Promise((r) => setTimeout(r, 1000));
+      }
 
       // Load all notes (including archived)
       const allNotes = await amStore.listNotes({ includeArchived: true });
