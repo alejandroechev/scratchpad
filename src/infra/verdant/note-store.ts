@@ -1,5 +1,5 @@
 import { Client } from "./client/index.js";
-import type { NoteSnapshot } from "./client/index.js";
+import type { NoteSnapshot, NoteImagesItemSnapshot } from "./client/index.js";
 import type { Note, NoteImage } from "../../domain/models/note.js";
 import type { NoteFilters } from "../../domain/services/note-repository.js";
 import { getActiveProfile } from "../profile-store.js";
@@ -63,7 +63,7 @@ function snapshotToNote(s: NoteSnapshot): Note {
   return {
     id: s.id,
     content: s.content,
-    images: (s.images || []).map((img) => ({
+    images: (s.images || []).map((img: NoteImagesItemSnapshot) => ({
       blobId: img.file?.id || "",
       fileName: img.fileName,
       sizeBytes: img.sizeBytes,
@@ -103,20 +103,20 @@ export async function listNotes(filters?: NoteFilters): Promise<Note[]> {
   let results = allNotes.map((n) => snapshotToNote(n.getSnapshot()));
 
   if (!filters?.includeArchived) {
-    results = results.filter((n) => !n.archived);
+    results = results.filter((n: Note) => !n.archived);
   }
   if (filters?.search) {
     const q = filters.search.toLowerCase();
-    results = results.filter((n) => n.content.toLowerCase().includes(q));
+    results = results.filter((n: Note) => n.content.toLowerCase().includes(q));
   }
   if (filters?.label) {
-    results = results.filter((n) => n.labels?.includes(filters.label!));
+    results = results.filter((n: Note) => n.labels?.includes(filters.label!));
   }
   if (filters?.tasksOnly) {
-    results = results.filter((n) => n.isTask === true);
+    results = results.filter((n: Note) => n.isTask === true);
   }
 
-  results.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  results.sort((a: Note, b: Note) => b.updatedAt.localeCompare(a.updatedAt));
   return results;
 }
 
