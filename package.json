@@ -32,6 +32,8 @@
     "@tauri-apps/plugin-clipboard-manager": "^2.3.2",
     "@tauri-apps/plugin-fs": "^2.5.0",
     "@tauri-apps/plugin-opener": "^2.5.3",
+    "@verdant-web/react": "^43.1.0",
+    "@verdant-web/store": "^5.4.0",
     "commander": "^14.0.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
