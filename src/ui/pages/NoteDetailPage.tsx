@@ -1,9 +1,11 @@
 import { useRef, useState, useEffect } from "react";
-import { ArrowLeftIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon, ClipboardDocumentIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon, ClipboardDocumentIcon, PencilIcon, EyeIcon } from "@heroicons/react/24/outline";
 import { extractUrls } from "../../domain/models/note.js";
 import type { NoteImage } from "../../domain/models/note.js";
 import { ImageThumbnail } from "../components/ImageThumbnail.js";
 import { ImageViewerOverlay } from "../components/ImageViewerOverlay.js";
+import { MarkdownRenderer } from "../components/MarkdownRenderer.js";
+import { toggleCheckbox } from "../../domain/services/markdown-checkbox.js";
 import { readClipboard, openUrl } from "../../infra/platform.js";
 
 interface NoteDetailPageProps {
@@ -24,6 +26,7 @@ export function NoteDetailPage({
   onBack,
 }: NoteDetailPageProps) {
   const [content, setContent] = useState(initialContent);
+  const [editing, setEditing] = useState(false);
   const [viewingImage, setViewingImage] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef(content);
@@ -66,59 +69,92 @@ export function NoteDetailPage({
         </button>
         <h1 className="text-lg font-bold flex-1">Nota</h1>
         <button
-          onClick={async () => {
-            try {
-              const text = await readClipboard();
-              if (text && textareaRef.current) {
-                const ta = textareaRef.current;
-                const start = ta.selectionStart;
-                const end = ta.selectionEnd;
-                const before = content.substring(0, start);
-                const after = content.substring(end);
-                const newContent = before + text + after;
-                setContent(newContent);
-                requestAnimationFrame(() => {
-                  ta.selectionStart = ta.selectionEnd = start + text.length;
-                  ta.focus();
-                });
-              }
-            } catch (err) {
-              console.warn('Clipboard read failed:', err);
-            }
-          }}
+          onClick={() => setEditing(!editing)}
           className="text-white text-sm px-1 hover:text-amber-200"
-          data-testid="paste-button"
-          title="Pegar"
+          data-testid="toggle-mode-button"
+          title={editing ? "Ver" : "Editar"}
         >
-          <ClipboardDocumentIcon className="w-5 h-5" />
+          {editing ? <EyeIcon className="w-5 h-5" /> : <PencilIcon className="w-5 h-5" />}
         </button>
-        <button
-          onClick={() => {
-            textareaRef.current?.focus();
-            document.execCommand('undo');
-          }}
-          className="text-white text-sm px-1 hover:text-amber-200"
-          data-testid="undo-button"
-        ><ArrowUturnLeftIcon className="w-5 h-5" /></button>
-        <button
-          onClick={() => {
-            textareaRef.current?.focus();
-            document.execCommand('redo');
-          }}
-          className="text-white text-sm px-1 hover:text-amber-200"
-          data-testid="redo-button"
-        ><ArrowUturnRightIcon className="w-5 h-5" /></button>
+        {editing && (
+          <>
+            <button
+              onClick={async () => {
+                try {
+                  const text = await readClipboard();
+                  if (text && textareaRef.current) {
+                    const ta = textareaRef.current;
+                    const start = ta.selectionStart;
+                    const end = ta.selectionEnd;
+                    const before = content.substring(0, start);
+                    const after = content.substring(end);
+                    const newContent = before + text + after;
+                    setContent(newContent);
+                    requestAnimationFrame(() => {
+                      ta.selectionStart = ta.selectionEnd = start + text.length;
+                      ta.focus();
+                    });
+                  }
+                } catch (err) {
+                  console.warn('Clipboard read failed:', err);
+                }
+              }}
+              className="text-white text-sm px-1 hover:text-amber-200"
+              data-testid="paste-button"
+              title="Pegar"
+            >
+              <ClipboardDocumentIcon className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => {
+                textareaRef.current?.focus();
+                document.execCommand('undo');
+              }}
+              className="text-white text-sm px-1 hover:text-amber-200"
+              data-testid="undo-button"
+            ><ArrowUturnLeftIcon className="w-5 h-5" /></button>
+            <button
+              onClick={() => {
+                textareaRef.current?.focus();
+                document.execCommand('redo');
+              }}
+              className="text-white text-sm px-1 hover:text-amber-200"
+              data-testid="redo-button"
+            ><ArrowUturnRightIcon className="w-5 h-5" /></button>
+          </>
+        )}
       </header>
 
       <div className="flex-1 p-3 flex flex-col gap-2 overflow-hidden min-h-0">
-        <textarea
-          ref={textareaRef}
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="flex-1 min-h-0 rounded-lg border border-amber-200 bg-white p-3 text-sm text-gray-900
-                     resize-none focus:outline-none focus:ring-2 focus:ring-amber-400 overflow-y-auto"
-          data-testid="note-editor"
-        />
+        {editing ? (
+          <textarea
+            ref={textareaRef}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="flex-1 min-h-0 rounded-lg border border-amber-200 bg-white p-3 text-sm text-gray-900
+                       resize-none focus:outline-none focus:ring-2 focus:ring-amber-400 overflow-y-auto"
+            data-testid="note-editor"
+          />
+        ) : (
+          <div
+            className="flex-1 min-h-0 rounded-lg border border-amber-200 bg-white p-3 overflow-y-auto cursor-text"
+            onClick={(e) => {
+              // Don't switch to edit mode when clicking checkboxes
+              if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') return;
+              setEditing(true);
+            }}
+            data-testid="markdown-view"
+          >
+            <MarkdownRenderer
+              content={content}
+              mode="full"
+              onCheckboxToggle={(index) => {
+                const updated = toggleCheckbox(content, index);
+                setContent(updated);
+              }}
+            />
+          </div>
+        )}
 
         {images && images.length > 0 && (
           <div className="shrink-0" data-testid="image-gallery">

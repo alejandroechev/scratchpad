@@ -7,14 +7,12 @@ interface NoteListProps {
   onArchive: (id: string) => void;
   onAddImage: (id: string, file: File) => void;
   onAddLabel: (id: string, label: string) => void;
-  onToggleTask: (id: string) => void;
-  onToggleDone?: (id: string) => void;
   allLabels: string[];
   selectedNoteIds?: Set<string>;
   onToggleSelect?: (id: string) => void;
 }
 
-export function NoteList({ notes, onNoteClick, onArchive, onAddImage, onAddLabel, onToggleTask, onToggleDone, allLabels, selectedNoteIds, onToggleSelect }: NoteListProps) {
+export function NoteList({ notes, onNoteClick, onArchive, onAddImage, onAddLabel, allLabels, selectedNoteIds, onToggleSelect }: NoteListProps) {
   const selectionMode = (selectedNoteIds?.size ?? 0) > 0;
   if (notes.length === 0) {
     return (
@@ -35,8 +33,6 @@ export function NoteList({ notes, onNoteClick, onArchive, onAddImage, onAddLabel
           onArchive={onArchive}
           onAddImage={onAddImage}
           onAddLabel={onAddLabel}
-          onToggleTask={onToggleTask}
-          onToggleDone={onToggleDone}
           allLabels={allLabels}
           isSelected={selectedNoteIds?.has(note.id)}
           onToggleSelect={onToggleSelect}

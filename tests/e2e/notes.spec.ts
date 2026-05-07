@@ -56,9 +56,12 @@ test.describe("ScratchPad Notes", () => {
     // Click the note
     await page.getByText("Detail test note").click();
 
-    // Should see detail page
-    await expect(page.getByTestId("note-editor")).toBeVisible();
-    await expect(page.getByTestId("note-editor")).toHaveValue("Detail test note");
+    // Should see rendered markdown view (not editor textarea)
+    await expect(page.getByTestId("markdown-view")).toBeVisible();
+    await expect(page.getByTestId("note-editor")).not.toBeVisible();
+
+    // Note content should be rendered in the markdown view
+    await expect(page.getByTestId("markdown-view")).toContainText("Detail test note");
 
     // Go back
     await page.getByTestId("back-button").click();
@@ -73,7 +76,16 @@ test.describe("ScratchPad Notes", () => {
 
     await page.getByText("Original content").click();
 
+    // Should be in view mode initially
+    await expect(page.getByTestId("markdown-view")).toBeVisible();
+    await expect(page.getByTestId("note-editor")).not.toBeVisible();
+
+    // Switch to edit mode via toggle button
+    await page.getByTestId("toggle-mode-button").click();
+
+    // Now editor should be visible
     const editor = page.getByTestId("note-editor");
+    await expect(editor).toBeVisible();
     await editor.clear();
     await editor.fill("Updated content");
 
@@ -126,5 +138,90 @@ test.describe("ScratchPad Notes", () => {
     // Label should appear as chip on the note card
     const noteCard = page.locator('[data-testid^="note-card-"]');
     await expect(noteCard.getByText("trabajo")).toBeVisible();
+  });
+
+  test("can create and toggle a markdown checklist", async ({ page }) => {
+    await page.goto("/");
+    const input = page.getByTestId("quick-add-input");
+
+    // Create a simple note first
+    await input.fill("Checklist note");
+    await page.getByTestId("quick-add-button").click();
+
+    // Open note detail
+    await page.getByText("Checklist note").click();
+
+    // Switch to edit mode
+    await page.getByTestId("toggle-mode-button").click();
+
+    // Fill with checklist content
+    const editor = page.getByTestId("note-editor");
+    await editor.clear();
+    await editor.fill("- [ ] Buy milk\n- [ ] Buy eggs\n- [x] Buy bread");
+
+    // Wait for auto-save
+    await page.waitForTimeout(1200);
+
+    // Go back to list
+    await page.getByTestId("back-button").click();
+
+    // Should see checklist badge showing "1/3 ✓"
+    await expect(page.getByTestId("checklist-badge")).toContainText("1/3");
+
+    // Open note again — should be in markdown view with checkboxes
+    await page.getByText("Buy milk").click();
+    await expect(page.getByTestId("markdown-view")).toBeVisible();
+
+    // Checkboxes should be rendered
+    const checkboxes = page.getByTestId("markdown-view").locator('input[type="checkbox"]');
+    await expect(checkboxes).toHaveCount(3);
+
+    // Toggle the first checkbox (unchecked → checked)
+    await checkboxes.first().click();
+
+    // Wait for auto-save
+    await page.waitForTimeout(1200);
+
+    // Go back
+    await page.getByTestId("back-button").click();
+
+    // Badge should now show 2/3
+    await expect(page.getByTestId("checklist-badge")).toContainText("2/3");
+  });
+
+  test("can search in archive page", async ({ page }) => {
+    await page.goto("/");
+    const input = page.getByTestId("quick-add-input");
+
+    // Add two notes
+    await input.fill("Archived groceries note");
+    await page.getByTestId("quick-add-button").click();
+    await input.fill("Archived work note");
+    await page.getByTestId("quick-add-button").click();
+
+    // Archive first note via context menu
+    await page.getByText("Archived groceries note").click({ button: "right" });
+    await page.getByText("Archivar").click();
+    await expect(page.getByText("Archived groceries note")).not.toBeVisible();
+
+    // Archive second note
+    await page.getByText("Archived work note").click({ button: "right" });
+    await page.getByText("Archivar").click();
+    await expect(page.getByText("Archived work note")).not.toBeVisible();
+
+    // Go to archive
+    await page.getByTestId("archive-nav-button").click();
+
+    // Both should be visible
+    await expect(page.getByText("Archived groceries note")).toBeVisible();
+    await expect(page.getByText("Archived work note")).toBeVisible();
+
+    // Search for "groceries"
+    const searchInput = page.getByTestId("archive-search-input");
+    await searchInput.fill("groceries");
+
+    // Only matching note visible
+    await expect(page.getByText("Archived groceries note")).toBeVisible();
+    await expect(page.getByText("Archived work note")).not.toBeVisible();
   });
 });

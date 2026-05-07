@@ -51,7 +51,6 @@ export function QuickAddBar({ onAdd, onAddAndOpen, onAddImage }: QuickAddBarProp
           ref={fileInputRef}
           type="file"
           accept="image/*"
-          capture="environment"
           onChange={handleFileChange}
           className="hidden"
           data-testid="quick-add-file-input"

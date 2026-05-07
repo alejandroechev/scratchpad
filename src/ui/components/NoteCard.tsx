@@ -1,14 +1,14 @@
 import { CameraIcon, CheckIcon } from "@heroicons/react/24/outline";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { extractUrls } from "../../domain/models/note.js";
 import type { Note } from "../../domain/models/note.js";
+import { extractUrls } from "../../domain/models/note.js";
 import { ImageThumbnail } from "./ImageThumbnail.js";
+import { MarkdownRenderer } from "./MarkdownRenderer.js";
 import { openUrl } from "../../infra/platform.js";
+import { countCheckboxes, hasCheckboxes } from "../../domain/services/markdown-checkbox.js";
 
 interface NoteCardProps {
   note: Note;
   onClick: (id: string) => void;
-  onToggleDone?: (id: string) => void;
   isSelected?: boolean;
   onToggleSelect?: (id: string) => void;
   selectionMode?: boolean;
@@ -26,7 +26,7 @@ function formatRelativeTime(isoDate: string): string {
   return `hace ${days}d`;
 }
 
-export function NoteCard({ note, onClick, onToggleDone, isSelected, onToggleSelect, selectionMode }: NoteCardProps) {
+export function NoteCard({ note, onClick, isSelected, onToggleSelect, selectionMode }: NoteCardProps) {
   const urls = extractUrls(note.content);
   const images = note.images ?? [];
   const isTruncated = note.content.length > 80 || note.content.includes('\n');
@@ -67,21 +67,22 @@ export function NoteCard({ note, onClick, onToggleDone, isSelected, onToggleSele
             )}
           </div>
         )}
-        <p className={`text-sm break-words flex-1 line-clamp-2 ${note.taskDone ? "line-through text-gray-400" : "text-gray-900"}`}>{note.content}</p>
-        {note.isTask && (
-          <button
-            onClick={(e) => { e.stopPropagation(); onToggleDone?.(note.id); }}
-            className="flex-shrink-0 ml-1"
-            data-testid={`task-checkbox-${note.id}`}
-          >
-            {note.taskDone ? (
-              <CheckCircleIcon className="w-6 h-6 text-green-500" />
-            ) : (
-              <div className="w-6 h-6 rounded-full border-2 border-amber-400" />
-            )}
-          </button>
-        )}
+        <div className="text-sm break-words flex-1">
+          <MarkdownRenderer content={note.content} mode="truncate" />
+        </div>
       </div>
+
+      {hasCheckboxes(note.content) && (() => {
+        const { total, checked } = countCheckboxes(note.content);
+        return (
+          <span
+            className="mt-1 inline-block text-[11px] font-medium text-amber-700 bg-amber-100 rounded-full px-2 py-0.5"
+            data-testid="checklist-badge"
+          >
+            {checked}/{total} ✓
+          </span>
+        );
+      })()}
 
       {isTruncated && (
         <p className="text-[11px] text-amber-400 -mt-0.5 ml-0.5" data-testid="more-indicator">más...</p>

@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { ArchiveBoxIcon, CameraIcon, TagIcon, ClipboardDocumentCheckIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { ArchiveBoxIcon, CameraIcon, TagIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { NoteCard } from "./NoteCard.js";
 import type { Note } from "../../domain/models/note.js";
 
@@ -9,8 +9,6 @@ interface SwipeableNoteCardProps {
   onArchive: (id: string) => void;
   onAddImage: (id: string, file: File) => void;
   onAddLabel: (id: string, label: string) => void;
-  onToggleTask: (id: string) => void;
-  onToggleDone?: (id: string) => void;
   allLabels: string[];
   isSelected?: boolean;
   onToggleSelect?: (id: string) => void;
@@ -26,8 +24,6 @@ export function SwipeableNoteCard({
   onArchive,
   onAddImage,
   onAddLabel,
-  onToggleTask,
-  onToggleDone,
   allLabels,
   isSelected,
   onToggleSelect,
@@ -118,14 +114,6 @@ export function SwipeableNoteCard({
           <TagIcon className="w-5 h-5" /><span>Etiqueta</span>
         </button>
         <button
-          onClick={() => { onToggleTask(note.id); closePanel(); }}
-          className="flex-1 bg-purple-500 text-white flex flex-col items-center justify-center text-xs gap-1"
-          data-testid={`swipe-task-${note.id}`}
-        >
-          <ClipboardDocumentCheckIcon className="w-5 h-5" />
-          <span>{note.isTask ? "Quitar tarea" : "Hacer tarea"}</span>
-        </button>
-        <button
           onClick={() => { onToggleSelect?.(note.id); closePanel(); }}
           className="flex-1 bg-cyan-500 text-white flex flex-col items-center justify-center text-xs gap-1"
           data-testid={`swipe-select-${note.id}`}
@@ -164,7 +152,7 @@ export function SwipeableNoteCard({
           zIndex: 10,
         }}
       >
-        <NoteCard note={note} onClick={revealed ? () => closePanel() : onClick} onToggleDone={onToggleDone} isSelected={isSelected} onToggleSelect={onToggleSelect} selectionMode={selectionMode} />
+        <NoteCard note={note} onClick={revealed ? () => closePanel() : onClick} isSelected={isSelected} onToggleSelect={onToggleSelect} selectionMode={selectionMode} />
       </div>
 
       {/* Context menu */}
@@ -191,13 +179,6 @@ export function SwipeableNoteCard({
             className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
           >
             <TagIcon className="w-4 h-4 text-green-500" /> Agregar etiqueta
-          </button>
-          <button
-            onClick={() => { onToggleTask(note.id); setContextMenu(null); }}
-            className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
-          >
-            <ClipboardDocumentCheckIcon className="w-4 h-4 text-purple-500" />
-            {note.isTask ? "Quitar tarea" : "Hacer tarea"}
           </button>
           <button
             onClick={() => { onToggleSelect?.(note.id); setContextMenu(null); }}

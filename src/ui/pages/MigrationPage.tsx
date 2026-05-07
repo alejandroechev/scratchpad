@@ -111,8 +111,6 @@ export function MigrationPage({ onClose }: { onClose: () => void }) {
             content: note.content,
             images: imageEntries,
             labels: note.labels || [],
-            isTask: note.isTask ?? false,
-            taskDone: note.taskDone ?? false,
             createdAt: note.createdAt,
             updatedAt: note.updatedAt,
             archived: note.archived,

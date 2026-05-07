@@ -28,10 +28,6 @@ export function migrateDoc(doc: ScratchPadDoc): void {
   }
 
   if (doc.schemaVersion < 4) {
-    for (const note of Object.values(doc.notes)) {
-      if (note.isTask === undefined) note.isTask = false;
-      if (note.taskDone === undefined) note.taskDone = false;
-    }
     doc.schemaVersion = 4;
   }
 }

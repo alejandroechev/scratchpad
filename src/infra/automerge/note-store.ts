@@ -43,10 +43,6 @@ export async function listNotes(filters?: NoteFilters): Promise<Note[]> {
     results = results.filter((n) => n.labels?.includes(filters.label!));
   }
 
-  if (filters?.tasksOnly) {
-    results = results.filter((n) => n.isTask === true);
-  }
-
   results.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   return results;
 }
@@ -136,31 +132,6 @@ export async function addLabel(noteId: string, label: string): Promise<Note> {
   });
   const doc = handle.doc()!;
   return doc.notes[noteId];
-}
-
-export async function toggleTask(id: string): Promise<Note> {
-  const handle = await getDocHandle();
-  handle.change((doc) => {
-    const note = doc.notes[id];
-    if (!note) throw new Error(`Note not found: ${id}`);
-    note.isTask = !note.isTask;
-    if (!note.isTask) note.taskDone = false;
-    note.updatedAt = new Date().toISOString();
-  });
-  const doc = handle.doc()!;
-  return doc.notes[id];
-}
-
-export async function toggleTaskDone(id: string): Promise<Note> {
-  const handle = await getDocHandle();
-  handle.change((doc) => {
-    const note = doc.notes[id];
-    if (!note) throw new Error(`Note not found: ${id}`);
-    note.taskDone = !note.taskDone;
-    note.updatedAt = new Date().toISOString();
-  });
-  const doc = handle.doc()!;
-  return doc.notes[id];
 }
 
 export async function removeLabel(noteId: string, label: string): Promise<Note> {

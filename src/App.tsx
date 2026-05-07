@@ -10,7 +10,7 @@ import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
-import { addImage, createNote, unarchiveNote, addLabel, toggleTask, toggleTaskDone, mergeNotes, storeImageBlob, resetBackend } from "./infra/store-provider.js";
+import { addImage, createNote, unarchiveNote, addLabel, mergeNotes, storeImageBlob, resetBackend } from "./infra/store-provider.js";
 import { getActiveProfile, clearActiveProfile } from "./infra/profile-store.js";
 
 function AppContent() {
@@ -20,10 +20,9 @@ function AppContent() {
   const [showInfo, setShowInfo] = useState(false);
   const [showArchive, setShowArchive] = useState(false);
   const [showMigration, setShowMigration] = useState(false);
-  const [tasksOnly, setTasksOnly] = useState(false);
   const [selectedNoteIds, setSelectedNoteIds] = useState<Set<string>>(new Set());
   const activeProfile = getActiveProfile();
-  const filters = useMemo(() => ({ search: search || undefined, label: activeLabel ?? undefined, tasksOnly: tasksOnly || undefined }), [search, activeLabel, tasksOnly]);
+  const filters = useMemo(() => ({ search: search || undefined, label: activeLabel ?? undefined }), [search, activeLabel]);
   const { notes, loading, addNote, editNote, archiveNote, refresh } = useNotes(filters);
 
   const allLabels = useMemo(() => [...new Set(notes.flatMap(n => n.labels ?? []))].sort(), [notes]);
@@ -199,8 +198,6 @@ function AppContent() {
           onLabelSelect={setActiveLabel}
           searchText={search}
           onSearchChange={setSearch}
-          tasksOnly={tasksOnly}
-          onTasksOnlyToggle={() => setTasksOnly(!tasksOnly)}
         />
       </div>
 
@@ -225,14 +222,6 @@ function AppContent() {
           }}
           onAddLabel={async (id, label) => {
             await addLabel(id, label);
-            await refresh();
-          }}
-          onToggleTask={async (id) => {
-            await toggleTask(id);
-            await refresh();
-          }}
-          onToggleDone={async (id) => {
-            await toggleTaskDone(id);
             await refresh();
           }}
           allLabels={allLabels}

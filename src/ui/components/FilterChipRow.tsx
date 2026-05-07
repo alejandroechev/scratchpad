@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MagnifyingGlassIcon, XMarkIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 interface FilterChipRowProps {
   labels: string[];           // all unique labels from notes
@@ -7,11 +7,9 @@ interface FilterChipRowProps {
   onLabelSelect: (label: string | null) => void;
   searchText: string;
   onSearchChange: (text: string) => void;
-  tasksOnly: boolean;
-  onTasksOnlyToggle: () => void;
 }
 
-export function FilterChipRow({ labels, activeLabel, onLabelSelect, searchText, onSearchChange, tasksOnly, onTasksOnlyToggle }: FilterChipRowProps) {
+export function FilterChipRow({ labels, activeLabel, onLabelSelect, searchText, onSearchChange }: FilterChipRowProps) {
   const [searchExpanded, setSearchExpanded] = useState(false);
 
   return (
@@ -44,19 +42,6 @@ export function FilterChipRow({ labels, activeLabel, onLabelSelect, searchText, 
           <MagnifyingGlassIcon className="w-4 h-4 inline" /> Buscar
         </button>
       )}
-
-      {/* Tasks chip */}
-      <button
-        onClick={onTasksOnlyToggle}
-        className={`shrink-0 rounded-full px-3 py-1 text-xs border flex items-center gap-1
-          ${tasksOnly
-            ? "bg-purple-600 text-white border-purple-600"
-            : "bg-white text-purple-700 border-purple-300 hover:bg-purple-50"
-          }`}
-        data-testid="tasks-filter-chip"
-      >
-        <CheckCircleIcon className="w-4 h-4" /> Tareas
-      </button>
 
       {/* Label chips */}
       {labels.map((label) => (

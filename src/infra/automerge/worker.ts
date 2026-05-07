@@ -118,7 +118,7 @@ const handlers: Record<string, (...args: any[]) => unknown> = {
     return toPlain(getDoc()?.notes[id] ?? null);
   },
 
-  listNotes(filters?: { includeArchived?: boolean; search?: string; label?: string; tasksOnly?: boolean }): Note[] {
+  listNotes(filters?: { includeArchived?: boolean; search?: string; label?: string }): Note[] {
     const doc = getDoc();
     if (!doc) return [];
     let results = Object.values(doc.notes);
@@ -128,7 +128,6 @@ const handlers: Record<string, (...args: any[]) => unknown> = {
       results = results.filter((n) => n.content.toLowerCase().includes(q));
     }
     if (filters?.label) results = results.filter((n) => n.labels?.includes(filters.label!));
-    if (filters?.tasksOnly) results = results.filter((n) => n.isTask === true);
     results.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
     return toPlain(results);
   },
@@ -217,27 +216,6 @@ const handlers: Record<string, (...args: any[]) => unknown> = {
       if (note.labels.length !== initialLength) note.updatedAt = new Date().toISOString();
     });
     return toPlain(handle!.doc()!.notes[noteId]);
-  },
-
-  toggleTask(id: string): Note {
-    handle!.change((doc) => {
-      const note = doc.notes[id];
-      if (!note) throw new Error(`Note not found: ${id}`);
-      note.isTask = !note.isTask;
-      if (!note.isTask) note.taskDone = false;
-      note.updatedAt = new Date().toISOString();
-    });
-    return toPlain(handle!.doc()!.notes[id]);
-  },
-
-  toggleTaskDone(id: string): Note {
-    handle!.change((doc) => {
-      const note = doc.notes[id];
-      if (!note) throw new Error(`Note not found: ${id}`);
-      note.taskDone = !note.taskDone;
-      note.updatedAt = new Date().toISOString();
-    });
-    return toPlain(handle!.doc()!.notes[id]);
   },
 
   mergeNotes(targetId: string, sourceIds: string[]): Note {

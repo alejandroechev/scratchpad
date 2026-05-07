@@ -107,8 +107,6 @@ describe('Schema migration v1→v2', () => {
     expect(doc.notes.n2.images).toEqual([]);
     expect(doc.notes.n1.labels).toEqual([]);
     expect(doc.notes.n2.labels).toEqual([]);
-    expect(doc.notes.n1.isTask).toBe(false);
-    expect(doc.notes.n2.isTask).toBe(false);
   });
 
   it('does not overwrite existing images', () => {

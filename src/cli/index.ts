@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import { InMemoryNoteStore } from "../infra/memory/note-store.js";
 import { extractUrls } from "../domain/models/note.js";
+import { toggleCheckbox, countCheckboxes, hasCheckboxes } from "../domain/services/markdown-checkbox.js";
 
 const store = new InMemoryNoteStore();
 const program = new Command();
@@ -62,7 +63,16 @@ program
     console.log(`Created: ${note.createdAt}`);
     console.log(`Updated: ${note.updatedAt}`);
     console.log(`Archived: ${note.archived}`);
-    console.log(`\n${note.content}`);
+    const displayContent = hasCheckboxes(note.content)
+      ? note.content
+          .replace(/- \[ \]/g, "⬜")
+          .replace(/- \[[xX]\]/g, "✅")
+      : note.content;
+    console.log(`\n${displayContent}`);
+    if (hasCheckboxes(note.content)) {
+      const { total, checked } = countCheckboxes(note.content);
+      console.log(`\n📋 Checklist: ${checked}/${total} completed`);
+    }
     const urls = extractUrls(note.content);
     if (urls.length > 0) {
       console.log(`\n🔗 Links: ${urls.join(", ")}`);
@@ -94,6 +104,32 @@ program
       console.log(`📦 Archived note ${id}`);
     } catch {
       console.error(`❌ Note not found: ${id}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command("checkbox")
+  .description("Toggle a checkbox in a note")
+  .argument("<id>", "Note ID")
+  .argument("<index>", "Checkbox index (0-based)")
+  .action((id: string, indexStr: string) => {
+    const note = store.getById(id);
+    if (!note) {
+      console.error(`❌ Note not found: ${id}`);
+      process.exit(1);
+    }
+    const index = parseInt(indexStr, 10);
+    if (isNaN(index) || index < 0) {
+      console.error(`❌ Invalid checkbox index: ${indexStr}`);
+      process.exit(1);
+    }
+    try {
+      const newContent = toggleCheckbox(note.content, index);
+      const updated = store.update(id, newContent);
+      console.log(`✅ Toggled checkbox ${index} in note ${updated.id}`);
+    } catch (err) {
+      console.error(`❌ ${(err as Error).message}`);
       process.exit(1);
     }
   });

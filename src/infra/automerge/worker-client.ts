@@ -129,9 +129,7 @@ export const addImage = (noteId: string, image: NoteImage) => call<Note>("addIma
 export const removeImage = (noteId: string, blobId: string) => call<Note>("removeImage", noteId, blobId);
 export const addLabel = (noteId: string, label: string) => call<Note>("addLabel", noteId, label);
 export const removeLabel = (noteId: string, label: string) => call<Note>("removeLabel", noteId, label);
-export const toggleTask = (id: string) => call<Note>("toggleTask", id);
-export const toggleTaskDone = (id: string) => call<Note>("toggleTaskDone", id);
-export const mergeNotes = (targetId: string, sourceIds: string[]) => call<Note>("mergeNotes", targetId, sourceIds);
+export const mergeNotes= (targetId: string, sourceIds: string[]) => call<Note>("mergeNotes", targetId, sourceIds);
 
 // --- Doc change subscription ---
 export function onDocChange(callback: () => void): () => void {

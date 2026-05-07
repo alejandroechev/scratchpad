@@ -10,8 +10,6 @@ export interface Note {
   content: string;
   images?: NoteImage[];
   labels?: string[];
-  isTask?: boolean;
-  taskDone?: boolean;
   createdAt: string;
   updatedAt: string;
   archived: boolean;
@@ -38,8 +36,6 @@ export function createNote(id: string, content: string): Note {
     content,
     images: [],
     labels: [],
-    isTask: false,
-    taskDone: false,
     createdAt: now,
     updatedAt: now,
     archived: false,

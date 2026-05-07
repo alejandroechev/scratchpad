@@ -38,10 +38,6 @@ export class InMemoryNoteStore implements NoteRepository {
       results = results.filter((n) => n.labels?.includes(filters.label!));
     }
 
-    if (filters?.tasksOnly) {
-      results = results.filter((n) => n.isTask === true);
-    }
-
     // Most recently updated first
     results.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
     return results.map((n) => ({ ...n }));
@@ -105,23 +101,6 @@ export class InMemoryNoteStore implements NoteRepository {
       note.updatedAt = new Date().toISOString();
     }
     return { ...note, labels: [...note.labels] };
-  }
-
-  toggleTask(id: string): Note {
-    const note = this.notes.get(id);
-    if (!note) throw new Error(`Note not found: ${id}`);
-    note.isTask = !note.isTask;
-    if (!note.isTask) note.taskDone = false;
-    note.updatedAt = new Date().toISOString();
-    return { ...note };
-  }
-
-  toggleTaskDone(id: string): Note {
-    const note = this.notes.get(id);
-    if (!note) throw new Error(`Note not found: ${id}`);
-    note.taskDone = !note.taskDone;
-    note.updatedAt = new Date().toISOString();
-    return { ...note };
   }
 
   removeLabel(noteId: string, label: string): Note {

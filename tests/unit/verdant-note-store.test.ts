@@ -30,17 +30,13 @@ describe("Verdant schema validation", () => {
   });
 
   it("has all required fields", () => {
-    for (const field of ["id", "content", "images", "labels", "isTask", "taskDone", "createdAt", "updatedAt", "archived"]) {
+    for (const field of ["id", "content", "images", "labels", "createdAt", "updatedAt", "archived"]) {
       expect(schemaSource).toContain(`${field}:`);
     }
   });
 
   it("has archived index", () => {
     expect(schemaSource).toContain('archived: { field: "archived" }');
-  });
-
-  it("has isTask index", () => {
-    expect(schemaSource).toContain('isTask: { field: "isTask" }');
   });
 
   it("has updatedAt index", () => {
@@ -63,9 +59,6 @@ describe("Verdant schema validation", () => {
     expect(schemaSource).toMatch(/archived:.*default: false/s);
   });
 
-  it("isTask defaults to false", () => {
-    expect(schemaSource).toMatch(/isTask:.*default: false/s);
-  });
 });
 
 describe("Verdant store parity with InMemoryNoteStore", () => {
@@ -122,22 +115,6 @@ describe("Verdant store parity with InMemoryNoteStore", () => {
     expect(filtered).toHaveLength(1);
   });
 
-  it("tasks: toggle task and done", () => {
-    const note = store.create("task note");
-    expect(note.isTask).toBe(false);
-
-    store.toggleTask(note.id);
-    expect(store.getById(note.id)!.isTask).toBe(true);
-
-    store.toggleTaskDone(note.id);
-    expect(store.getById(note.id)!.taskDone).toBe(true);
-
-    // Untoggling task should reset taskDone
-    store.toggleTask(note.id);
-    expect(store.getById(note.id)!.isTask).toBe(false);
-    expect(store.getById(note.id)!.taskDone).toBe(false);
-  });
-
   it("images: add and remove", () => {
     const note = store.create("image note");
     const image = { blobId: "abc123", fileName: "photo.jpg", sizeBytes: 1024, createdAt: new Date().toISOString() };
@@ -174,11 +151,4 @@ describe("Verdant store parity with InMemoryNoteStore", () => {
     expect(results[0].content).toContain("groceries");
   });
 
-  it("tasks filter works", () => {
-    const note = store.create("task item");
-    store.create("regular note");
-    store.toggleTask(note.id);
-    const tasks = store.list({ tasksOnly: true });
-    expect(tasks).toHaveLength(1);
-  });
 });

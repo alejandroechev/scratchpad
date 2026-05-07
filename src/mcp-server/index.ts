@@ -165,10 +165,9 @@ server.tool(
   {
     search: z.string().optional().describe("Filter by content text"),
     label: z.string().optional().describe("Filter by label"),
-    tasksOnly: z.boolean().optional().describe("Only return task notes"),
     includeArchived: z.boolean().optional().describe("Include archived notes"),
   },
-  async ({ search, label, tasksOnly, includeArchived }) => {
+  async ({ search, label, includeArchived }) => {
     let notes = getNotes(includeArchived);
     if (search) {
       const q = search.toLowerCase();
@@ -176,9 +175,6 @@ server.tool(
     }
     if (label) {
       notes = notes.filter((n) => n.labels?.includes(label));
-    }
-    if (tasksOnly) {
-      notes = notes.filter((n) => n.isTask === true);
     }
     return {
       content: [
@@ -189,8 +185,6 @@ server.tool(
               id: n.id,
               content: n.content.substring(0, 200),
               labels: n.labels,
-              isTask: n.isTask,
-              taskDone: n.taskDone,
               updatedAt: n.updatedAt,
               archived: n.archived,
             })),

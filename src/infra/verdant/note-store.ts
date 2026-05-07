@@ -85,8 +85,6 @@ function snapshotToNote(s: NoteSnapshot): Note {
       createdAt: img.createdAt,
     })),
     labels: [...(s.labels || [])],
-    isTask: s.isTask,
-    taskDone: s.taskDone,
     createdAt: s.createdAt,
     updatedAt: s.updatedAt,
     archived: s.archived,
@@ -127,10 +125,6 @@ export async function listNotes(filters?: NoteFilters): Promise<Note[]> {
   if (filters?.label) {
     results = results.filter((n: Note) => n.labels?.includes(filters.label!));
   }
-  if (filters?.tasksOnly) {
-    results = results.filter((n: Note) => n.isTask === true);
-  }
-
   results.sort((a: Note, b: Note) => b.updatedAt.localeCompare(a.updatedAt));
   return results;
 }
@@ -218,26 +212,6 @@ export async function removeLabel(noteId: string, label: string): Promise<Note> 
     labels.delete(idx);
     note.set("updatedAt", new Date().toISOString());
   }
-  return snapshotToNote(note.getSnapshot());
-}
-
-export async function toggleTask(id: string): Promise<Note> {
-  const client = await getClient();
-  const note = await client.notes.get(id).resolved;
-  if (!note) throw new Error(`Note not found: ${id}`);
-  const isTask = !note.get("isTask");
-  note.set("isTask", isTask);
-  if (!isTask) note.set("taskDone", false);
-  note.set("updatedAt", new Date().toISOString());
-  return snapshotToNote(note.getSnapshot());
-}
-
-export async function toggleTaskDone(id: string): Promise<Note> {
-  const client = await getClient();
-  const note = await client.notes.get(id).resolved;
-  if (!note) throw new Error(`Note not found: ${id}`);
-  note.set("taskDone", !note.get("taskDone"));
-  note.set("updatedAt", new Date().toISOString());
   return snapshotToNote(note.getSnapshot());
 }
 
