@@ -25,11 +25,19 @@ function createInitialDoc(): ScratchPadDoc {
 
 export function getRepo(): Repo {
   if (!repoInstance) {
-    const wsUrl = getAuthenticatedWsUrl();
+    const idbAdapter = new IndexedDBStorageAdapter(IDB_NAME);
+    // Create repo with local storage only — loads instantly without network blocking
     repoInstance = new Repo({
-      network: [new BrowserWebSocketClientAdapter(wsUrl)],
-      storage: new IndexedDBStorageAdapter(IDB_NAME),
+      storage: idbAdapter,
     });
+
+    // Add WebSocket after a delay so sync merge doesn't freeze the UI
+    setTimeout(() => {
+      if (!repoInstance) return;
+      const wsUrl = getAuthenticatedWsUrl();
+      const wsAdapter = new BrowserWebSocketClientAdapter(wsUrl);
+      repoInstance.networkSubsystem.addNetworkAdapter(wsAdapter as any);
+    }, 3_000);
   }
   return repoInstance;
 }
