@@ -5,6 +5,7 @@ import type { NoteFilters } from "../../domain/services/note-repository.js";
 import { getActiveProfile } from "../profile-store.js";
 
 const SYNC_SERVER_URL = import.meta.env.VITE_SYNC_SERVER_URL || "";
+const HTTP_SERVER_URL = SYNC_SERVER_URL.replace(/^ws/, "http");
 
 function getLibraryId(): string {
   const profile = getActiveProfile();
@@ -31,13 +32,27 @@ export function getClient(): Promise<Client> {
   activeLibraryId = libraryId;
 
   clientReady = (async () => {
-    const syncConfig = SYNC_SERVER_URL
-      ? {
-          authEndpoint: `${SYNC_SERVER_URL}/verdant/auth/${libraryId}`,
-          initialPresence: {},
-          defaultProfile: {},
-        }
-      : undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let syncConfig: any;
+
+    if (HTTP_SERVER_URL) {
+      // Get the stored sync engine JWT for authenticating with the Verdant auth endpoint
+      const { getStoredToken } = await import("../automerge/auth.js");
+      const syncToken = getStoredToken();
+      const authUrl = `${HTTP_SERVER_URL}/verdant/auth/${libraryId}`;
+
+      syncConfig = {
+        fetchAuth: async () => {
+          const headers: Record<string, string> = {};
+          if (syncToken) headers["Authorization"] = `Bearer ${syncToken}`;
+          const res = await fetch(authUrl, { headers });
+          if (!res.ok) throw new Error(`Auth failed: ${res.status}`);
+          return res.json();
+        },
+        initialPresence: {},
+        defaultProfile: {},
+      };
+    }
 
     const client = new Client({
       namespace: `scratchpad-${libraryId}`,
