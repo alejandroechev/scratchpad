@@ -25,6 +25,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./tests/setup.ts'],
     include: ['tests/unit/**/*.test.ts', 'tests/unit/**/*.test.tsx'],
+    server: {
+      deps: {
+        inline: ['@verdant-web/store', '@verdant-web/common', 'weak-event', 'uuid'],
+      },
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
