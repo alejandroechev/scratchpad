@@ -7,7 +7,7 @@ import type { Note, NoteImage } from "../domain/models/note.js";
 import type { NoteFilters } from "../domain/services/note-repository.js";
 import { InMemoryNoteStore } from "./memory/note-store.js";
 
-const automerge = () => import("./automerge/note-store.js");
+const automerge = () => import("./automerge/worker-client.js");
 const verdant = () => import("./verdant/note-store.js");
 
 type StorageBackend = "verdant" | "automerge" | "memory";
@@ -118,7 +118,7 @@ export async function onDocChange(callback: () => void): Promise<() => void> {
     return onDocChange(callback);
   }
   if (backend === "automerge") {
-    const { onDocChange } = await import("./automerge/repo.js");
+    const { onDocChange } = await import("./automerge/worker-client.js");
     return onDocChange(callback);
   }
   return () => {};
