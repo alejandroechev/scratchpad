@@ -13,6 +13,7 @@ const RPC_TIMEOUT_MS = 10_000;
 
 let worker: Worker | null = null;
 let nextId = 0;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- RPC pending map holds callbacks for heterogeneous return types
 const pending = new Map<number, { resolve: (v: any) => void; reject: (e: Error) => void; timer: ReturnType<typeof setTimeout> }>();
 let changeListeners: Array<() => void> = [];
 let initPromise: Promise<void> | null = null;
@@ -101,7 +102,7 @@ function ensureInit(): Promise<void> {
   return initPromise;
 }
 
-function call<T>(method: string, ...args: any[]): Promise<T> {
+function call<T>(method: string, ...args: unknown[]): Promise<T> {
   return ensureInit().then(() => {
     return new Promise<T>((resolve, reject) => {
       const id = nextId++;

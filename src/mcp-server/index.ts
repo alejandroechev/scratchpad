@@ -54,7 +54,6 @@ if (!DOC_URL) {
 
 let repo: Repo;
 let docHandle: DocHandle<ScratchPadDoc>;
-let docReady = false;
 
 async function initAutomerge(): Promise<void> {
   const wsUrl = AUTH_TOKEN
@@ -86,8 +85,6 @@ async function initAutomerge(): Promise<void> {
     console.error("Failed to load Automerge document within timeout");
     process.exit(1);
   }
-
-  docReady = true;
 }
 
 function getDoc(): ScratchPadDoc {

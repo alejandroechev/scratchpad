@@ -7,15 +7,23 @@ export function useNotes(filters?: NoteFilters) {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch notes when filters change
+  useEffect(() => {
+    let cancelled = false;
+    store.listNotes(filters).then((result) => {
+      if (!cancelled) {
+        setNotes(result);
+        setLoading(false);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [filters]);
+
   const refresh = useCallback(async () => {
     const result = await store.listNotes(filters);
     setNotes(result);
     setLoading(false);
-  }, [filters?.search, filters?.includeArchived, filters?.label, filters?.tasksOnly]);
-
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
+  }, [filters]);
 
   // Listen for remote doc changes (real-time sync)
   useEffect(() => {

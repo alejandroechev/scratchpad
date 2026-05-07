@@ -23,10 +23,16 @@ function AppContent() {
   const [tasksOnly, setTasksOnly] = useState(false);
   const [selectedNoteIds, setSelectedNoteIds] = useState<Set<string>>(new Set());
   const activeProfile = getActiveProfile();
-  const filters = useMemo(() => ({ search: search || undefined, label: activeLabel || undefined, tasksOnly: tasksOnly || undefined }), [search, activeLabel, tasksOnly]);
+  const filters = useMemo(() => ({ search: search || undefined, label: activeLabel ?? undefined, tasksOnly: tasksOnly || undefined }), [search, activeLabel, tasksOnly]);
   const { notes, loading, addNote, editNote, archiveNote, refresh } = useNotes(filters);
 
   const allLabels = useMemo(() => [...new Set(notes.flatMap(n => n.labels ?? []))].sort(), [notes]);
+
+  // Auto-clear stale label filter (derived during render, not in an effect)
+  const effectiveLabel = activeLabel && allLabels.includes(activeLabel) ? activeLabel : null;
+  if (effectiveLabel !== activeLabel) {
+    setActiveLabel(effectiveLabel);
+  }
 
   const toggleSelect = (id: string) => {
     setSelectedNoteIds(prev => {
@@ -57,12 +63,6 @@ function AppContent() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  useEffect(() => {
-    if (activeLabel && !allLabels.includes(activeLabel)) {
-      setActiveLabel(null);
-    }
-  }, [allLabels, activeLabel]);
-
   // Handle Android back button for detail view
   useEffect(() => {
     if (!selectedNoteId) return;
@@ -90,7 +90,7 @@ function AppContent() {
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [showArchive]);
+  }, [showArchive, refresh]);
 
   if (showArchive) {
     return (

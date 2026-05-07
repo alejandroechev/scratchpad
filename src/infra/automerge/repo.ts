@@ -36,7 +36,7 @@ export function getRepo(): Repo {
       if (!repoInstance) return;
       const wsUrl = getAuthenticatedWsUrl();
       const wsAdapter = new BrowserWebSocketClientAdapter(wsUrl);
-      repoInstance.networkSubsystem.addNetworkAdapter(wsAdapter as any);
+      repoInstance.networkSubsystem.addNetworkAdapter(wsAdapter as unknown as Parameters<typeof repoInstance.networkSubsystem.addNetworkAdapter>[0]);
     }, 3_000);
   }
   return repoInstance;

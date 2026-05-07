@@ -27,7 +27,11 @@ export function NoteDetailPage({
   const [viewingImage, setViewingImage] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef(content);
-  contentRef.current = content;
+
+  // Keep ref in sync for cleanup effect
+  useEffect(() => {
+    contentRef.current = content;
+  });
 
   // Debounced auto-save
   useEffect(() => {

@@ -46,16 +46,29 @@ if (!DOC_URL) {
   process.exit(1);
 }
 
+interface AgentBusMessage {
+  id: number;
+  from: string;
+  message: string;
+  topic: string;
+  timestamp: string;
+}
+
+interface AgentBusData {
+  messages: AgentBusMessage[];
+  agents: { name: string; description?: string }[];
+}
+
 function sendToAgentBus(message: string, topic: string): void {
   try {
     if (!existsSync(AGENT_BUS_DIR)) mkdirSync(AGENT_BUS_DIR, { recursive: true });
     const file = join(AGENT_BUS_DIR, "mobile-commands.json");
-    let data = { messages: [] as any[], agents: [] as any[] };
+    let data: AgentBusData = { messages: [], agents: [] };
     if (existsSync(file)) {
-      data = JSON.parse(readFileSync(file, "utf-8"));
+      data = JSON.parse(readFileSync(file, "utf-8")) as AgentBusData;
     }
     const nextId = data.messages.length > 0
-      ? Math.max(...data.messages.map((m: any) => m.id)) + 1
+      ? Math.max(...data.messages.map((m) => m.id)) + 1
       : 1;
     data.messages.push({
       id: nextId,

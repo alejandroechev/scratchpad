@@ -5,7 +5,7 @@
 
 let isTauri = false;
 try {
-  isTauri = !!(window as any).__TAURI_INTERNALS__;
+  isTauri = !!(window as unknown as Record<string, unknown>).__TAURI_INTERNALS__;
 } catch {
   // Not in Tauri
 }

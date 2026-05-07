@@ -106,7 +106,8 @@ function getDoc(): ScratchPadDoc | undefined {
 
 // ============= RPC Handlers =============
 
-const handlers: Record<string, (...args: any[]) => any> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- RPC dispatch requires dynamic typing
+const handlers: Record<string, (...args: any[]) => unknown> = {
   createNoteAsync(content: string): Note {
     const note = createNote(generateId(), content);
     handle!.change((doc) => { doc.notes[note.id] = note; });
@@ -280,7 +281,13 @@ const handlers: Record<string, (...args: any[]) => any> = {
 
 // ============= Message Handler =============
 
-function handleRpc(msg: any): void {
+interface RpcMessage {
+  id: number;
+  method: string;
+  args?: unknown[];
+}
+
+function handleRpc(msg: RpcMessage): void {
   const { id, method, args } = msg;
   if (!handlers[method]) {
     self.postMessage({ id, error: `Unknown method: ${method}` });
