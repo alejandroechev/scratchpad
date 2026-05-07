@@ -17,7 +17,7 @@ function detectBackend(): StorageBackend {
   if (explicit === "memory") return "memory";
   if (explicit === "automerge") return "automerge";
   if (explicit === "verdant") return "verdant";
-  return "verdant";
+  return "automerge";
 }
 
 const backend = detectBackend();

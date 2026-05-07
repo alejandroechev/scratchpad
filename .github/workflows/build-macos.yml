@@ -48,7 +48,7 @@ jobs:
       - name: Build Tauri app
         run: npx tauri build --target ${{ matrix.target }}
         env:
-          VITE_STORAGE_BACKEND: verdant
+          VITE_STORAGE_BACKEND: automerge
           VITE_SYNC_SERVER_URL: wss://sync.stormlab.app
 
       - name: Find and rename DMG
