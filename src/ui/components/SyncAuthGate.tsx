@@ -53,8 +53,13 @@ export function SyncAuthGate({ children }: SyncAuthGateProps) {
   }, [status]);
 
 
-  // Skip profile gate for memory backend
-  const needsDeviceRegistration = getStorageBackend() === "automerge";
+  const currentBackend = getStorageBackend();
+  const needsDeviceRegistration = currentBackend === "automerge";
+
+  // Memory backend: skip the entire gate — no profile or registration needed
+  if (currentBackend === "memory") {
+    return <>{children}</>;
+  }
 
   // Already authenticated AND profile selected → go straight to app
   if (status === "authenticated" && getActiveProfile()) {

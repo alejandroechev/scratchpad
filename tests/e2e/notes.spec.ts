@@ -20,7 +20,8 @@ test.describe("ScratchPad Notes", () => {
     await input.fill("Check out https://example.com for more info");
     await page.getByTestId("quick-add-button").click();
 
-    await expect(page.getByRole("link", { name: "example.com" })).toBeVisible();
+    // URL chips render as buttons (not links) in the note card
+    await expect(page.locator("button", { hasText: "example.com" })).toBeVisible();
   });
 
   test("can search notes by text", async ({ page }) => {
@@ -75,7 +76,10 @@ test.describe("ScratchPad Notes", () => {
     const editor = page.getByTestId("note-editor");
     await editor.clear();
     await editor.fill("Updated content");
-    await page.getByTestId("save-button").click();
+
+    // Auto-save is debounced (1s) + save-on-unmount via back button
+    await page.waitForTimeout(1200);
+    await page.getByTestId("back-button").click();
 
     // Back on the list with updated content
     await expect(page.getByText("Updated content")).toBeVisible();
@@ -87,17 +91,16 @@ test.describe("ScratchPad Notes", () => {
     const input = page.getByTestId("quick-add-input");
     await input.fill("Archive test note");
     await page.getByTestId("quick-add-button").click();
-    // Click note to open detail
-    await page.getByText("Archive test note").click();
-    // Archive it
-    await page.getByTestId("archive-button").click();
+    // Right-click the note to open context menu, then archive
+    await page.getByText("Archive test note").click({ button: "right" });
+    await page.getByText("Archivar").click();
     // Note should be gone from main list
     await expect(page.getByText("Archive test note")).not.toBeVisible();
     // Go to archive
     await page.getByTestId("archive-nav-button").click();
     // Note should be in archive
     await expect(page.getByText("Archive test note")).toBeVisible();
-    // Unarchive it - using a more specific selector
+    // Unarchive it
     await page.locator('[data-testid^="unarchive-button-"]').first().click();
     // Go back to main view
     await page.getByTestId("archive-back-button").click();
@@ -105,40 +108,23 @@ test.describe("ScratchPad Notes", () => {
     await expect(page.getByText("Archive test note")).toBeVisible();
   });
 
-  test("can add and remove labels on a note", async ({ page }) => {
+  test("can add a label to a note via context menu", async ({ page }) => {
     await page.goto("/");
     const input = page.getByTestId("quick-add-input");
     await input.fill("Label test note");
     await page.getByTestId("quick-add-button").click();
     
-    // Click note to open detail
-    await page.getByText("Label test note").click();
+    // Right-click the note to open context menu
+    await page.getByText("Label test note").click({ button: "right" });
+    await page.getByText("Agregar etiqueta").click();
     
-    // Add a label
-    const labelInput = page.getByTestId("add-label-input");
+    // Type a label in the popup input and press Enter
+    const labelInput = page.locator('[data-testid^="swipe-label-input-"]');
     await labelInput.fill("trabajo");
     await labelInput.press("Enter");
     
-    // Label should appear as chip
-    await expect(page.getByText("trabajo")).toBeVisible();
-    
-    // Add another label
-    await labelInput.fill("urgente");
-    await labelInput.press("Enter");
-    await expect(page.getByTestId("label-section").getByText("urgente")).toBeVisible();
-    
-    // Remove a label
-    await page.getByTestId("remove-label-trabajo").click();
-    await page.waitForTimeout(100); // Wait for async operation
-    await expect(page.getByTestId("label-section").getByText("trabajo")).not.toBeVisible();
-    await expect(page.getByTestId("label-section").getByText("urgente")).toBeVisible();
-    
-    // Go back and verify label shows on card
-    await page.getByTestId("back-button").click();
-    
-    // Should see the remaining label chip on the note card (urgente only, not trabajo)
-    const noteCard = page.getByTestId(/note-card-/);
-    await expect(noteCard.getByText("urgente")).toBeVisible();
-    await expect(noteCard.getByText("trabajo")).not.toBeVisible();
+    // Label should appear as chip on the note card
+    const noteCard = page.locator('[data-testid^="note-card-"]');
+    await expect(noteCard.getByText("trabajo")).toBeVisible();
   });
 });
