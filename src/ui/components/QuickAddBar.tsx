@@ -9,7 +9,8 @@ interface QuickAddBarProps {
 
 export function QuickAddBar({ onAdd, onAddAndOpen, onAddImage }: QuickAddBarProps) {
   const [text, setText] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showImageMenu, setShowImageMenu] = useState(false);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = () => {
@@ -33,6 +34,7 @@ export function QuickAddBar({ onAdd, onAddAndOpen, onAddImage }: QuickAddBarProp
     const file = e.target.files?.[0];
     if (file && onAddImage) onAddImage(file);
     e.target.value = "";
+    setShowImageMenu(false);
   };
 
   return (
@@ -49,7 +51,7 @@ export function QuickAddBar({ onAdd, onAddAndOpen, onAddImage }: QuickAddBarProp
           data-testid="quick-add-input"
         />
         <input
-          ref={fileInputRef}
+          ref={cameraInputRef}
           type="file"
           accept="image/*"
           capture="environment"
@@ -73,24 +75,37 @@ export function QuickAddBar({ onAdd, onAddAndOpen, onAddImage }: QuickAddBarProp
         >
           Agregar
         </button>
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="rounded-lg bg-amber-700 px-3 py-2 text-sm font-medium text-white
-                     hover:bg-amber-800"
-          data-testid="quick-add-image-button"
-          title="Tomar foto"
-        >
-          <CameraIcon className="w-5 h-5" />
-        </button>
-        <button
-          onClick={() => galleryInputRef.current?.click()}
-          className="rounded-lg bg-amber-700 px-3 py-2 text-sm font-medium text-white
-                     hover:bg-amber-800"
-          data-testid="quick-add-gallery-button"
-          title="Elegir imagen"
-        >
-          <PhotoIcon className="w-5 h-5" />
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowImageMenu(!showImageMenu)}
+            className="rounded-lg bg-amber-700 px-3 py-2 text-sm font-medium text-white
+                       hover:bg-amber-800"
+            data-testid="quick-add-image-button"
+          >
+            <CameraIcon className="w-5 h-5" />
+          </button>
+          {showImageMenu && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setShowImageMenu(false)} />
+              <div className="absolute right-0 top-full mt-1 z-50 bg-white rounded-lg shadow-lg border border-amber-200 py-1 min-w-[140px]">
+                <button
+                  onClick={() => { cameraInputRef.current?.click(); setShowImageMenu(false); }}
+                  className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
+                  data-testid="quick-add-camera-option"
+                >
+                  <CameraIcon className="w-4 h-4 text-amber-600" /> Cámara
+                </button>
+                <button
+                  onClick={() => { galleryInputRef.current?.click(); setShowImageMenu(false); }}
+                  className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
+                  data-testid="quick-add-gallery-option"
+                >
+                  <PhotoIcon className="w-4 h-4 text-blue-500" /> Galería
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

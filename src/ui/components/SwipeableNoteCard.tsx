@@ -16,7 +16,7 @@ interface SwipeableNoteCardProps {
   selectionMode?: boolean;
 }
 
-const ACTION_PANEL_WIDTH = 360;
+const ACTION_PANEL_WIDTH = 260;
 const SWIPE_THRESHOLD = 60;
 
 export function SwipeableNoteCard({
@@ -96,40 +96,40 @@ export function SwipeableNoteCard({
       >
         <button
           onClick={() => { onArchive(note.id); closePanel(); }}
-          className="flex-1 bg-amber-600 text-white flex flex-col items-center justify-center text-xs gap-1"
+          className="flex-1 bg-amber-600 text-white flex flex-col items-center justify-center text-[10px] gap-0.5 px-1"
           data-testid={`swipe-archive-${note.id}`}
         >
-          <ArchiveBoxIcon className="w-5 h-5" /><span>Archivar</span>
+          <ArchiveBoxIcon className="w-4 h-4" /><span>Archivar</span>
         </button>
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="flex-1 bg-blue-500 text-white flex flex-col items-center justify-center text-xs gap-1"
+          className="flex-1 bg-blue-500 text-white flex flex-col items-center justify-center text-[10px] gap-0.5 px-1"
           data-testid={`swipe-image-${note.id}`}
         >
-          <CameraIcon className="w-5 h-5" /><span>Imagen</span>
+          <CameraIcon className="w-4 h-4" /><span>Imagen</span>
         </button>
         <button
           onClick={() => setShowLabelPopup(true)}
-          className="flex-1 bg-green-500 text-white flex flex-col items-center justify-center text-xs gap-1"
+          className="flex-1 bg-green-500 text-white flex flex-col items-center justify-center text-[10px] gap-0.5 px-1"
           data-testid={`swipe-label-${note.id}`}
         >
-          <TagIcon className="w-5 h-5" /><span>Etiqueta</span>
+          <TagIcon className="w-4 h-4" /><span>Etiqueta</span>
         </button>
         {(note.checklistItems ?? []).length === 0 && (
           <button
             onClick={() => { onConvertToChecklist(note.id); closePanel(); }}
-            className="flex-1 bg-indigo-500 text-white flex flex-col items-center justify-center text-xs gap-1"
+            className="flex-1 bg-indigo-500 text-white flex flex-col items-center justify-center text-[10px] gap-0.5 px-1"
             data-testid={`swipe-checklist-${note.id}`}
           >
-            <ListBulletIcon className="w-5 h-5" /><span>Lista</span>
+            <ListBulletIcon className="w-4 h-4" /><span>Lista</span>
           </button>
         )}
         <button
           onClick={() => { onToggleSelect?.(note.id); closePanel(); }}
-          className="flex-1 bg-cyan-500 text-white flex flex-col items-center justify-center text-xs gap-1"
+          className="flex-1 bg-cyan-500 text-white flex flex-col items-center justify-center text-[10px] gap-0.5 px-1"
           data-testid={`swipe-select-${note.id}`}
         >
-          <CheckIcon className="w-5 h-5" />
+          <CheckIcon className="w-4 h-4" />
           <span>Seleccionar</span>
         </button>
       </div>}
