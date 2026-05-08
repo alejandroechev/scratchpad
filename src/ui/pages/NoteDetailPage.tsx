@@ -140,6 +140,19 @@ export function NoteDetailPage({
       <div className="flex-1 p-3 flex flex-col gap-2 overflow-hidden min-h-0">
         {isChecklist ? (
           <div className="flex-1 min-h-0 rounded-lg border border-amber-200 bg-white p-3 overflow-y-auto" data-testid="checklist-view">
+            {(content || (checklistItems ?? []).length > 0) && (
+              <input
+                type="text"
+                value={content}
+                onChange={(e) => {
+                  setContent(e.target.value);
+                  onSave(e.target.value);
+                }}
+                placeholder="Título de la lista..."
+                className="w-full text-base font-bold text-gray-900 border-0 border-b border-amber-200 pb-2 mb-2 focus:outline-none focus:border-amber-400 bg-transparent"
+                data-testid="checklist-title-input"
+              />
+            )}
             <div className="space-y-1">
               {(checklistItems ?? []).map((item, index) => (
                 <div key={index} className="flex items-center gap-2 py-1.5 border-b border-gray-100 last:border-0">

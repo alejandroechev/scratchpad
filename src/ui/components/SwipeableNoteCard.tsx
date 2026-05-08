@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { ArchiveBoxIcon, CameraIcon, TagIcon, CheckIcon, ListBulletIcon } from "@heroicons/react/24/outline";
+import { ArchiveBoxIcon, CameraIcon, TagIcon, CheckIcon, ListBulletIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import { NoteCard } from "./NoteCard.js";
 import type { Note } from "../../domain/models/note.js";
 
@@ -10,6 +10,7 @@ interface SwipeableNoteCardProps {
   onAddImage: (id: string, file: File) => void;
   onAddLabel: (id: string, label: string) => void;
   onConvertToChecklist: (id: string) => void;
+  onConvertToNote?: (id: string) => void;
   allLabels: string[];
   isSelected?: boolean;
   onToggleSelect?: (id: string) => void;
@@ -26,6 +27,7 @@ export function SwipeableNoteCard({
   onAddImage,
   onAddLabel,
   onConvertToChecklist,
+  onConvertToNote,
   allLabels,
   isSelected,
   onToggleSelect,
@@ -115,13 +117,21 @@ export function SwipeableNoteCard({
         >
           <TagIcon className="w-4 h-4" /><span>Etiqueta</span>
         </button>
-        {(note.checklistItems ?? []).length === 0 && (
+        {(note.checklistItems ?? []).length === 0 ? (
           <button
             onClick={() => { onConvertToChecklist(note.id); closePanel(); }}
             className="flex-1 bg-indigo-500 text-white flex flex-col items-center justify-center text-[10px] gap-0.5 px-1"
             data-testid={`swipe-checklist-${note.id}`}
           >
             <ListBulletIcon className="w-4 h-4" /><span>Lista</span>
+          </button>
+        ) : (
+          <button
+            onClick={() => { onConvertToNote?.(note.id); closePanel(); }}
+            className="flex-1 bg-amber-500 text-white flex flex-col items-center justify-center text-[10px] gap-0.5 px-1"
+            data-testid={`swipe-to-note-${note.id}`}
+          >
+            <DocumentTextIcon className="w-4 h-4" /><span>Nota</span>
           </button>
         )}
         <button
@@ -191,12 +201,19 @@ export function SwipeableNoteCard({
           >
             <TagIcon className="w-4 h-4 text-green-500" /> Agregar etiqueta
           </button>
-          {(note.checklistItems ?? []).length === 0 && (
+          {(note.checklistItems ?? []).length === 0 ? (
             <button
               onClick={() => { onConvertToChecklist(note.id); setContextMenu(null); }}
               className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
             >
               <ListBulletIcon className="w-4 h-4 text-indigo-500" /> Hacer lista
+            </button>
+          ) : (
+            <button
+              onClick={() => { onConvertToNote?.(note.id); setContextMenu(null); }}
+              className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
+            >
+              <DocumentTextIcon className="w-4 h-4 text-amber-500" /> Convertir a nota
             </button>
           )}
           <button

@@ -10,7 +10,7 @@ import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
-import { addImage, createNote, unarchiveNote, addLabel, mergeNotes, storeImageBlob, resetBackend, convertToChecklist, toggleChecklistItem, addChecklistItem, removeChecklistItem } from "./infra/store-provider.js";
+import { addImage, createNote, unarchiveNote, addLabel, mergeNotes, storeImageBlob, resetBackend, convertToChecklist, convertToNote, toggleChecklistItem, addChecklistItem, removeChecklistItem } from "./infra/store-provider.js";
 import { getActiveProfile, clearActiveProfile } from "./infra/profile-store.js";
 
 function AppContent() {
@@ -230,6 +230,10 @@ function AppContent() {
           }}
           onConvertToChecklist={async (id) => {
             await convertToChecklist(id);
+            await refresh();
+          }}
+          onConvertToNote={async (id) => {
+            await convertToNote(id);
             await refresh();
           }}
           allLabels={allLabels}

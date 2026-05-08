@@ -9,37 +9,44 @@ describe('Checklist', () => {
   });
 
   describe('convertToChecklist', () => {
-    it('splits content lines into checklist items', () => {
+    it('keeps first line as title, rest become checklist items', () => {
       const note = store.create('Buy milk\nBuy eggs\nBuy bread');
       const result = store.convertToChecklist(note.id);
-      expect(result.checklistItems).toHaveLength(3);
-      expect(result.checklistItems![0]).toEqual({ text: 'Buy milk', done: false });
-      expect(result.checklistItems![1]).toEqual({ text: 'Buy eggs', done: false });
-      expect(result.checklistItems![2]).toEqual({ text: 'Buy bread', done: false });
+      expect(result.content).toBe('Buy milk');
+      expect(result.checklistItems).toHaveLength(2);
+      expect(result.checklistItems![0]).toEqual({ text: 'Buy eggs', done: false });
+      expect(result.checklistItems![1]).toEqual({ text: 'Buy bread', done: false });
     });
 
-    it('clears content after conversion', () => {
+    it('sets first line as content (title) after conversion', () => {
       const note = store.create('Buy milk\nBuy eggs');
       const result = store.convertToChecklist(note.id);
-      expect(result.content).toBe('');
+      expect(result.content).toBe('Buy milk');
     });
 
     it('skips empty lines', () => {
       const note = store.create('Buy milk\n\n\nBuy eggs\n');
       const result = store.convertToChecklist(note.id);
-      expect(result.checklistItems).toHaveLength(2);
-      expect(result.checklistItems![0].text).toBe('Buy milk');
-      expect(result.checklistItems![1].text).toBe('Buy eggs');
+      expect(result.content).toBe('Buy milk');
+      expect(result.checklistItems).toHaveLength(1);
+      expect(result.checklistItems![0].text).toBe('Buy eggs');
     });
 
     it('does nothing if already has checklist items', () => {
-      const note = store.create('Original content');
+      const note = store.create('Title\nOriginal content');
       store.convertToChecklist(note.id);
       // Convert again — should not overwrite existing items
       const result = store.convertToChecklist(note.id);
       expect(result.checklistItems).toHaveLength(1);
       expect(result.checklistItems![0].text).toBe('Original content');
-      expect(result.content).toBe('');
+      expect(result.content).toBe('Title');
+    });
+
+    it('single line note becomes title with empty checklist', () => {
+      const note = store.create('Only title');
+      const result = store.convertToChecklist(note.id);
+      expect(result.content).toBe('Only title');
+      expect(result.checklistItems).toHaveLength(0);
     });
 
     it('throws for non-existent note', () => {
@@ -47,9 +54,39 @@ describe('Checklist', () => {
     });
   });
 
+  describe('convertToNote', () => {
+    it('joins title and items back into content lines', () => {
+      const note = store.create('Shopping\nMilk\nEggs');
+      store.convertToChecklist(note.id);
+      const result = store.convertToNote(note.id);
+      expect(result.content).toBe('Shopping\nMilk\nEggs');
+      expect(result.checklistItems).toHaveLength(0);
+    });
+
+    it('is no-op on note without checklist items', () => {
+      const note = store.create('Just a note');
+      const result = store.convertToNote(note.id);
+      expect(result.content).toBe('Just a note');
+      expect(result.checklistItems).toHaveLength(0);
+    });
+
+    it('handles checklist with no title (empty content)', () => {
+      const note = store.create('');
+      store.addChecklistItem(note.id, 'Item A');
+      store.addChecklistItem(note.id, 'Item B');
+      const result = store.convertToNote(note.id);
+      expect(result.content).toBe('Item A\nItem B');
+      expect(result.checklistItems).toHaveLength(0);
+    });
+
+    it('throws for non-existent note', () => {
+      expect(() => store.convertToNote('nope')).toThrow('Note not found');
+    });
+  });
+
   describe('toggleChecklistItem', () => {
     it('toggles item done status', () => {
-      const note = store.create('Item A\nItem B');
+      const note = store.create('Title\nItem A\nItem B');
       store.convertToChecklist(note.id);
 
       const toggled = store.toggleChecklistItem(note.id, 0);
@@ -61,7 +98,7 @@ describe('Checklist', () => {
     });
 
     it('throws on invalid index', () => {
-      const note = store.create('Item A');
+      const note = store.create('Title\nItem A');
       store.convertToChecklist(note.id);
 
       expect(() => store.toggleChecklistItem(note.id, -1)).toThrow('out of bounds');
@@ -75,7 +112,7 @@ describe('Checklist', () => {
 
   describe('addChecklistItem', () => {
     it('adds a new item with done=false', () => {
-      const note = store.create('Existing');
+      const note = store.create('Title\nExisting');
       store.convertToChecklist(note.id);
 
       const result = store.addChecklistItem(note.id, 'New item');
@@ -97,7 +134,7 @@ describe('Checklist', () => {
 
   describe('removeChecklistItem', () => {
     it('removes item at index', () => {
-      const note = store.create('A\nB\nC');
+      const note = store.create('Title\nA\nB\nC');
       store.convertToChecklist(note.id);
 
       const result = store.removeChecklistItem(note.id, 1);
@@ -107,7 +144,7 @@ describe('Checklist', () => {
     });
 
     it('throws on invalid index', () => {
-      const note = store.create('A\nB');
+      const note = store.create('Title\nA\nB');
       store.convertToChecklist(note.id);
 
       expect(() => store.removeChecklistItem(note.id, -1)).toThrow('out of bounds');

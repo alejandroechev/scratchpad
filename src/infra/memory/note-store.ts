@@ -130,10 +130,22 @@ export class InMemoryNoteStore implements NoteRepository {
     if (!note) throw new Error(`Note not found: ${noteId}`);
     if (note.checklistItems && note.checklistItems.length > 0) return { ...note, checklistItems: note.checklistItems.map(i => ({ ...i })) };
     const lines = note.content.split("\n").filter(l => l.trim().length > 0);
-    note.checklistItems = lines.map(text => ({ text, done: false }));
-    note.content = "";
+    note.content = lines.length > 0 ? lines[0] : "";
+    note.checklistItems = lines.slice(1).map(text => ({ text, done: false }));
     note.updatedAt = new Date().toISOString();
     return { ...note, checklistItems: note.checklistItems.map(i => ({ ...i })) };
+  }
+
+  convertToNote(noteId: string): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    const items = note.checklistItems ?? [];
+    if (items.length === 0) return { ...note };
+    const lines = note.content ? [note.content, ...items.map(i => i.text)] : items.map(i => i.text);
+    note.content = lines.join("\n");
+    note.checklistItems = [];
+    note.updatedAt = new Date().toISOString();
+    return { ...note, checklistItems: [] };
   }
 
   addChecklistItem(noteId: string, text: string): Note {

@@ -171,8 +171,24 @@ export async function convertToChecklist(noteId: string): Promise<Note> {
     if (!note) throw new Error(`Note not found: ${noteId}`);
     if (note.checklistItems && note.checklistItems.length > 0) return;
     const lines = note.content.split("\n").filter((l) => l.trim().length > 0);
-    note.checklistItems = lines.map((text) => ({ text, done: false }));
-    note.content = "";
+    note.content = lines.length > 0 ? lines[0] : "";
+    note.checklistItems = lines.slice(1).map((text) => ({ text, done: false }));
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[noteId];
+}
+
+export async function convertToNote(noteId: string): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    const items = note.checklistItems ?? [];
+    if (items.length === 0) return;
+    const lines = note.content ? [note.content, ...items.map((i) => i.text)] : items.map((i) => i.text);
+    note.content = lines.join("\n");
+    note.checklistItems = [];
     note.updatedAt = new Date().toISOString();
   });
   const doc = handle.doc()!;

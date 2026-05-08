@@ -275,10 +275,27 @@ export async function convertToChecklist(noteId: string): Promise<Note> {
   if (existing.length > 0) return snapshotToNote(note.getSnapshot());
   const content = note.get("content");
   const lines = content.split("\n").filter((l: string) => l.trim().length > 0);
-  for (const text of lines) {
+  note.set("content", lines.length > 0 ? lines[0] : "");
+  for (const text of lines.slice(1)) {
     items.push({ text, done: false });
   }
-  note.set("content", "");
+  note.set("updatedAt", new Date().toISOString());
+  return snapshotToNote(note.getSnapshot());
+}
+
+export async function convertToNote(noteId: string): Promise<Note> {
+  const client = await getClient();
+  const note = await client.notes.get(noteId).resolved;
+  if (!note) throw new Error(`Note not found: ${noteId}`);
+  const items = note.get("checklistItems");
+  const existing = items.getSnapshot();
+  if (existing.length === 0) return snapshotToNote(note.getSnapshot());
+  const content = note.get("content");
+  const lines = content ? [content, ...existing.map((i: { text: string }) => i.text)] : existing.map((i: { text: string }) => i.text);
+  note.set("content", lines.join("\n"));
+  while (items.length > 0) {
+    items.delete(items.length - 1);
+  }
   note.set("updatedAt", new Date().toISOString());
   return snapshotToNote(note.getSnapshot());
 }

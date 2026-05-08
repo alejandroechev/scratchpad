@@ -132,6 +132,7 @@ export const removeLabel = (noteId: string, label: string) => call<Note>("remove
 export const mergeNotes = (targetId: string, sourceIds: string[]) => call<Note>("mergeNotes", targetId, sourceIds);
 export const toggleChecklistItem = (noteId: string, itemIndex: number) => call<Note>("toggleChecklistItem", noteId, itemIndex);
 export const convertToChecklist = (noteId: string) => call<Note>("convertToChecklist", noteId);
+export const convertToNote = (noteId: string) => call<Note>("convertToNote", noteId);
 export const addChecklistItem = (noteId: string, text: string) => call<Note>("addChecklistItem", noteId, text);
 export const removeChecklistItem = (noteId: string, itemIndex: number) => call<Note>("removeChecklistItem", noteId, itemIndex);
 

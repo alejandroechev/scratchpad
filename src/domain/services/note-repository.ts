@@ -21,6 +21,7 @@ export interface NoteRepository {
   mergeNotes(targetId: string, sourceIds: string[]): Note;
   toggleChecklistItem(noteId: string, itemIndex: number): Note;
   convertToChecklist(noteId: string): Note;
+  convertToNote(id: string): Note;
   addChecklistItem(noteId: string, text: string): Note;
   removeChecklistItem(noteId: string, itemIndex: number): Note;
 }

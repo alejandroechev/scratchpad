@@ -111,6 +111,12 @@ export async function convertToChecklist(noteId: string): Promise<Note> {
   return memoryStore.convertToChecklist(noteId);
 }
 
+export async function convertToNote(noteId: string): Promise<Note> {
+  if (backend === "verdant") return (await verdant()).convertToNote(noteId);
+  if (backend === "automerge") return (await automerge()).convertToNote(noteId);
+  return memoryStore.convertToNote(noteId);
+}
+
 export async function addChecklistItem(noteId: string, text: string): Promise<Note> {
   if (backend === "verdant") return (await verdant()).addChecklistItem(noteId, text);
   if (backend === "automerge") return (await automerge()).addChecklistItem(noteId, text);

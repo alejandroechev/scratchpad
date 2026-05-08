@@ -67,6 +67,9 @@ export function NoteCard({ note, onClick, isSelected, onToggleSelect, selectionM
         )}
         {(note.checklistItems ?? []).length > 0 ? (
           <div className="text-sm flex-1 min-w-0">
+            {note.content && (
+              <p className="font-bold text-gray-900 truncate mb-0.5">{note.content}</p>
+            )}
             {(note.checklistItems ?? []).slice(0, 3).map((item, i) => (
               <div key={i} className={`flex items-center gap-1.5 ${item.done ? "line-through text-gray-400" : "text-gray-900"}`}>
                 <span className="text-xs">{item.done ? "✅" : "⬜"}</span>
