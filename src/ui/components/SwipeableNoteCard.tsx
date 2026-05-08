@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { ArchiveBoxIcon, CameraIcon, TagIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { ArchiveBoxIcon, CameraIcon, TagIcon, CheckIcon, ListBulletIcon } from "@heroicons/react/24/outline";
 import { NoteCard } from "./NoteCard.js";
 import type { Note } from "../../domain/models/note.js";
 
@@ -9,13 +9,14 @@ interface SwipeableNoteCardProps {
   onArchive: (id: string) => void;
   onAddImage: (id: string, file: File) => void;
   onAddLabel: (id: string, label: string) => void;
+  onConvertToChecklist: (id: string) => void;
   allLabels: string[];
   isSelected?: boolean;
   onToggleSelect?: (id: string) => void;
   selectionMode?: boolean;
 }
 
-const ACTION_PANEL_WIDTH = 300;
+const ACTION_PANEL_WIDTH = 360;
 const SWIPE_THRESHOLD = 60;
 
 export function SwipeableNoteCard({
@@ -24,6 +25,7 @@ export function SwipeableNoteCard({
   onArchive,
   onAddImage,
   onAddLabel,
+  onConvertToChecklist,
   allLabels,
   isSelected,
   onToggleSelect,
@@ -113,6 +115,15 @@ export function SwipeableNoteCard({
         >
           <TagIcon className="w-5 h-5" /><span>Etiqueta</span>
         </button>
+        {(note.checklistItems ?? []).length === 0 && (
+          <button
+            onClick={() => { onConvertToChecklist(note.id); closePanel(); }}
+            className="flex-1 bg-indigo-500 text-white flex flex-col items-center justify-center text-xs gap-1"
+            data-testid={`swipe-checklist-${note.id}`}
+          >
+            <ListBulletIcon className="w-5 h-5" /><span>Lista</span>
+          </button>
+        )}
         <button
           onClick={() => { onToggleSelect?.(note.id); closePanel(); }}
           className="flex-1 bg-cyan-500 text-white flex flex-col items-center justify-center text-xs gap-1"
@@ -180,6 +191,14 @@ export function SwipeableNoteCard({
           >
             <TagIcon className="w-4 h-4 text-green-500" /> Agregar etiqueta
           </button>
+          {(note.checklistItems ?? []).length === 0 && (
+            <button
+              onClick={() => { onConvertToChecklist(note.id); setContextMenu(null); }}
+              className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"
+            >
+              <ListBulletIcon className="w-4 h-4 text-indigo-500" /> Hacer lista
+            </button>
+          )}
           <button
             onClick={() => { onToggleSelect?.(note.id); setContextMenu(null); }}
             className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center gap-2"

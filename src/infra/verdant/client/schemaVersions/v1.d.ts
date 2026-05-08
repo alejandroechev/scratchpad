@@ -7,6 +7,7 @@ export type NoteSnapshot = {
   content: string;
   images: NoteImagesSnapshot;
   labels: NoteLabelsSnapshot;
+  checklistItems: NoteChecklistItemsSnapshot;
   isTask: boolean;
   taskDone: boolean;
   createdAt: string;
@@ -27,6 +28,7 @@ export type NoteInit = {
   content?: string;
   images?: NoteImagesInit;
   labels?: NoteLabelsInit;
+  checklistItems?: NoteChecklistItemsInit;
   isTask?: boolean;
   taskDone?: boolean;
   createdAt?: string;
@@ -42,6 +44,16 @@ export type NoteImagesItemInit = {
 };
 export type NoteImagesInit = NoteImagesItemInit[];
 export type NoteLabelsInit = string[];
+export type NoteChecklistItemsItemSnapshot = {
+  text: string;
+  done: boolean;
+};
+export type NoteChecklistItemsSnapshot = NoteChecklistItemsItemSnapshot[];
+export type NoteChecklistItemsItemInit = {
+  text?: string;
+  done?: boolean;
+};
+export type NoteChecklistItemsInit = NoteChecklistItemsItemInit[];
 
 export type MigrationTypes = {
   notes: { init: NoteInit; snapshot: NoteSnapshot };

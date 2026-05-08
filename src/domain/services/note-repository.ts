@@ -19,4 +19,8 @@ export interface NoteRepository {
   addLabel(noteId: string, label: string): Note;
   removeLabel(noteId: string, label: string): Note;
   mergeNotes(targetId: string, sourceIds: string[]): Note;
+  toggleChecklistItem(noteId: string, itemIndex: number): Note;
+  convertToChecklist(noteId: string): Note;
+  addChecklistItem(noteId: string, text: string): Note;
+  removeChecklistItem(noteId: string, itemIndex: number): Note;
 }

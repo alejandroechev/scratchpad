@@ -150,6 +150,62 @@ export async function removeLabel(noteId: string, label: string): Promise<Note> 
   return doc.notes[noteId];
 }
 
+export async function toggleChecklistItem(noteId: string, itemIndex: number): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    const items = note.checklistItems ?? [];
+    if (itemIndex < 0 || itemIndex >= items.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+    items[itemIndex].done = !items[itemIndex].done;
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[noteId];
+}
+
+export async function convertToChecklist(noteId: string): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (note.checklistItems && note.checklistItems.length > 0) return;
+    const lines = note.content.split("\n").filter((l) => l.trim().length > 0);
+    note.checklistItems = lines.map((text) => ({ text, done: false }));
+    note.content = "";
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[noteId];
+}
+
+export async function addChecklistItem(noteId: string, text: string): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (!note.checklistItems) note.checklistItems = [];
+    note.checklistItems.push({ text, done: false });
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[noteId];
+}
+
+export async function removeChecklistItem(noteId: string, itemIndex: number): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    const items = note.checklistItems ?? [];
+    if (itemIndex < 0 || itemIndex >= items.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+    items.splice(itemIndex, 1);
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[noteId];
+}
+
 export async function mergeNotes(targetId: string, sourceIds: string[]): Promise<Note> {
   const handle = await getDocHandle();
   handle.change((doc) => {

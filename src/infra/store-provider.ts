@@ -99,6 +99,30 @@ export async function mergeNotes(targetId: string, sourceIds: string[]): Promise
   return memoryStore.mergeNotes(targetId, sourceIds);
 }
 
+export async function toggleChecklistItem(noteId: string, itemIndex: number): Promise<Note> {
+  if (backend === "verdant") return (await verdant()).toggleChecklistItem(noteId, itemIndex);
+  if (backend === "automerge") return (await automerge()).toggleChecklistItem(noteId, itemIndex);
+  return memoryStore.toggleChecklistItem(noteId, itemIndex);
+}
+
+export async function convertToChecklist(noteId: string): Promise<Note> {
+  if (backend === "verdant") return (await verdant()).convertToChecklist(noteId);
+  if (backend === "automerge") return (await automerge()).convertToChecklist(noteId);
+  return memoryStore.convertToChecklist(noteId);
+}
+
+export async function addChecklistItem(noteId: string, text: string): Promise<Note> {
+  if (backend === "verdant") return (await verdant()).addChecklistItem(noteId, text);
+  if (backend === "automerge") return (await automerge()).addChecklistItem(noteId, text);
+  return memoryStore.addChecklistItem(noteId, text);
+}
+
+export async function removeChecklistItem(noteId: string, itemIndex: number): Promise<Note> {
+  if (backend === "verdant") return (await verdant()).removeChecklistItem(noteId, itemIndex);
+  if (backend === "automerge") return (await automerge()).removeChecklistItem(noteId, itemIndex);
+  return memoryStore.removeChecklistItem(noteId, itemIndex);
+}
+
 /** Subscribe to remote doc changes. Returns unsubscribe function. No-op for memory backend. */
 export async function onDocChange(callback: () => void): Promise<() => void> {
   if (backend === "verdant") {

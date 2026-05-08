@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
-import { ArrowLeftIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon, ClipboardDocumentIcon, PencilIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon, ClipboardDocumentIcon, PencilIcon, EyeIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { extractUrls } from "../../domain/models/note.js";
-import type { NoteImage } from "../../domain/models/note.js";
+import type { NoteImage, ChecklistItem } from "../../domain/models/note.js";
 import { ImageThumbnail } from "../components/ImageThumbnail.js";
 import { ImageViewerOverlay } from "../components/ImageViewerOverlay.js";
 import { MarkdownRenderer } from "../components/MarkdownRenderer.js";
@@ -14,6 +14,10 @@ interface NoteDetailPageProps {
   initialCreatedAt: string;
   initialUpdatedAt: string;
   images?: NoteImage[];
+  checklistItems?: ChecklistItem[];
+  onToggleChecklistItem?: (itemIndex: number) => void;
+  onAddChecklistItem?: (text: string) => void;
+  onRemoveChecklistItem?: (itemIndex: number) => void;
   onSave: (content: string) => void;
   onBack: () => void;
 }
@@ -22,14 +26,20 @@ export function NoteDetailPage({
   initialContent,
   initialUpdatedAt,
   images,
+  checklistItems,
+  onToggleChecklistItem,
+  onAddChecklistItem,
+  onRemoveChecklistItem,
   onSave,
   onBack,
 }: NoteDetailPageProps) {
   const [content, setContent] = useState(initialContent);
-  const [editing, setEditing] = useState(false);
+  const [showMarkdown, setShowMarkdown] = useState(false);
   const [viewingImage, setViewingImage] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef(content);
+
+  const isChecklist = (checklistItems ?? []).length > 0;
 
   // Keep ref in sync for cleanup effect
   useEffect(() => {
@@ -67,16 +77,18 @@ export function NoteDetailPage({
         }} className="text-white text-lg" data-testid="back-button">
           <ArrowLeftIcon className="w-5 h-5" />
         </button>
-        <h1 className="text-lg font-bold flex-1">Nota</h1>
-        <button
-          onClick={() => setEditing(!editing)}
-          className="text-white text-sm px-1 hover:text-amber-200"
-          data-testid="toggle-mode-button"
-          title={editing ? "Ver" : "Editar"}
-        >
-          {editing ? <EyeIcon className="w-5 h-5" /> : <PencilIcon className="w-5 h-5" />}
-        </button>
-        {editing && (
+        <h1 className="text-lg font-bold flex-1">{isChecklist ? "Lista" : "Nota"}</h1>
+        {!isChecklist && (
+          <button
+            onClick={() => setShowMarkdown(!showMarkdown)}
+            className="text-white text-sm px-1 hover:text-amber-200"
+            data-testid="toggle-mode-button"
+            title={showMarkdown ? "Editar" : "Ver Markdown"}
+          >
+            {showMarkdown ? <PencilIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+          </button>
+        )}
+        {!isChecklist && !showMarkdown && (
           <>
             <button
               onClick={async () => {
@@ -126,23 +138,52 @@ export function NoteDetailPage({
       </header>
 
       <div className="flex-1 p-3 flex flex-col gap-2 overflow-hidden min-h-0">
-        {editing ? (
-          <textarea
-            ref={textareaRef}
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="flex-1 min-h-0 rounded-lg border border-amber-200 bg-white p-3 text-sm text-gray-900
-                       resize-none focus:outline-none focus:ring-2 focus:ring-amber-400 overflow-y-auto"
-            data-testid="note-editor"
-          />
-        ) : (
+        {isChecklist ? (
+          <div className="flex-1 min-h-0 rounded-lg border border-amber-200 bg-white p-3 overflow-y-auto" data-testid="checklist-view">
+            <div className="space-y-1">
+              {(checklistItems ?? []).map((item, index) => (
+                <div key={index} className="flex items-center gap-2 py-1.5 border-b border-gray-100 last:border-0">
+                  <input
+                    type="checkbox"
+                    checked={item.done}
+                    onChange={() => onToggleChecklistItem?.(index)}
+                    className="w-5 h-5 accent-amber-600 cursor-pointer flex-shrink-0"
+                    data-testid={`checklist-item-${index}`}
+                  />
+                  <span className={`flex-1 text-sm ${item.done ? "line-through text-gray-400" : "text-gray-900"}`}>
+                    {item.text}
+                  </span>
+                  <button
+                    onClick={() => onRemoveChecklistItem?.(index)}
+                    className="text-gray-300 hover:text-red-500 flex-shrink-0"
+                    data-testid={`checklist-remove-${index}`}
+                  >
+                    <XMarkIcon className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 flex gap-2">
+              <input
+                type="text"
+                placeholder="Agregar elemento..."
+                className="flex-1 border border-amber-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                data-testid="checklist-add-input"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && e.currentTarget.value.trim()) {
+                    onAddChecklistItem?.(e.currentTarget.value.trim());
+                    e.currentTarget.value = "";
+                  }
+                }}
+              />
+            </div>
+            <p className="mt-2 text-xs text-amber-700">
+              {(checklistItems ?? []).filter(i => i.done).length}/{(checklistItems ?? []).length} completados
+            </p>
+          </div>
+        ) : showMarkdown ? (
           <div
-            className="flex-1 min-h-0 rounded-lg border border-amber-200 bg-white p-3 overflow-y-auto cursor-text"
-            onClick={(e) => {
-              // Don't switch to edit mode when clicking checkboxes
-              if (e.target instanceof HTMLInputElement && e.target.type === 'checkbox') return;
-              setEditing(true);
-            }}
+            className="flex-1 min-h-0 rounded-lg border border-amber-200 bg-white p-3 overflow-y-auto"
             data-testid="markdown-view"
           >
             <MarkdownRenderer
@@ -154,6 +195,15 @@ export function NoteDetailPage({
               }}
             />
           </div>
+        ) : (
+          <textarea
+            ref={textareaRef}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="flex-1 min-h-0 rounded-lg border border-amber-200 bg-white p-3 text-sm text-gray-900
+                       resize-none focus:outline-none focus:ring-2 focus:ring-amber-400 overflow-y-auto"
+            data-testid="note-editor"
+          />
         )}
 
         {images && images.length > 0 && (

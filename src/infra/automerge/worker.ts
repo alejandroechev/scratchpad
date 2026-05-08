@@ -218,6 +218,54 @@ const handlers: Record<string, (...args: any[]) => unknown> = {
     return toPlain(handle!.doc()!.notes[noteId]);
   },
 
+  toggleChecklistItem(noteId: string, itemIndex: number): Note {
+    handle!.change((doc) => {
+      const note = doc.notes[noteId];
+      if (!note) throw new Error(`Note not found: ${noteId}`);
+      const items = note.checklistItems ?? [];
+      if (itemIndex < 0 || itemIndex >= items.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+      items[itemIndex].done = !items[itemIndex].done;
+      note.updatedAt = new Date().toISOString();
+    });
+    return toPlain(handle!.doc()!.notes[noteId]);
+  },
+
+  convertToChecklist(noteId: string): Note {
+    handle!.change((doc) => {
+      const note = doc.notes[noteId];
+      if (!note) throw new Error(`Note not found: ${noteId}`);
+      if (note.checklistItems && note.checklistItems.length > 0) return;
+      const lines = note.content.split("\n").filter((l) => l.trim().length > 0);
+      note.checklistItems = lines.map((text) => ({ text, done: false }));
+      note.content = "";
+      note.updatedAt = new Date().toISOString();
+    });
+    return toPlain(handle!.doc()!.notes[noteId]);
+  },
+
+  addChecklistItem(noteId: string, text: string): Note {
+    handle!.change((doc) => {
+      const note = doc.notes[noteId];
+      if (!note) throw new Error(`Note not found: ${noteId}`);
+      if (!note.checklistItems) note.checklistItems = [];
+      note.checklistItems.push({ text, done: false });
+      note.updatedAt = new Date().toISOString();
+    });
+    return toPlain(handle!.doc()!.notes[noteId]);
+  },
+
+  removeChecklistItem(noteId: string, itemIndex: number): Note {
+    handle!.change((doc) => {
+      const note = doc.notes[noteId];
+      if (!note) throw new Error(`Note not found: ${noteId}`);
+      const items = note.checklistItems ?? [];
+      if (itemIndex < 0 || itemIndex >= items.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+      items.splice(itemIndex, 1);
+      note.updatedAt = new Date().toISOString();
+    });
+    return toPlain(handle!.doc()!.notes[noteId]);
+  },
+
   mergeNotes(targetId: string, sourceIds: string[]): Note {
     handle!.change((doc) => {
       const target = doc.notes[targetId];

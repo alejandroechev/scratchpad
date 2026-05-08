@@ -115,6 +115,46 @@ export class InMemoryNoteStore implements NoteRepository {
     return { ...note, labels: [...note.labels] };
   }
 
+  toggleChecklistItem(noteId: string, itemIndex: number): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    const items = note.checklistItems ?? [];
+    if (itemIndex < 0 || itemIndex >= items.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+    items[itemIndex].done = !items[itemIndex].done;
+    note.updatedAt = new Date().toISOString();
+    return { ...note, checklistItems: items.map(i => ({ ...i })) };
+  }
+
+  convertToChecklist(noteId: string): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (note.checklistItems && note.checklistItems.length > 0) return { ...note, checklistItems: note.checklistItems.map(i => ({ ...i })) };
+    const lines = note.content.split("\n").filter(l => l.trim().length > 0);
+    note.checklistItems = lines.map(text => ({ text, done: false }));
+    note.content = "";
+    note.updatedAt = new Date().toISOString();
+    return { ...note, checklistItems: note.checklistItems.map(i => ({ ...i })) };
+  }
+
+  addChecklistItem(noteId: string, text: string): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    if (!note.checklistItems) note.checklistItems = [];
+    note.checklistItems.push({ text, done: false });
+    note.updatedAt = new Date().toISOString();
+    return { ...note, checklistItems: note.checklistItems.map(i => ({ ...i })) };
+  }
+
+  removeChecklistItem(noteId: string, itemIndex: number): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    const items = note.checklistItems ?? [];
+    if (itemIndex < 0 || itemIndex >= items.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+    items.splice(itemIndex, 1);
+    note.updatedAt = new Date().toISOString();
+    return { ...note, checklistItems: items.map(i => ({ ...i })) };
+  }
+
   mergeNotes(targetId: string, sourceIds: string[]): Note {
     const target = this.notes.get(targetId);
     if (!target) throw new Error(`Note not found: ${targetId}`);

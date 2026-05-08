@@ -144,6 +144,18 @@ export type NoteLabels = ListEntity<
   NoteLabelsSnapshot
 >;
 export type NoteLabelsItem = string;
+export type NoteChecklistItems = ListEntity<
+  NoteChecklistItemsInit,
+  NoteChecklistItemsDestructured,
+  NoteChecklistItemsSnapshot
+>;
+export type NoteChecklistItemsItem = ObjectEntity<
+  NoteChecklistItemsItemInit,
+  NoteChecklistItemsItemDestructured,
+  NoteChecklistItemsItemSnapshot
+>;
+export type NoteChecklistItemsItemText = string;
+export type NoteChecklistItemsItemDone = boolean;
 export type NoteIsTask = boolean;
 export type NoteTaskDone = boolean;
 export type NoteCreatedAt = string;
@@ -154,6 +166,7 @@ export type NoteInit = {
   content?: string;
   images?: NoteImagesInit;
   labels?: NoteLabelsInit;
+  checklistItems?: NoteChecklistItemsInit;
   isTask?: boolean;
   taskDone?: boolean;
   createdAt?: string;
@@ -169,11 +182,17 @@ export type NoteImagesItemInit = {
 };
 export type NoteImagesInit = NoteImagesItemInit[];
 export type NoteLabelsInit = string[];
+export type NoteChecklistItemsItemInit = {
+  text?: string;
+  done?: boolean;
+};
+export type NoteChecklistItemsInit = NoteChecklistItemsItemInit[];
 export type NoteDestructured = {
   id: string;
   content: string;
   images: NoteImages;
   labels: NoteLabels;
+  checklistItems: NoteChecklistItems;
   isTask: boolean;
   taskDone: boolean;
   createdAt: string;
@@ -189,11 +208,17 @@ export type NoteImagesItemDestructured = {
 };
 export type NoteImagesDestructured = NoteImagesItem[];
 export type NoteLabelsDestructured = string[];
+export type NoteChecklistItemsItemDestructured = {
+  text: string;
+  done: boolean;
+};
+export type NoteChecklistItemsDestructured = NoteChecklistItemsItem[];
 export type NoteSnapshot = {
   id: string;
   content: string;
   images: NoteImagesSnapshot;
   labels: NoteLabelsSnapshot;
+  checklistItems: NoteChecklistItemsSnapshot;
   isTask: boolean;
   taskDone: boolean;
   createdAt: string;
@@ -209,6 +234,11 @@ export type NoteImagesItemSnapshot = {
 };
 export type NoteImagesSnapshot = NoteImagesItemSnapshot[];
 export type NoteLabelsSnapshot = string[];
+export type NoteChecklistItemsItemSnapshot = {
+  text: string;
+  done: boolean;
+};
+export type NoteChecklistItemsSnapshot = NoteChecklistItemsItemSnapshot[];
 
 /** Index filters for Note **/
 

@@ -5,11 +5,17 @@ export interface NoteImage {
   createdAt: string;
 }
 
+export interface ChecklistItem {
+  text: string;
+  done: boolean;
+}
+
 export interface Note {
   id: string;
   content: string;
   images?: NoteImage[];
   labels?: string[];
+  checklistItems?: ChecklistItem[];
   createdAt: string;
   updatedAt: string;
   archived: boolean;
@@ -36,6 +42,7 @@ export function createNote(id: string, content: string): Note {
     content,
     images: [],
     labels: [],
+    checklistItems: [],
     createdAt: now,
     updatedAt: now,
     archived: false,

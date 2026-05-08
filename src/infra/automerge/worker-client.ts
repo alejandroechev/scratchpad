@@ -129,7 +129,11 @@ export const addImage = (noteId: string, image: NoteImage) => call<Note>("addIma
 export const removeImage = (noteId: string, blobId: string) => call<Note>("removeImage", noteId, blobId);
 export const addLabel = (noteId: string, label: string) => call<Note>("addLabel", noteId, label);
 export const removeLabel = (noteId: string, label: string) => call<Note>("removeLabel", noteId, label);
-export const mergeNotes= (targetId: string, sourceIds: string[]) => call<Note>("mergeNotes", targetId, sourceIds);
+export const mergeNotes = (targetId: string, sourceIds: string[]) => call<Note>("mergeNotes", targetId, sourceIds);
+export const toggleChecklistItem = (noteId: string, itemIndex: number) => call<Note>("toggleChecklistItem", noteId, itemIndex);
+export const convertToChecklist = (noteId: string) => call<Note>("convertToChecklist", noteId);
+export const addChecklistItem = (noteId: string, text: string) => call<Note>("addChecklistItem", noteId, text);
+export const removeChecklistItem = (noteId: string, itemIndex: number) => call<Note>("removeChecklistItem", noteId, itemIndex);
 
 // --- Doc change subscription ---
 export function onDocChange(callback: () => void): () => void {

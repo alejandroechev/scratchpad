@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { CameraIcon } from "@heroicons/react/24/outline";
+import { CameraIcon, PhotoIcon } from "@heroicons/react/24/outline";
 
 interface QuickAddBarProps {
   onAdd: (content: string) => void;
@@ -10,6 +10,7 @@ interface QuickAddBarProps {
 export function QuickAddBar({ onAdd, onAddAndOpen, onAddImage }: QuickAddBarProps) {
   const [text, setText] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = () => {
     const trimmed = text.trim();
@@ -51,9 +52,18 @@ export function QuickAddBar({ onAdd, onAddAndOpen, onAddImage }: QuickAddBarProp
           ref={fileInputRef}
           type="file"
           accept="image/*"
+          capture="environment"
           onChange={handleFileChange}
           className="hidden"
           data-testid="quick-add-file-input"
+        />
+        <input
+          ref={galleryInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+          data-testid="quick-add-gallery-input"
         />
         <button
           onClick={handleSubmit}
@@ -68,8 +78,18 @@ export function QuickAddBar({ onAdd, onAddAndOpen, onAddImage }: QuickAddBarProp
           className="rounded-lg bg-amber-700 px-3 py-2 text-sm font-medium text-white
                      hover:bg-amber-800"
           data-testid="quick-add-image-button"
+          title="Tomar foto"
         >
           <CameraIcon className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => galleryInputRef.current?.click()}
+          className="rounded-lg bg-amber-700 px-3 py-2 text-sm font-medium text-white
+                     hover:bg-amber-800"
+          data-testid="quick-add-gallery-button"
+          title="Elegir imagen"
+        >
+          <PhotoIcon className="w-5 h-5" />
         </button>
       </div>
     </div>

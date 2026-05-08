@@ -2,9 +2,7 @@ import { CameraIcon, CheckIcon } from "@heroicons/react/24/outline";
 import type { Note } from "../../domain/models/note.js";
 import { extractUrls } from "../../domain/models/note.js";
 import { ImageThumbnail } from "./ImageThumbnail.js";
-import { MarkdownRenderer } from "./MarkdownRenderer.js";
 import { openUrl } from "../../infra/platform.js";
-import { countCheckboxes, hasCheckboxes } from "../../domain/services/markdown-checkbox.js";
 
 interface NoteCardProps {
   note: Note;
@@ -67,24 +65,37 @@ export function NoteCard({ note, onClick, isSelected, onToggleSelect, selectionM
             )}
           </div>
         )}
-        <div className="text-sm break-words flex-1">
-          <MarkdownRenderer content={note.content} mode="truncate" />
-        </div>
+        {(note.checklistItems ?? []).length > 0 ? (
+          <div className="text-sm flex-1 min-w-0">
+            {(note.checklistItems ?? []).slice(0, 3).map((item, i) => (
+              <div key={i} className={`flex items-center gap-1.5 ${item.done ? "line-through text-gray-400" : "text-gray-900"}`}>
+                <span className="text-xs">{item.done ? "✅" : "⬜"}</span>
+                <span className="truncate">{item.text}</span>
+              </div>
+            ))}
+            {(note.checklistItems ?? []).length > 3 && (
+              <p className="text-[11px] text-amber-400 ml-5">+{(note.checklistItems ?? []).length - 3} más...</p>
+            )}
+          </div>
+        ) : (
+          <p className="text-sm break-words flex-1 line-clamp-2 text-gray-900">{note.content}</p>
+        )}
       </div>
 
-      {hasCheckboxes(note.content) && (() => {
-        const { total, checked } = countCheckboxes(note.content);
+      {(note.checklistItems ?? []).length > 0 && (() => {
+        const items = note.checklistItems ?? [];
+        const checked = items.filter(i => i.done).length;
         return (
           <span
             className="mt-1 inline-block text-[11px] font-medium text-amber-700 bg-amber-100 rounded-full px-2 py-0.5"
             data-testid="checklist-badge"
           >
-            {checked}/{total} ✓
+            {checked}/{items.length} ✓
           </span>
         );
       })()}
 
-      {isTruncated && (
+      {isTruncated && (note.checklistItems ?? []).length === 0 && (
         <p className="text-[11px] text-amber-400 -mt-0.5 ml-0.5" data-testid="more-indicator">más...</p>
       )}
 

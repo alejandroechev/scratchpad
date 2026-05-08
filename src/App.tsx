@@ -10,7 +10,7 @@ import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
-import { addImage, createNote, unarchiveNote, addLabel, mergeNotes, storeImageBlob, resetBackend } from "./infra/store-provider.js";
+import { addImage, createNote, unarchiveNote, addLabel, mergeNotes, storeImageBlob, resetBackend, convertToChecklist, toggleChecklistItem, addChecklistItem, removeChecklistItem } from "./infra/store-provider.js";
 import { getActiveProfile, clearActiveProfile } from "./infra/profile-store.js";
 
 function AppContent() {
@@ -119,6 +119,10 @@ function AppContent() {
         initialCreatedAt={note?.createdAt ?? ""}
         initialUpdatedAt={note?.updatedAt ?? ""}
         images={note?.images}
+        checklistItems={note?.checklistItems}
+        onToggleChecklistItem={async (i) => { await toggleChecklistItem(selectedNoteId, i); await refresh(); }}
+        onAddChecklistItem={async (text) => { await addChecklistItem(selectedNoteId, text); await refresh(); }}
+        onRemoveChecklistItem={async (i) => { await removeChecklistItem(selectedNoteId, i); await refresh(); }}
         onSave={async (content) => {
           await editNote(selectedNoteId, content);
         }}
@@ -222,6 +226,10 @@ function AppContent() {
           }}
           onAddLabel={async (id, label) => {
             await addLabel(id, label);
+            await refresh();
+          }}
+          onConvertToChecklist={async (id) => {
+            await convertToChecklist(id);
             await refresh();
           }}
           allLabels={allLabels}

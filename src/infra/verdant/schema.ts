@@ -19,6 +19,14 @@ const notes = schema.collection({
       }),
     }),
     labels: schema.fields.array({ items: schema.fields.string() }),
+    checklistItems: schema.fields.array({
+      items: schema.fields.object({
+        properties: {
+          text: schema.fields.string({ default: "" }),
+          done: schema.fields.boolean({ default: false }),
+        },
+      }),
+    }),
     isTask: schema.fields.boolean({ default: false }),
     taskDone: schema.fields.boolean({ default: false }),
     createdAt: schema.fields.string({ default: () => new Date().toISOString() }),

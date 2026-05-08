@@ -56,12 +56,9 @@ test.describe("ScratchPad Notes", () => {
     // Click the note
     await page.getByText("Detail test note").click();
 
-    // Should see rendered markdown view (not editor textarea)
-    await expect(page.getByTestId("markdown-view")).toBeVisible();
-    await expect(page.getByTestId("note-editor")).not.toBeVisible();
-
-    // Note content should be rendered in the markdown view
-    await expect(page.getByTestId("markdown-view")).toContainText("Detail test note");
+    // Detail page defaults to textarea editor (not markdown view)
+    await expect(page.getByTestId("note-editor")).toBeVisible();
+    await expect(page.getByTestId("markdown-view")).not.toBeVisible();
 
     // Go back
     await page.getByTestId("back-button").click();
@@ -76,14 +73,7 @@ test.describe("ScratchPad Notes", () => {
 
     await page.getByText("Original content").click();
 
-    // Should be in view mode initially
-    await expect(page.getByTestId("markdown-view")).toBeVisible();
-    await expect(page.getByTestId("note-editor")).not.toBeVisible();
-
-    // Switch to edit mode via toggle button
-    await page.getByTestId("toggle-mode-button").click();
-
-    // Now editor should be visible
+    // Detail page defaults to editor mode — no toggle needed
     const editor = page.getByTestId("note-editor");
     await expect(editor).toBeVisible();
     await editor.clear();
@@ -140,53 +130,42 @@ test.describe("ScratchPad Notes", () => {
     await expect(noteCard.getByText("trabajo")).toBeVisible();
   });
 
-  test("can create and toggle a markdown checklist", async ({ page }) => {
+  test("can convert a note to checklist and toggle items", async ({ page }) => {
     await page.goto("/");
     const input = page.getByTestId("quick-add-input");
-
-    // Create a simple note first
-    await input.fill("Checklist note");
+    await input.fill("Shopping list");
     await page.getByTestId("quick-add-button").click();
 
-    // Open note detail
-    await page.getByText("Checklist note").click();
-
-    // Switch to edit mode
-    await page.getByTestId("toggle-mode-button").click();
-
-    // Fill with checklist content
+    // Open note detail to add multiline content via the textarea editor
+    await page.getByText("Shopping list").click();
     const editor = page.getByTestId("note-editor");
     await editor.clear();
-    await editor.fill("- [ ] Buy milk\n- [ ] Buy eggs\n- [x] Buy bread");
-
-    // Wait for auto-save
+    await editor.fill("Buy milk\nBuy eggs\nBuy bread");
     await page.waitForTimeout(1200);
-
-    // Go back to list
     await page.getByTestId("back-button").click();
 
-    // Should see checklist badge showing "1/3 ✓"
-    await expect(page.getByTestId("checklist-badge")).toContainText("1/3");
+    // Right-click to convert to checklist
+    await page.getByText("Buy milk").click({ button: "right" });
+    await page.getByText("Hacer lista").click();
 
-    // Open note again — should be in markdown view with checkboxes
+    // Should see checklist badge on card
+    await expect(page.getByTestId("checklist-badge")).toBeVisible();
+    await expect(page.getByText("0/3 ✓")).toBeVisible();
+
+    // Click note to see checklist detail
     await page.getByText("Buy milk").click();
-    await expect(page.getByTestId("markdown-view")).toBeVisible();
 
-    // Checkboxes should be rendered
-    const checkboxes = page.getByTestId("markdown-view").locator('input[type="checkbox"]');
-    await expect(checkboxes).toHaveCount(3);
+    // Should see checklist view
+    await expect(page.getByTestId("checklist-view")).toBeVisible();
 
-    // Toggle the first checkbox (unchecked → checked)
-    await checkboxes.first().click();
-
-    // Wait for auto-save
-    await page.waitForTimeout(1200);
+    // Toggle first item
+    await page.getByTestId("checklist-item-0").click();
 
     // Go back
     await page.getByTestId("back-button").click();
 
-    // Badge should now show 2/3
-    await expect(page.getByTestId("checklist-badge")).toContainText("2/3");
+    // Badge should update
+    await expect(page.getByText("1/3 ✓")).toBeVisible();
   });
 
   test("can search in archive page", async ({ page }) => {

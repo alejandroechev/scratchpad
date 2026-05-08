@@ -85,6 +85,10 @@ function snapshotToNote(s: NoteSnapshot): Note {
       createdAt: img.createdAt,
     })),
     labels: [...(s.labels || [])],
+    checklistItems: (s.checklistItems ?? []).map((item: { text: string; done: boolean }) => ({
+      text: item.text,
+      done: item.done,
+    })),
     createdAt: s.createdAt,
     updatedAt: s.updatedAt,
     archived: s.archived,
@@ -247,6 +251,58 @@ export async function mergeNotes(targetId: string, sourceIds: string[]): Promise
 
   target.set("updatedAt", new Date().toISOString());
   return snapshotToNote(target.getSnapshot());
+}
+
+export async function toggleChecklistItem(noteId: string, itemIndex: number): Promise<Note> {
+  const client = await getClient();
+  const note = await client.notes.get(noteId).resolved;
+  if (!note) throw new Error(`Note not found: ${noteId}`);
+  const items = note.get("checklistItems");
+  const snapshot = items.getSnapshot();
+  if (itemIndex < 0 || itemIndex >= snapshot.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+  const item = items.get(itemIndex);
+  item.set("done", !snapshot[itemIndex].done);
+  note.set("updatedAt", new Date().toISOString());
+  return snapshotToNote(note.getSnapshot());
+}
+
+export async function convertToChecklist(noteId: string): Promise<Note> {
+  const client = await getClient();
+  const note = await client.notes.get(noteId).resolved;
+  if (!note) throw new Error(`Note not found: ${noteId}`);
+  const items = note.get("checklistItems");
+  const existing = items.getSnapshot();
+  if (existing.length > 0) return snapshotToNote(note.getSnapshot());
+  const content = note.get("content");
+  const lines = content.split("\n").filter((l: string) => l.trim().length > 0);
+  for (const text of lines) {
+    items.push({ text, done: false });
+  }
+  note.set("content", "");
+  note.set("updatedAt", new Date().toISOString());
+  return snapshotToNote(note.getSnapshot());
+}
+
+export async function addChecklistItem(noteId: string, text: string): Promise<Note> {
+  const client = await getClient();
+  const note = await client.notes.get(noteId).resolved;
+  if (!note) throw new Error(`Note not found: ${noteId}`);
+  const items = note.get("checklistItems");
+  items.push({ text, done: false });
+  note.set("updatedAt", new Date().toISOString());
+  return snapshotToNote(note.getSnapshot());
+}
+
+export async function removeChecklistItem(noteId: string, itemIndex: number): Promise<Note> {
+  const client = await getClient();
+  const note = await client.notes.get(noteId).resolved;
+  if (!note) throw new Error(`Note not found: ${noteId}`);
+  const items = note.get("checklistItems");
+  const snapshot = items.getSnapshot();
+  if (itemIndex < 0 || itemIndex >= snapshot.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+  items.delete(itemIndex);
+  note.set("updatedAt", new Date().toISOString());
+  return snapshotToNote(note.getSnapshot());
 }
 
 export async function onDocChange(callback: () => void): Promise<() => void> {
