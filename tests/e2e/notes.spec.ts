@@ -1,14 +1,23 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Page } from "@playwright/test";
+
+/** Helper: create a note via Nota button, fill content in detail, go back */
+async function addNote(page: Page, content: string) {
+  await page.getByTestId("quick-add-note").click();
+  const editor = page.getByTestId("note-editor");
+  await expect(editor).toBeVisible();
+  await editor.fill(content);
+  await page.waitForTimeout(1200);
+  await page.getByTestId("back-button").click();
+  await expect(page.getByText(content.split("\n")[0])).toBeVisible();
+}
 
 test.describe("ScratchPad Notes", () => {
   test("can add a note and see it in the list", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByText("ScratchPad")).toBeVisible();
 
-    // Add a note
-    const input = page.getByTestId("quick-add-input");
-    await input.fill("My first test note");
-    await page.getByTestId("quick-add-button").click();
+    // Add a note via Nota button
+    await addNote(page, "My first test note");
 
     // Should appear in the list
     await expect(page.getByText("My first test note")).toBeVisible();
@@ -16,9 +25,7 @@ test.describe("ScratchPad Notes", () => {
 
   test("can add a note with a URL and see the link chip", async ({ page }) => {
     await page.goto("/");
-    const input = page.getByTestId("quick-add-input");
-    await input.fill("Check out https://example.com for more info");
-    await page.getByTestId("quick-add-button").click();
+    await addNote(page, "Check out https://example.com for more info");
 
     // URL chips render as buttons (not links) in the note card
     await expect(page.locator("button", { hasText: "example.com" })).toBeVisible();
@@ -26,13 +33,10 @@ test.describe("ScratchPad Notes", () => {
 
   test("can search notes by text", async ({ page }) => {
     await page.goto("/");
-    const input = page.getByTestId("quick-add-input");
 
     // Add two notes
-    await input.fill("Buy groceries");
-    await page.getByTestId("quick-add-button").click();
-    await input.fill("Read a book about TypeScript");
-    await page.getByTestId("quick-add-button").click();
+    await addNote(page, "Buy groceries");
+    await addNote(page, "Read a book about TypeScript");
 
     // Click search chip to expand search input
     const searchChip = page.getByTestId("search-chip");
@@ -49,9 +53,7 @@ test.describe("ScratchPad Notes", () => {
 
   test("can click a note to view detail and go back", async ({ page }) => {
     await page.goto("/");
-    const input = page.getByTestId("quick-add-input");
-    await input.fill("Detail test note");
-    await page.getByTestId("quick-add-button").click();
+    await addNote(page, "Detail test note");
 
     // Click the note
     await page.getByText("Detail test note").click();
@@ -62,14 +64,12 @@ test.describe("ScratchPad Notes", () => {
 
     // Go back
     await page.getByTestId("back-button").click();
-    await expect(page.getByTestId("quick-add-input")).toBeVisible();
+    await expect(page.getByTestId("quick-add-note")).toBeVisible();
   });
 
   test("can edit a note from the detail page", async ({ page }) => {
     await page.goto("/");
-    const input = page.getByTestId("quick-add-input");
-    await input.fill("Original content");
-    await page.getByTestId("quick-add-button").click();
+    await addNote(page, "Original content");
 
     await page.getByText("Original content").click();
 
@@ -89,10 +89,8 @@ test.describe("ScratchPad Notes", () => {
 
   test("can archive a note and unarchive it from archive view", async ({ page }) => {
     await page.goto("/");
-    // Add a note
-    const input = page.getByTestId("quick-add-input");
-    await input.fill("Archive test note");
-    await page.getByTestId("quick-add-button").click();
+    await addNote(page, "Archive test note");
+
     // Right-click the note to open context menu, then archive
     await page.getByText("Archive test note").click({ button: "right" });
     await page.getByText("Archivar").click();
@@ -112,9 +110,7 @@ test.describe("ScratchPad Notes", () => {
 
   test("can add a label to a note via context menu", async ({ page }) => {
     await page.goto("/");
-    const input = page.getByTestId("quick-add-input");
-    await input.fill("Label test note");
-    await page.getByTestId("quick-add-button").click();
+    await addNote(page, "Label test note");
     
     // Right-click the note to open context menu
     await page.getByText("Label test note").click({ button: "right" });
@@ -132,17 +128,7 @@ test.describe("ScratchPad Notes", () => {
 
   test("can convert a note to checklist and toggle items", async ({ page }) => {
     await page.goto("/");
-    const input = page.getByTestId("quick-add-input");
-    await input.fill("Shopping list");
-    await page.getByTestId("quick-add-button").click();
-
-    // Open note detail to add multiline content via the textarea editor
-    await page.getByText("Shopping list").click();
-    const editor = page.getByTestId("note-editor");
-    await editor.clear();
-    await editor.fill("Buy milk\nBuy eggs\nBuy bread");
-    await page.waitForTimeout(1200);
-    await page.getByTestId("back-button").click();
+    await addNote(page, "Shopping list\nBuy milk\nBuy eggs\nBuy bread");
 
     // Right-click to convert to checklist
     await page.getByText("Buy milk").click({ button: "right" });
@@ -170,13 +156,10 @@ test.describe("ScratchPad Notes", () => {
 
   test("can search in archive page", async ({ page }) => {
     await page.goto("/");
-    const input = page.getByTestId("quick-add-input");
 
     // Add two notes
-    await input.fill("Archived groceries note");
-    await page.getByTestId("quick-add-button").click();
-    await input.fill("Archived work note");
-    await page.getByTestId("quick-add-button").click();
+    await addNote(page, "Archived groceries note");
+    await addNote(page, "Archived work note");
 
     // Archive first note via context menu
     await page.getByText("Archived groceries note").click({ button: "right" });
