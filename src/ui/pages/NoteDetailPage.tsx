@@ -18,6 +18,7 @@ interface NoteDetailPageProps {
   onToggleChecklistItem?: (itemIndex: number) => void;
   onAddChecklistItem?: (text: string) => void;
   onRemoveChecklistItem?: (itemIndex: number) => void;
+  onEditChecklistItem?: (itemIndex: number, newText: string) => void;
   onSave: (content: string) => void;
   onBack: () => void;
 }
@@ -30,6 +31,7 @@ export function NoteDetailPage({
   onToggleChecklistItem,
   onAddChecklistItem,
   onRemoveChecklistItem,
+  onEditChecklistItem,
   onSave,
   onBack,
 }: NoteDetailPageProps) {
@@ -163,9 +165,19 @@ export function NoteDetailPage({
                     className="w-5 h-5 accent-amber-600 cursor-pointer flex-shrink-0"
                     data-testid={`checklist-item-${index}`}
                   />
-                  <span className={`flex-1 text-sm ${item.done ? "line-through text-gray-400" : "text-gray-900"}`}>
-                    {item.text}
-                  </span>
+                  <input
+                    type="text"
+                    defaultValue={item.text}
+                    key={`${index}-${item.text}`}
+                    onBlur={(e) => {
+                      const newText = e.target.value.trim();
+                      if (newText && newText !== item.text) {
+                        onEditChecklistItem?.(index, newText);
+                      }
+                    }}
+                    className={`flex-1 text-sm border-0 bg-transparent focus:outline-none focus:ring-0 ${item.done ? "line-through text-gray-400" : "text-gray-900"}`}
+                    data-testid={`checklist-item-text-${index}`}
+                  />
                   <button
                     onClick={() => onRemoveChecklistItem?.(index)}
                     className="text-gray-300 hover:text-red-500 flex-shrink-0"

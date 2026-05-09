@@ -135,6 +135,7 @@ export const convertToChecklist = (noteId: string) => call<Note>("convertToCheck
 export const convertToNote = (noteId: string) => call<Note>("convertToNote", noteId);
 export const addChecklistItem = (noteId: string, text: string) => call<Note>("addChecklistItem", noteId, text);
 export const removeChecklistItem = (noteId: string, itemIndex: number) => call<Note>("removeChecklistItem", noteId, itemIndex);
+export const editChecklistItem = (noteId: string, itemIndex: number, newText: string) => call<Note>("editChecklistItem", noteId, itemIndex, newText);
 
 // --- Doc change subscription ---
 export function onDocChange(callback: () => void): () => void {

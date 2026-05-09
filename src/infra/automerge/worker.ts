@@ -280,6 +280,18 @@ const handlers: Record<string, (...args: any[]) => unknown> = {
     return toPlain(handle!.doc()!.notes[noteId]);
   },
 
+  editChecklistItem(noteId: string, itemIndex: number, newText: string): Note {
+    handle!.change((doc) => {
+      const note = doc.notes[noteId];
+      if (!note) throw new Error(`Note not found: ${noteId}`);
+      const items = note.checklistItems ?? [];
+      if (itemIndex < 0 || itemIndex >= items.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+      items[itemIndex].text = newText;
+      note.updatedAt = new Date().toISOString();
+    });
+    return toPlain(handle!.doc()!.notes[noteId]);
+  },
+
   mergeNotes(targetId: string, sourceIds: string[]): Note {
     handle!.change((doc) => {
       const target = doc.notes[targetId];

@@ -111,4 +111,55 @@ describe("mergeNotes", () => {
     const result = store.mergeNotes(target.id, [source.id]);
     expect(result.archived).toBe(false);
   });
+
+  it("merges checklist items from both notes", () => {
+    const target = store.create("Target");
+    store.addChecklistItem(target.id, "Buy milk");
+    store.addChecklistItem(target.id, "Buy eggs");
+
+    const source = store.create("Source");
+    store.addChecklistItem(source.id, "Call dentist");
+    store.addChecklistItem(source.id, "Fix bike");
+
+    const result = store.mergeNotes(target.id, [source.id]);
+    expect(result.checklistItems).toHaveLength(4);
+    expect(result.checklistItems!.map(i => i.text)).toEqual([
+      "Buy milk", "Buy eggs", "Call dentist", "Fix bike",
+    ]);
+  });
+
+  it("creates checklist on target when merging checklist into plain note", () => {
+    const target = store.create("Plain target");
+    const source = store.create("Source");
+    store.addChecklistItem(source.id, "Task A");
+
+    const result = store.mergeNotes(target.id, [source.id]);
+    expect(result.checklistItems).toHaveLength(1);
+    expect(result.checklistItems![0].text).toBe("Task A");
+  });
+
+  it("preserves existing checklist when merging plain note into checklist note", () => {
+    const target = store.create("Target");
+    store.addChecklistItem(target.id, "Existing item");
+
+    const source = store.create("Plain source");
+
+    const result = store.mergeNotes(target.id, [source.id]);
+    expect(result.checklistItems).toHaveLength(1);
+    expect(result.checklistItems![0].text).toBe("Existing item");
+  });
+
+  it("preserves done/undone status of checklist items after merge", () => {
+    const target = store.create("Target");
+    store.addChecklistItem(target.id, "Done item");
+    store.toggleChecklistItem(target.id, 0);
+
+    const source = store.create("Source");
+    store.addChecklistItem(source.id, "Undone item");
+
+    const result = store.mergeNotes(target.id, [source.id]);
+    expect(result.checklistItems).toHaveLength(2);
+    expect(result.checklistItems![0]).toEqual({ text: "Done item", done: true });
+    expect(result.checklistItems![1]).toEqual({ text: "Undone item", done: false });
+  });
 });

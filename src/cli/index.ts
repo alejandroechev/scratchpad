@@ -148,4 +148,24 @@ program
     }
   });
 
+program
+  .command("edit-item")
+  .description("Edit a checklist item's text")
+  .argument("<id>", "Note ID")
+  .argument("<index>", "Item index (0-based)")
+  .argument("<text...>", "New text")
+  .action((id: string, indexStr: string, textParts: string[]) => {
+    const note = store.getById(id);
+    if (!note) { console.error(`❌ Note not found: ${id}`); process.exit(1); }
+    const index = parseInt(indexStr, 10);
+    if (isNaN(index) || index < 0) { console.error(`❌ Invalid index: ${indexStr}`); process.exit(1); }
+    try {
+      const updated = store.editChecklistItem(id, index, textParts.join(" "));
+      console.log(`✅ Updated item ${index} in note ${updated.id}`);
+    } catch (err) {
+      console.error(`❌ ${(err as Error).message}`);
+      process.exit(1);
+    }
+  });
+
 program.parse();

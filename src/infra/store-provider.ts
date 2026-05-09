@@ -129,6 +129,12 @@ export async function removeChecklistItem(noteId: string, itemIndex: number): Pr
   return memoryStore.removeChecklistItem(noteId, itemIndex);
 }
 
+export async function editChecklistItem(noteId: string, itemIndex: number, newText: string): Promise<Note> {
+  if (backend === "verdant") return (await verdant()).editChecklistItem(noteId, itemIndex, newText);
+  if (backend === "automerge") return (await automerge()).editChecklistItem(noteId, itemIndex, newText);
+  return memoryStore.editChecklistItem(noteId, itemIndex, newText);
+}
+
 /** Subscribe to remote doc changes. Returns unsubscribe function. No-op for memory backend. */
 export async function onDocChange(callback: () => void): Promise<() => void> {
   if (backend === "verdant") {

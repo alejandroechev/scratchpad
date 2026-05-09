@@ -24,4 +24,5 @@ export interface NoteRepository {
   convertToNote(id: string): Note;
   addChecklistItem(noteId: string, text: string): Note;
   removeChecklistItem(noteId: string, itemIndex: number): Note;
+  editChecklistItem(noteId: string, itemIndex: number, newText: string): Note;
 }

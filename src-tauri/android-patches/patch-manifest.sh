@@ -1,5 +1,5 @@
 #!/bin/bash
-# Patches AndroidManifest.xml to add share intent filter for receiving images.
+# Patches AndroidManifest.xml to add share intent filter for receiving text and images.
 # Also bumps minSdk to 28 (required by tauri-plugin-mobile-sharetarget).
 # Run AFTER `tauri android init` since that command regenerates these files.
 
@@ -11,14 +11,16 @@ if [ ! -f "$MANIFEST" ]; then
   exit 1
 fi
 
-# Patch manifest with share intent filter
+# Patch manifest with share intent filter (text, images, and other content)
 sed -i '/<\/activity>/i \
             <intent-filter>\
                 <action android:name="android.intent.action.SEND" \/>\
                 <category android:name="android.intent.category.DEFAULT" \/>\
                 <data android:mimeType="image\/*" \/>\
+                <data android:mimeType="text\/*" \/>\
+                <data android:mimeType="*\/*" \/>\
             <\/intent-filter>' "$MANIFEST"
-echo "✅ Patched AndroidManifest.xml with share intent filter (image/*)"
+echo "✅ Patched AndroidManifest.xml with share intent filter (image/*, text/*, */*)"
 
 # Bump minSdk to 28 (required by tauri-plugin-mobile-sharetarget)
 if [ -f "$GRADLE" ]; then

@@ -322,6 +322,19 @@ export async function removeChecklistItem(noteId: string, itemIndex: number): Pr
   return snapshotToNote(note.getSnapshot());
 }
 
+export async function editChecklistItem(noteId: string, itemIndex: number, newText: string): Promise<Note> {
+  const client = await getClient();
+  const note = await client.notes.get(noteId).resolved;
+  if (!note) throw new Error(`Note not found: ${noteId}`);
+  const items = note.get("checklistItems");
+  const snapshot = items.getSnapshot();
+  if (itemIndex < 0 || itemIndex >= snapshot.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+  const item = items.get(itemIndex);
+  item.set("text", newText);
+  note.set("updatedAt", new Date().toISOString());
+  return snapshotToNote(note.getSnapshot());
+}
+
 export async function onDocChange(callback: () => void): Promise<() => void> {
   const client = await getClient();
   return client.subscribe("operation", callback);

@@ -5,12 +5,11 @@ import { QuickAddBar } from "./ui/components/QuickAddBar";
 import { NoteList } from "./ui/components/NoteList";
 import { NoteDetailPage } from "./ui/pages/NoteDetailPage";
 import { ArchivePage } from "./ui/pages/ArchivePage";
-import { MigrationPage } from "./ui/pages/MigrationPage";
 import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
-import { addImage, createNote, unarchiveNote, addLabel, mergeNotes, storeImageBlob, resetBackend, convertToChecklist, convertToNote, toggleChecklistItem, addChecklistItem, removeChecklistItem } from "./infra/store-provider.js";
+import { addImage, createNote, unarchiveNote, addLabel, mergeNotes, storeImageBlob, resetBackend, convertToChecklist, convertToNote, toggleChecklistItem, addChecklistItem, removeChecklistItem, editChecklistItem } from "./infra/store-provider.js";
 import { getActiveProfile, clearActiveProfile } from "./infra/profile-store.js";
 
 function AppContent() {
@@ -19,11 +18,10 @@ function AppContent() {
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [showInfo, setShowInfo] = useState(false);
   const [showArchive, setShowArchive] = useState(false);
-  const [showMigration, setShowMigration] = useState(false);
   const [selectedNoteIds, setSelectedNoteIds] = useState<Set<string>>(new Set());
   const activeProfile = getActiveProfile();
   const filters = useMemo(() => ({ search: search || undefined, label: activeLabel ?? undefined }), [search, activeLabel]);
-  const { notes, loading, addNote, editNote, archiveNote, refresh } = useNotes(filters);
+  const { notes, loading, editNote, archiveNote, refresh } = useNotes(filters);
 
   const allLabels = useMemo(() => [...new Set(notes.flatMap(n => n.labels ?? []))].sort(), [notes]);
 
@@ -106,10 +104,6 @@ function AppContent() {
     );
   }
 
-  if (showMigration) {
-    return <MigrationPage onClose={() => { setShowMigration(false); refresh(); }} />;
-  }
-
   if (selectedNoteId) {
     const note = notes.find((n) => n.id === selectedNoteId);
     return (
@@ -123,6 +117,7 @@ function AppContent() {
         onToggleChecklistItem={async (i) => { await toggleChecklistItem(selectedNoteId, i); await refresh(); }}
         onAddChecklistItem={async (text) => { await addChecklistItem(selectedNoteId, text); await refresh(); }}
         onRemoveChecklistItem={async (i) => { await removeChecklistItem(selectedNoteId, i); await refresh(); }}
+        onEditChecklistItem={async (i, text) => { await editChecklistItem(selectedNoteId, i, text); await refresh(); }}
         onSave={async (content) => {
           await editNote(selectedNoteId, content);
         }}
@@ -164,28 +159,21 @@ function AppContent() {
           </div>
         </header>
 
-        {showInfo && (
-          <>
-            <SyncInfo />
-            <div className="mx-3 mb-2">
-              <button
-                onClick={() => setShowMigration(true)}
-                className="w-full py-1.5 px-3 bg-amber-700 text-white text-xs rounded-lg hover:bg-amber-800"
-              >
-                Migrar datos desde Automerge
-              </button>
-            </div>
-          </>
-        )}
+        {showInfo && <SyncInfo />}
 
         <QuickAddBar
-          onAdd={addNote}
-          onAddAndOpen={async (content) => {
-            const note = await createNote(content);
+          onAddNote={async () => {
+            const note = await createNote("");
             await refresh();
             setSelectedNoteId(note.id);
           }}
-          onAddImage={async (file) => {
+          onAddList={async () => {
+            const note = await createNote("");
+            await convertToChecklist(note.id);
+            await refresh();
+            setSelectedNoteId(note.id);
+          }}
+          onAddFromCamera={async (file) => {
             const { blobId, sizeBytes } = await storeImageBlob(file);
             const note = await createNote("");
             await addImage(note.id, {
@@ -194,6 +182,18 @@ function AppContent() {
               sizeBytes,
               createdAt: new Date().toISOString(),
             });
+            await refresh();
+          }}
+          onAddFromGallery={async (file) => {
+            const { blobId, sizeBytes } = await storeImageBlob(file);
+            const note = await createNote("");
+            await addImage(note.id, {
+              blobId,
+              fileName: file.name,
+              sizeBytes,
+              createdAt: new Date().toISOString(),
+            });
+            await refresh();
           }}
         />
         <FilterChipRow

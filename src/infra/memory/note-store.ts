@@ -167,6 +167,16 @@ export class InMemoryNoteStore implements NoteRepository {
     return { ...note, checklistItems: items.map(i => ({ ...i })) };
   }
 
+  editChecklistItem(noteId: string, itemIndex: number, newText: string): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    const items = note.checklistItems ?? [];
+    if (itemIndex < 0 || itemIndex >= items.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+    items[itemIndex].text = newText;
+    note.updatedAt = new Date().toISOString();
+    return { ...note, checklistItems: items.map(i => ({ ...i })) };
+  }
+
   mergeNotes(targetId: string, sourceIds: string[]): Note {
     const target = this.notes.get(targetId);
     if (!target) throw new Error(`Note not found: ${targetId}`);
@@ -195,6 +205,12 @@ export class InMemoryNoteStore implements NoteRepository {
             target.labels = [...(target.labels ?? []), label];
             existingLabels.add(label);
           }
+        }
+      }
+      if (source.checklistItems?.length) {
+        if (!target.checklistItems) target.checklistItems = [];
+        for (const item of source.checklistItems) {
+          target.checklistItems.push({ text: item.text, done: item.done });
         }
       }
       source.archived = true;

@@ -1,11 +1,17 @@
 /**
- * Listens for Android share intents (images shared to ScratchPad).
- * Creates a new note with the shared image attached.
+ * Listens for Android share intents (text and images shared to ScratchPad).
+ * Creates a new note with the shared content.
  *
  * Uses a queue-based approach: polls on startup and on each app focus event.
  * Only active on mobile (Tauri Android/iOS).
  * All imports are dynamic to avoid triggering automerge init on desktop.
  */
+
+async function handleTextIntent(text: string): Promise<void> {
+  const { createNote } = await import("./store-provider.js");
+  await createNote(text);
+  console.log("📝 Nota creada desde texto compartido:", text.slice(0, 50));
+}
 
 async function handleImageIntent(contentUri: string): Promise<void> {
   const { readFile } = await import("@tauri-apps/plugin-fs");
@@ -24,6 +30,10 @@ async function handleImageIntent(contentUri: string): Promise<void> {
   console.log("📸 Nota creada desde imagen compartida:", note.id);
 }
 
+function isContentUri(raw: string): boolean {
+  return raw.startsWith("content://") || raw.startsWith("file://");
+}
+
 async function drainIntentQueue(): Promise<void> {
   const { popIntentQueue } = await import(
     "tauri-plugin-mobile-sharetarget-api"
@@ -31,7 +41,11 @@ async function drainIntentQueue(): Promise<void> {
   let raw = await popIntentQueue();
   while (raw) {
     try {
-      await handleImageIntent(raw);
+      if (isContentUri(raw)) {
+        await handleImageIntent(raw);
+      } else {
+        await handleTextIntent(raw);
+      }
     } catch (err) {
       console.error("Error procesando intent compartido:", err);
     }

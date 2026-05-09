@@ -222,6 +222,20 @@ export async function removeChecklistItem(noteId: string, itemIndex: number): Pr
   return doc.notes[noteId];
 }
 
+export async function editChecklistItem(noteId: string, itemIndex: number, newText: string): Promise<Note> {
+  const handle = await getDocHandle();
+  handle.change((doc) => {
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    const items = note.checklistItems ?? [];
+    if (itemIndex < 0 || itemIndex >= items.length) throw new Error(`Checklist item index out of bounds: ${itemIndex}`);
+    items[itemIndex].text = newText;
+    note.updatedAt = new Date().toISOString();
+  });
+  const doc = handle.doc()!;
+  return doc.notes[noteId];
+}
+
 export async function mergeNotes(targetId: string, sourceIds: string[]): Promise<Note> {
   const handle = await getDocHandle();
   handle.change((doc) => {
@@ -254,6 +268,12 @@ export async function mergeNotes(targetId: string, sourceIds: string[]): Promise
             target.labels.push(label);
             existing.add(label);
           }
+        }
+      }
+      if (source.checklistItems?.length) {
+        if (!target.checklistItems) target.checklistItems = [];
+        for (const item of source.checklistItems) {
+          target.checklistItems.push({ text: item.text, done: item.done });
         }
       }
       doc.notes[id].archived = true;

@@ -81,7 +81,7 @@ export function NoteCard({ note, onClick, isSelected, onToggleSelect, selectionM
             )}
           </div>
         ) : (
-          <p className="text-sm break-words flex-1 line-clamp-2 text-gray-900">{note.content}</p>
+          <p className="text-sm break-words flex-1 line-clamp-2 text-gray-900 whitespace-pre-line">{note.content}</p>
         )}
       </div>
 
