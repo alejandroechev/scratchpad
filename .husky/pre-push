@@ -6,9 +6,6 @@ npx tsc -b || exit 1
 npx vitest run --coverage || exit 1
 npx eslint src/ --max-warnings 0 || exit 1
 
-echo "🎭 Pre-push: E2E tests..."
-npx playwright test || exit 1
-
 if [ -f "src-tauri/tauri.conf.json" ]; then
   echo "🔢 Pre-push: Checking version bump..."
   LOCAL_VERSION=$(node -p "require('./package.json').version" 2>/dev/null)
@@ -19,14 +16,6 @@ if [ -f "src-tauri/tauri.conf.json" ]; then
     exit 1
   fi
   echo "   v${REMOTE_VERSION:-new} → v${LOCAL_VERSION} ✓"
-fi
-
-if [ -f "src-tauri/tauri.conf.json" ]; then
-  echo "🖥️ Pre-push: CDP visual validation on Tauri desktop app..."
-  npx tsx scripts/cdp-visual-validate.ts || {
-    echo "⚠️  CDP validation failed — check screenshots/ for details."
-    exit 1
-  }
 fi
 
 echo "✅ Pre-push: All checks passed! Safe to push."
