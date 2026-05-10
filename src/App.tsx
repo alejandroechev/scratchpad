@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { isNoteEmpty } from "./domain/models/note.js";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useNotes } from "./ui/hooks/useNotes";
 import { QuickAddBar } from "./ui/components/QuickAddBar";
@@ -9,7 +10,7 @@ import { FilterChipRow } from "./ui/components/FilterChipRow";
 import { SyncInfo } from "./ui/components/SyncInfo";
 import { SyncStatus } from "./ui/components/SyncStatus";
 import { SyncAuthGate } from "./ui/components/SyncAuthGate";
-import { addImage, createNote, unarchiveNote, addLabel, mergeNotes, storeImageBlob, resetBackend, convertToChecklist, convertToNote, toggleChecklistItem, addChecklistItem, removeChecklistItem, editChecklistItem } from "./infra/store-provider.js";
+import { addImage, createNote, unarchiveNote, addLabel, mergeNotes, storeImageBlob, resetBackend, convertToChecklist, convertToNote, toggleChecklistItem, addChecklistItem, removeChecklistItem, editChecklistItem, deleteNote } from "./infra/store-provider.js";
 import { getActiveProfile, clearActiveProfile } from "./infra/profile-store.js";
 
 function AppContent() {
@@ -169,7 +170,7 @@ function AppContent() {
           }}
           onAddList={async () => {
             const note = await createNote("");
-            await convertToChecklist(note.id);
+            await addChecklistItem(note.id, "");
             await refresh();
             setSelectedNoteId(note.id);
           }}
@@ -213,7 +214,15 @@ function AppContent() {
         <NoteList
           notes={notes}
           onNoteClick={setSelectedNoteId}
-          onArchive={archiveNote}
+          onArchive={async (id) => {
+            const note = notes.find(n => n.id === id);
+            if (note && isNoteEmpty(note)) {
+              await deleteNote(id);
+              await refresh();
+            } else {
+              await archiveNote(id);
+            }
+          }}
           onAddImage={async (id, file) => {
             const { blobId, sizeBytes } = await storeImageBlob(file);
             await addImage(id, {

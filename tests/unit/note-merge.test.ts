@@ -162,4 +162,38 @@ describe("mergeNotes", () => {
     expect(result.checklistItems![0]).toEqual({ text: "Done item", done: true });
     expect(result.checklistItems![1]).toEqual({ text: "Undone item", done: false });
   });
+
+  it("merges two list notes keeping all items from both", () => {
+    const target = store.create("Shopping");
+    store.addChecklistItem(target.id, "Milk");
+    store.addChecklistItem(target.id, "Eggs");
+    store.toggleChecklistItem(target.id, 0);
+
+    const source = store.create("Errands");
+    store.addChecklistItem(source.id, "Dentist");
+    store.addChecklistItem(source.id, "Bike repair");
+    store.toggleChecklistItem(source.id, 1);
+
+    const result = store.mergeNotes(target.id, [source.id]);
+    expect(result.content).toBe("Shopping\n---\nErrands");
+    expect(result.checklistItems).toHaveLength(4);
+    expect(result.checklistItems!.map(i => i.text)).toEqual([
+      "Milk", "Eggs", "Dentist", "Bike repair",
+    ]);
+    expect(result.checklistItems!.map(i => i.done)).toEqual([
+      true, false, false, true,
+    ]);
+  });
+});
+
+describe("addChecklistItem for Lista button", () => {
+  it("creates a checklist note recognized by UI when adding empty item", () => {
+    const store = new InMemoryNoteStore();
+    const note = store.create("");
+    const result = store.addChecklistItem(note.id, "");
+    expect(result.checklistItems).toHaveLength(1);
+    expect(result.checklistItems![0]).toEqual({ text: "", done: false });
+    // UI check: (checklistItems ?? []).length > 0
+    expect((result.checklistItems ?? []).length > 0).toBe(true);
+  });
 });

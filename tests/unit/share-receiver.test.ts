@@ -27,7 +27,7 @@ vi.mock("../../src/infra/store-provider.js", () => ({
 }));
 
 // Import the module under test AFTER mocks are set up
-import { initShareReceiver } from "../../src/infra/share-receiver.js";
+import { initShareReceiver, extractTextFromIntent } from "../../src/infra/share-receiver.js";
 
 describe("share-receiver", () => {
   beforeEach(() => {
@@ -190,6 +190,96 @@ describe("share-receiver", () => {
       await initShareReceiver();
 
       expect(mockListen).toHaveBeenCalledWith("tauri://focus", expect.any(Function));
+    });
+  });
+
+  describe("extractTextFromIntent", () => {
+    it("extracts URL-encoded text from a raw intent string", () => {
+      const raw =
+        "#Intent;action=android.intent.action.SEND;type=text/plain;S.android.intent.extra.TEXT=https%3A%2F%2Fgithub.com%2Falejandroechev%2Fscratchpad;end";
+      expect(extractTextFromIntent(raw)).toBe(
+        "https://github.com/alejandroechev/scratchpad"
+      );
+    });
+
+    it("extracts plain text without encoding", () => {
+      const raw =
+        "#Intent;action=android.intent.action.SEND;S.android.intent.extra.TEXT=Hello world;end";
+      expect(extractTextFromIntent(raw)).toBe("Hello world");
+    });
+
+    it("returns null when EXTRA_TEXT is missing from intent", () => {
+      const raw = "#Intent;action=android.intent.action.SEND;type=image/jpeg;end";
+      expect(extractTextFromIntent(raw)).toBeNull();
+    });
+
+    it("returns raw value when decodeURIComponent fails", () => {
+      const raw =
+        "#Intent;S.android.intent.extra.TEXT=%E0%A4%A;end";
+      const result = extractTextFromIntent(raw);
+      expect(result).toBe("%E0%A4%A");
+    });
+  });
+
+  describe("raw intent string handling", () => {
+    it("extracts text from raw #Intent; string and creates note", async () => {
+      const rawIntent =
+        "#Intent;action=android.intent.action.SEND;type=text/plain;S.android.intent.extra.TEXT=https%3A%2F%2Fexample.com;end";
+      mockPopIntentQueue
+        .mockResolvedValueOnce(rawIntent)
+        .mockResolvedValueOnce(null);
+      mockCreateNote.mockResolvedValue({ id: "n1", content: "" });
+
+      await initShareReceiver();
+
+      expect(mockCreateNote).toHaveBeenCalledWith("https://example.com");
+    });
+
+    it("warns and skips when raw intent has no EXTRA_TEXT", async () => {
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const rawIntent =
+        "#Intent;action=android.intent.action.SEND;type=image/jpeg;end";
+      mockPopIntentQueue
+        .mockResolvedValueOnce(rawIntent)
+        .mockResolvedValueOnce(null);
+
+      await initShareReceiver();
+
+      expect(mockCreateNote).not.toHaveBeenCalled();
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining("Intent sin texto"),
+        expect.any(String)
+      );
+      warnSpy.mockRestore();
+    });
+
+    it("plain text still routes to text handler", async () => {
+      mockPopIntentQueue
+        .mockResolvedValueOnce("just some plain text")
+        .mockResolvedValueOnce(null);
+      mockCreateNote.mockResolvedValue({ id: "n1", content: "" });
+
+      await initShareReceiver();
+
+      expect(mockCreateNote).toHaveBeenCalledWith("just some plain text");
+    });
+
+    it("content:// URI still routes to image handler", async () => {
+      const uri = "content://media/external/images/999";
+      const fakeBytes = new Uint8Array([0xff]);
+      mockPopIntentQueue
+        .mockResolvedValueOnce(uri)
+        .mockResolvedValueOnce(null);
+      mockReadFile.mockResolvedValue(fakeBytes);
+      mockStoreImageBlob.mockResolvedValue({ blobId: "b1", sizeBytes: 1 });
+      mockCreateNote.mockResolvedValue({ id: "img-n", content: "" });
+      mockAddImage.mockResolvedValue({ id: "img-n", content: "", images: [] });
+
+      await initShareReceiver();
+
+      expect(mockReadFile).toHaveBeenCalledWith(uri);
+      expect(mockCreateNote).toHaveBeenCalledWith("");
+      expect(mockAddImage).toHaveBeenCalledTimes(1);
     });
   });
 });

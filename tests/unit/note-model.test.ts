@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractUrls, createNote } from '../../src/domain/models/note';
+import { extractUrls, createNote, isNoteEmpty } from '../../src/domain/models/note';
 
 describe('extractUrls', () => {
   it('returns empty array for text with no URLs', () => {
@@ -34,6 +34,38 @@ describe('extractUrls', () => {
 
   it('returns empty array for empty string', () => {
     expect(extractUrls('')).toEqual([]);
+  });
+});
+
+describe('isNoteEmpty', () => {
+  it('returns true for a note with no content, images, or checklist items', () => {
+    const note = createNote('e1', '');
+    expect(isNoteEmpty(note)).toBe(true);
+  });
+
+  it('returns true for whitespace-only content', () => {
+    const note = createNote('e2', '   \n\t ');
+    expect(isNoteEmpty(note)).toBe(true);
+  });
+
+  it('returns false when note has text content', () => {
+    const note = createNote('e3', 'hello');
+    expect(isNoteEmpty(note)).toBe(false);
+  });
+
+  it('returns false when note has images', () => {
+    const note = { ...createNote('e4', ''), images: [{ blobId: 'abc', fileName: 'img.png', sizeBytes: 100, createdAt: '' }] };
+    expect(isNoteEmpty(note)).toBe(false);
+  });
+
+  it('returns false when note has checklist items', () => {
+    const note = { ...createNote('e5', ''), checklistItems: [{ text: 'task', done: false }] };
+    expect(isNoteEmpty(note)).toBe(false);
+  });
+
+  it('returns true when images and checklistItems are undefined', () => {
+    const note = { ...createNote('e6', ''), images: undefined, checklistItems: undefined };
+    expect(isNoteEmpty(note)).toBe(true);
   });
 });
 

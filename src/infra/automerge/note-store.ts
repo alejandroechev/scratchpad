@@ -273,7 +273,7 @@ export async function mergeNotes(targetId: string, sourceIds: string[]): Promise
       if (source.checklistItems?.length) {
         if (!target.checklistItems) target.checklistItems = [];
         for (const item of source.checklistItems) {
-          target.checklistItems.push({ text: item.text, done: item.done });
+          target.checklistItems.push({ text: String(item.text), done: Boolean(item.done) });
         }
       }
       doc.notes[id].archived = true;

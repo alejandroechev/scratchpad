@@ -29,6 +29,12 @@ export interface UpdateNoteInput {
   content: string;
 }
 
+export function isNoteEmpty(note: Note): boolean {
+  return note.content.trim() === "" &&
+    (note.images ?? []).length === 0 &&
+    (note.checklistItems ?? []).length === 0;
+}
+
 const URL_REGEX = /https?:\/\/[^\s<>"{}|\\^`[\]]+/g;
 
 export function extractUrls(text: string): string[] {

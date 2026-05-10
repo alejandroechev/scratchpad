@@ -34,6 +34,19 @@ function isContentUri(raw: string): boolean {
   return raw.startsWith("content://") || raw.startsWith("file://");
 }
 
+/** Extract EXTRA_TEXT from a raw Android intent URI string */
+export function extractTextFromIntent(raw: string): string | null {
+  const match = raw.match(/S\.android\.intent\.extra\.TEXT=([^;]*)/);
+  if (match) {
+    try {
+      return decodeURIComponent(match[1]);
+    } catch {
+      return match[1];
+    }
+  }
+  return null;
+}
+
 async function drainIntentQueue(): Promise<void> {
   const { popIntentQueue } = await import(
     "tauri-plugin-mobile-sharetarget-api"
@@ -43,6 +56,13 @@ async function drainIntentQueue(): Promise<void> {
     try {
       if (isContentUri(raw)) {
         await handleImageIntent(raw);
+      } else if (raw.startsWith("#Intent;")) {
+        const text = extractTextFromIntent(raw);
+        if (text) {
+          await handleTextIntent(text);
+        } else {
+          console.warn("Intent sin texto extraíble:", raw.slice(0, 100));
+        }
       } else {
         await handleTextIntent(raw);
       }
