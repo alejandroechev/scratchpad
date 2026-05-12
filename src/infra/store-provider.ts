@@ -135,6 +135,12 @@ export async function editChecklistItem(noteId: string, itemIndex: number, newTe
   return memoryStore.editChecklistItem(noteId, itemIndex, newText);
 }
 
+export async function setHideCompleted(noteId: string, hide: boolean): Promise<Note> {
+  if (backend === "verdant") return (await verdant()).setHideCompleted(noteId, hide);
+  if (backend === "automerge") return (await automerge()).setHideCompleted(noteId, hide);
+  return memoryStore.setHideCompleted(noteId, hide);
+}
+
 /** Subscribe to remote doc changes. Returns unsubscribe function. No-op for memory backend. */
 export async function onDocChange(callback: () => void): Promise<() => void> {
   if (backend === "verdant") {

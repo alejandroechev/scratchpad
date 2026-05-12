@@ -3,6 +3,7 @@ import type { Note } from "../../domain/models/note.js";
 import { extractUrls } from "../../domain/models/note.js";
 import { ImageThumbnail } from "./ImageThumbnail.js";
 import { openUrl } from "../../infra/platform.js";
+import { getLabelColor } from "../../domain/services/label-color.js";
 
 interface NoteCardProps {
   note: Note;
@@ -70,15 +71,22 @@ export function NoteCard({ note, onClick, isSelected, onToggleSelect, selectionM
             {note.content && (
               <p className="font-bold text-gray-900 truncate mb-0.5">{note.content}</p>
             )}
-            {(note.checklistItems ?? []).slice(0, 3).map((item, i) => (
-              <div key={i} className={`flex items-center gap-1.5 ${item.done ? "line-through text-gray-400" : "text-gray-900"}`}>
-                <span className="text-xs">{item.done ? "✅" : "⬜"}</span>
-                <span className="truncate">{item.text}</span>
-              </div>
-            ))}
-            {(note.checklistItems ?? []).length > 3 && (
-              <p className="text-[11px] text-amber-400 ml-5">+{(note.checklistItems ?? []).length - 3} más...</p>
-            )}
+            {(() => {
+              const visibleItems = (note.checklistItems ?? []).filter(i => !note.hideCompleted || !i.done);
+              return (
+                <>
+                  {visibleItems.slice(0, 3).map((item, i) => (
+                    <div key={i} className={`flex items-center gap-1.5 ${item.done ? "line-through text-gray-400" : "text-gray-900"}`}>
+                      <span className="text-xs">{item.done ? "✅" : "⬜"}</span>
+                      <span className="truncate">{item.text}</span>
+                    </div>
+                  ))}
+                  {visibleItems.length > 3 && (
+                    <p className="text-[11px] text-amber-400 ml-5">+{visibleItems.length - 3} más...</p>
+                  )}
+                </>
+              );
+            })()}
           </div>
         ) : (
           <p className="text-sm break-words flex-1 line-clamp-2 text-gray-900 whitespace-pre-line">{note.content}</p>
@@ -88,12 +96,13 @@ export function NoteCard({ note, onClick, isSelected, onToggleSelect, selectionM
       {(note.checklistItems ?? []).length > 0 && (() => {
         const items = note.checklistItems ?? [];
         const checked = items.filter(i => i.done).length;
+        const pending = items.length - checked;
         return (
           <span
             className="mt-1 inline-block text-[11px] font-medium text-amber-700 bg-amber-100 rounded-full px-2 py-0.5"
             data-testid="checklist-badge"
           >
-            {checked}/{items.length} ✓
+            {note.hideCompleted ? `${pending} pendientes` : `${checked}/${items.length} ✓`}
           </span>
         );
       })()}
@@ -104,11 +113,18 @@ export function NoteCard({ note, onClick, isSelected, onToggleSelect, selectionM
 
       {(note.labels ?? []).length > 0 && (
         <div className="mt-1 flex flex-wrap gap-1">
-          {(note.labels ?? []).map((label) => (
-            <span key={label} className="rounded-full bg-amber-100 text-amber-700 px-2 py-0.5 text-[10px]">
-              {label}
-            </span>
-          ))}
+          {(note.labels ?? []).map((label) => {
+            const color = getLabelColor(label);
+            return (
+              <span
+                key={label}
+                className="rounded-full px-2 py-0.5 text-[10px]"
+                style={{ backgroundColor: color.bg, color: color.text }}
+              >
+                {label}
+              </span>
+            );
+          })}
         </div>
       )}
 

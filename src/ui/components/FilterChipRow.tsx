@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { getLabelColor } from "../../domain/services/label-color.js";
 
 interface FilterChipRowProps {
   labels: string[];           // all unique labels from notes
@@ -44,20 +45,28 @@ export function FilterChipRow({ labels, activeLabel, onLabelSelect, searchText, 
       )}
 
       {/* Label chips */}
-      {labels.map((label) => (
-        <button
-          key={label}
-          onClick={() => onLabelSelect(activeLabel === label ? null : label)}
-          className={`shrink-0 rounded-full px-3 py-1 text-xs border
-            ${activeLabel === label
-              ? "bg-amber-600 text-white border-amber-600"
-              : "bg-white text-amber-700 border-amber-300 hover:bg-amber-100"
+      {labels.map((label) => {
+        const color = getLabelColor(label);
+        return (
+          <button
+            key={label}
+            onClick={() => onLabelSelect(activeLabel === label ? null : label)}
+            className={`shrink-0 rounded-full px-3 py-1 text-xs border ${
+              activeLabel === label
+                ? "ring-2 ring-offset-1 ring-amber-600 font-bold"
+                : "hover:opacity-80"
             }`}
-          data-testid={`label-chip-${label}`}
-        >
-          {label}
-        </button>
-      ))}
+            style={{
+              backgroundColor: color.bg,
+              color: color.text,
+              borderColor: color.text + "40",
+            }}
+            data-testid={`label-chip-${label}`}
+          >
+            {label}
+          </button>
+        );
+      })}
     </div>
   );
 }

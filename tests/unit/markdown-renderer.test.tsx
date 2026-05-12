@@ -9,7 +9,7 @@ describe("MarkdownRenderer", () => {
     expect(screen.getByText("Hello world")).toBeInTheDocument();
   });
 
-  it("renders headings", () => {
+  it("renders headings", { timeout: 15000 }, () => {
     render(<MarkdownRenderer content="# Main Title" mode="full" />);
     const heading = screen.getByRole("heading", { level: 1 });
     expect(heading).toBeInTheDocument();

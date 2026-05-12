@@ -1,6 +1,7 @@
 import type { Note, NoteImage } from "../../domain/models/note.js";
 import type { NoteFilters } from "../../domain/services/note-repository.js";
 import { createNote } from "../../domain/models/note.js";
+import { mergeNotesData } from "../../domain/services/merge-notes.js";
 import { getDocHandle } from "./repo.js";
 
 function generateId(): string {
@@ -236,51 +237,52 @@ export async function editChecklistItem(noteId: string, itemIndex: number, newTe
   return doc.notes[noteId];
 }
 
-export async function mergeNotes(targetId: string, sourceIds: string[]): Promise<Note> {
+export async function setHideCompleted(noteId: string, hide: boolean): Promise<Note> {
   const handle = await getDocHandle();
   handle.change((doc) => {
-    const target = doc.notes[targetId];
-    if (!target) throw new Error(`Note not found: ${targetId}`);
-
-    const sources = sourceIds
-      .map((id) => {
-        const note = doc.notes[id];
-        if (!note) throw new Error(`Note not found: ${id}`);
-        return { id, note };
-      })
-      .sort((a, b) => b.note.updatedAt.localeCompare(a.note.updatedAt));
-
-    for (const { id, note: source } of sources) {
-      if (source.content) {
-        target.content = target.content
-          ? target.content + "\n---\n" + source.content
-          : source.content;
-      }
-      if (source.images?.length) {
-        if (!target.images) target.images = [];
-        for (const img of source.images) target.images.push(img);
-      }
-      if (source.labels?.length) {
-        if (!target.labels) target.labels = [];
-        const existing = new Set(target.labels);
-        for (const label of source.labels) {
-          if (!existing.has(label)) {
-            target.labels.push(label);
-            existing.add(label);
-          }
-        }
-      }
-      if (source.checklistItems?.length) {
-        if (!target.checklistItems) target.checklistItems = [];
-        for (const item of source.checklistItems) {
-          target.checklistItems.push({ text: String(item.text), done: Boolean(item.done) });
-        }
-      }
-      doc.notes[id].archived = true;
-      doc.notes[id].updatedAt = new Date().toISOString();
-    }
-
-    target.updatedAt = new Date().toISOString();
+    const note = doc.notes[noteId];
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    note.hideCompleted = hide;
+    note.updatedAt = new Date().toISOString();
   });
+  return handle.doc()!.notes[noteId];
+}
+
+export async function mergeNotes(targetId: string, sourceIds: string[]): Promise<Note> {
+  const handle = await getDocHandle();
+
+  // Read plain copies OUTSIDE the change callback to avoid Automerge proxy issues
+  const doc = handle.doc()!;
+  const targetProxy = doc.notes[targetId];
+  if (!targetProxy) throw new Error(`Note not found: ${targetId}`);
+  const targetCopy: Note = JSON.parse(JSON.stringify(targetProxy));
+
+  const sourceCopies: Note[] = sourceIds.map((id) => {
+    const note = doc.notes[id];
+    if (!note) throw new Error(`Note not found: ${id}`);
+    return JSON.parse(JSON.stringify(note));
+  });
+
+  // Compute merge on plain objects
+  const result = mergeNotesData(targetCopy, sourceCopies);
+
+  // Apply inside change callback
+  handle.change((d) => {
+    const target = d.notes[targetId];
+    target.content = result.content;
+
+    // Replace arrays entirely with plain data
+    target.images = result.images ?? [];
+    target.labels = result.labels;
+    target.checklistItems = result.checklistItems ?? [];
+    target.updatedAt = new Date().toISOString();
+
+    // Archive sources
+    for (const id of sourceIds) {
+      d.notes[id].archived = true;
+      d.notes[id].updatedAt = new Date().toISOString();
+    }
+  });
+
   return handle.doc()!.notes[targetId];
 }

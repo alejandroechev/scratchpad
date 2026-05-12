@@ -292,6 +292,16 @@ const handlers: Record<string, (...args: any[]) => unknown> = {
     return toPlain(handle!.doc()!.notes[noteId]);
   },
 
+  setHideCompleted(noteId: string, hide: boolean): Note {
+    handle!.change((doc) => {
+      const note = doc.notes[noteId];
+      if (!note) throw new Error(`Note not found: ${noteId}`);
+      note.hideCompleted = hide;
+      note.updatedAt = new Date().toISOString();
+    });
+    return toPlain(handle!.doc()!.notes[noteId]);
+  },
+
   mergeNotes(targetId: string, sourceIds: string[]): Note {
     handle!.change((doc) => {
       const target = doc.notes[targetId];

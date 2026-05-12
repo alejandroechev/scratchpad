@@ -25,4 +25,5 @@ export interface NoteRepository {
   addChecklistItem(noteId: string, text: string): Note;
   removeChecklistItem(noteId: string, itemIndex: number): Note;
   editChecklistItem(noteId: string, itemIndex: number, newText: string): Note;
+  setHideCompleted(noteId: string, hide: boolean): Note;
 }

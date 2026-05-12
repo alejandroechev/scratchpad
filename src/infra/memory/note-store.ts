@@ -1,6 +1,7 @@
 import type { Note, NoteImage } from "../../domain/models/note.js";
 import type { NoteRepository, NoteFilters } from "../../domain/services/note-repository.js";
 import { createNote } from "../../domain/models/note.js";
+import { mergeNotesData } from "../../domain/services/merge-notes.js";
 
 let counter = 0;
 function generateId(): string {
@@ -177,47 +178,45 @@ export class InMemoryNoteStore implements NoteRepository {
     return { ...note, checklistItems: items.map(i => ({ ...i })) };
   }
 
+  setHideCompleted(noteId: string, hide: boolean): Note {
+    const note = this.notes.get(noteId);
+    if (!note) throw new Error(`Note not found: ${noteId}`);
+    note.hideCompleted = hide;
+    note.updatedAt = new Date().toISOString();
+    return { ...note };
+  }
+
   mergeNotes(targetId: string, sourceIds: string[]): Note {
     const target = this.notes.get(targetId);
     if (!target) throw new Error(`Note not found: ${targetId}`);
 
-    const sources = sourceIds
-      .map((id) => {
-        const note = this.notes.get(id);
-        if (!note) throw new Error(`Note not found: ${id}`);
-        return note;
-      })
-      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    const sources = sourceIds.map((id) => {
+      const note = this.notes.get(id);
+      if (!note) throw new Error(`Note not found: ${id}`);
+      return note;
+    });
 
-    for (const source of sources) {
-      if (source.content) {
-        target.content = target.content
-          ? target.content + "\n---\n" + source.content
-          : source.content;
-      }
-      if (source.images?.length) {
-        target.images = [...(target.images ?? []), ...source.images];
-      }
-      if (source.labels?.length) {
-        const existingLabels = new Set(target.labels ?? []);
-        for (const label of source.labels) {
-          if (!existingLabels.has(label)) {
-            target.labels = [...(target.labels ?? []), label];
-            existingLabels.add(label);
-          }
-        }
-      }
-      if (source.checklistItems?.length) {
-        if (!target.checklistItems) target.checklistItems = [];
-        for (const item of source.checklistItems) {
-          target.checklistItems.push({ text: item.text, done: item.done });
-        }
-      }
+    const result = mergeNotesData(target, sources);
+
+    // Apply merge result
+    target.content = result.content;
+    target.images = result.images ? [...result.images] : [];
+    target.labels = [...result.labels];
+    target.checklistItems = result.checklistItems ? [...result.checklistItems] : [];
+    target.updatedAt = new Date().toISOString();
+
+    // Archive sources
+    for (const id of sourceIds) {
+      const source = this.notes.get(id)!;
       source.archived = true;
       source.updatedAt = new Date().toISOString();
     }
 
-    target.updatedAt = new Date().toISOString();
-    return { ...target };
+    return {
+      ...target,
+      images: [...(target.images ?? [])],
+      labels: [...(target.labels ?? [])],
+      checklistItems: (target.checklistItems ?? []).map(i => ({ ...i })),
+    };
   }
 }

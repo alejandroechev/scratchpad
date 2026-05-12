@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { ArrowLeftIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon, ClipboardDocumentIcon, PencilIcon, EyeIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, ArrowUturnLeftIcon, ArrowUturnRightIcon, ClipboardDocumentIcon, PencilIcon, EyeIcon, EyeSlashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { extractUrls } from "../../domain/models/note.js";
 import type { NoteImage, ChecklistItem } from "../../domain/models/note.js";
 import { ImageThumbnail } from "../components/ImageThumbnail.js";
@@ -15,6 +15,8 @@ interface NoteDetailPageProps {
   initialUpdatedAt: string;
   images?: NoteImage[];
   checklistItems?: ChecklistItem[];
+  hideCompleted?: boolean;
+  onSetHideCompleted?: (hide: boolean) => void;
   onToggleChecklistItem?: (itemIndex: number) => void;
   onAddChecklistItem?: (text: string) => void;
   onRemoveChecklistItem?: (itemIndex: number) => void;
@@ -28,6 +30,8 @@ export function NoteDetailPage({
   initialUpdatedAt,
   images,
   checklistItems,
+  hideCompleted,
+  onSetHideCompleted,
   onToggleChecklistItem,
   onAddChecklistItem,
   onRemoveChecklistItem,
@@ -155,38 +159,56 @@ export function NoteDetailPage({
                 data-testid="checklist-title-input"
               />
             )}
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs text-amber-700">
+                {(checklistItems ?? []).filter(i => i.done).length}/{(checklistItems ?? []).length} completados
+              </p>
+              <button
+                onClick={() => onSetHideCompleted?.(!hideCompleted)}
+                className="text-xs text-amber-600 flex items-center gap-1 hover:text-amber-800"
+                data-testid="hide-completed-toggle"
+              >
+                {hideCompleted ? <EyeSlashIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+                {hideCompleted ? "Mostrar completados" : "Ocultar completados"}
+              </button>
+            </div>
             <div className="space-y-1">
-              {(checklistItems ?? []).map((item, index) => (
-                <div key={index} className="flex items-center gap-2 py-1.5 border-b border-gray-100 last:border-0">
-                  <input
-                    type="checkbox"
-                    checked={item.done}
-                    onChange={() => onToggleChecklistItem?.(index)}
-                    className="w-5 h-5 accent-amber-600 cursor-pointer flex-shrink-0"
-                    data-testid={`checklist-item-${index}`}
-                  />
-                  <input
-                    type="text"
-                    defaultValue={item.text}
-                    key={`${index}-${item.text}`}
-                    onBlur={(e) => {
-                      const newText = e.target.value.trim();
-                      if (newText && newText !== item.text) {
-                        onEditChecklistItem?.(index, newText);
-                      }
-                    }}
-                    className={`flex-1 text-sm border-0 bg-transparent focus:outline-none focus:ring-0 ${item.done ? "line-through text-gray-400" : "text-gray-900"}`}
-                    data-testid={`checklist-item-text-${index}`}
-                  />
-                  <button
-                    onClick={() => onRemoveChecklistItem?.(index)}
-                    className="text-gray-300 hover:text-red-500 flex-shrink-0"
-                    data-testid={`checklist-remove-${index}`}
-                  >
-                    <XMarkIcon className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
+              {(() => {
+                const displayItems = hideCompleted
+                  ? (checklistItems ?? []).map((item, i) => ({ ...item, originalIndex: i })).filter(item => !item.done)
+                  : (checklistItems ?? []).map((item, i) => ({ ...item, originalIndex: i }));
+                return displayItems.map((item) => (
+                  <div key={item.originalIndex} className="flex items-center gap-2 py-1.5 border-b border-gray-100 last:border-0">
+                    <input
+                      type="checkbox"
+                      checked={item.done}
+                      onChange={() => onToggleChecklistItem?.(item.originalIndex)}
+                      className="w-5 h-5 accent-amber-600 cursor-pointer flex-shrink-0"
+                      data-testid={`checklist-item-${item.originalIndex}`}
+                    />
+                    <input
+                      type="text"
+                      defaultValue={item.text}
+                      key={`${item.originalIndex}-${item.text}`}
+                      onBlur={(e) => {
+                        const newText = e.target.value.trim();
+                        if (newText && newText !== item.text) {
+                          onEditChecklistItem?.(item.originalIndex, newText);
+                        }
+                      }}
+                      className={`flex-1 text-sm border-0 bg-transparent focus:outline-none focus:ring-0 ${item.done ? "line-through text-gray-400" : "text-gray-900"}`}
+                      data-testid={`checklist-item-text-${item.originalIndex}`}
+                    />
+                    <button
+                      onClick={() => onRemoveChecklistItem?.(item.originalIndex)}
+                      className="text-gray-300 hover:text-red-500 flex-shrink-0"
+                      data-testid={`checklist-remove-${item.originalIndex}`}
+                    >
+                      <XMarkIcon className="w-4 h-4" />
+                    </button>
+                  </div>
+                ));
+              })()}
             </div>
             <div className="mt-3 flex gap-2">
               <input
@@ -202,9 +224,11 @@ export function NoteDetailPage({
                 }}
               />
             </div>
-            <p className="mt-2 text-xs text-amber-700">
-              {(checklistItems ?? []).filter(i => i.done).length}/{(checklistItems ?? []).length} completados
-            </p>
+            {hideCompleted && (checklistItems ?? []).filter(i => i.done).length > 0 && (
+              <p className="text-xs text-gray-400 mt-2" data-testid="hidden-items-count">
+                {(checklistItems ?? []).filter(i => i.done).length} elementos completados ocultos
+              </p>
+            )}
           </div>
         ) : showMarkdown ? (
           <div

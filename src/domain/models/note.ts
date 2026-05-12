@@ -16,6 +16,7 @@ export interface Note {
   images?: NoteImage[];
   labels?: string[];
   checklistItems?: ChecklistItem[];
+  hideCompleted?: boolean;
   createdAt: string;
   updatedAt: string;
   archived: boolean;
@@ -49,6 +50,7 @@ export function createNote(id: string, content: string): Note {
     images: [],
     labels: [],
     checklistItems: [],
+    hideCompleted: false,
     createdAt: now,
     updatedAt: now,
     archived: false,

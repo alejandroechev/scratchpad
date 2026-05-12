@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { ArchiveBoxIcon, CameraIcon, TagIcon, CheckIcon, ListBulletIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import { NoteCard } from "./NoteCard.js";
 import type { Note } from "../../domain/models/note.js";
+import { getLabelColor } from "../../domain/services/label-color.js";
 
 interface SwipeableNoteCardProps {
   note: Note;
@@ -235,15 +236,19 @@ export function SwipeableNoteCard({
           <div className="flex flex-wrap gap-1 mb-2">
             {allLabels
               .filter((l) => !note.labels?.includes(l))
-              .map((l) => (
-                <button
-                  key={l}
-                  onClick={() => { onAddLabel(note.id, l); closePanel(); }}
-                  className="rounded-full bg-amber-100 text-amber-700 px-2 py-0.5 text-xs hover:bg-amber-200"
-                >
-                  + {l}
-                </button>
-              ))}
+              .map((l) => {
+                const color = getLabelColor(l);
+                return (
+                  <button
+                    key={l}
+                    onClick={() => { onAddLabel(note.id, l); closePanel(); }}
+                    className="rounded-full px-2 py-0.5 text-xs hover:opacity-80"
+                    style={{ backgroundColor: color.bg, color: color.text }}
+                  >
+                    + {l}
+                  </button>
+                );
+              })}
           </div>
           <div className="flex gap-1">
             <input

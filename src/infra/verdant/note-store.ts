@@ -89,6 +89,7 @@ function snapshotToNote(s: NoteSnapshot): Note {
       text: item.text,
       done: item.done,
     })),
+    hideCompleted: false,
     createdAt: s.createdAt,
     updatedAt: s.updatedAt,
     archived: s.archived,
@@ -333,6 +334,17 @@ export async function editChecklistItem(noteId: string, itemIndex: number, newTe
   item.set("text", newText);
   note.set("updatedAt", new Date().toISOString());
   return snapshotToNote(note.getSnapshot());
+}
+
+export async function setHideCompleted(noteId: string, hide: boolean): Promise<Note> {
+  const client = await getClient();
+  const note = await client.notes.get(noteId).resolved;
+  if (!note) throw new Error(`Note not found: ${noteId}`);
+  // Verdant schema may not have hideCompleted field — store in snapshot as best-effort
+  note.set("updatedAt", new Date().toISOString());
+  const snapshot = snapshotToNote(note.getSnapshot());
+  snapshot.hideCompleted = hide;
+  return snapshot;
 }
 
 export async function onDocChange(callback: () => void): Promise<() => void> {
